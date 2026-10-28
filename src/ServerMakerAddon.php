@@ -29,7 +29,7 @@ final class ServerMakerAddon extends Addon
 
     public function icon(): string
     {
-        return 'tabler-server-2';
+        return 'tabler-wand';
     }
 
     /** "Create server" on the dashboard, for everyone who may use the Server Maker. */
