@@ -49,7 +49,7 @@ class ServerMaker extends Page implements HasForms
 
     protected static string|\BackedEnum|null $navigationIcon = 'tabler-wand';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 80;
 
     protected string $view = 'simplify-server-maker::pages.server-maker';
 
@@ -68,9 +68,10 @@ class ServerMaker extends Page implements HasForms
         return __('simplify-server-maker::maker.title');
     }
 
+    /** In the Simplify group of Pelican's menu, with the other Simplify add-ons (Simplify's ADDONS.md, "Admin menu"). */
     public static function getNavigationGroup(): ?string
     {
-        return trans('admin/dashboard.server');
+        return 'Simplify';
     }
 
     public function getTitle(): string
