@@ -7,6 +7,7 @@ namespace Simplify\ServerMaker\Games;
 use App\Models\Egg;
 use App\Models\Server;
 use Illuminate\Database\Eloquent\Builder;
+use Simplify\ServerMaker\Access;
 
 /** Every other game: the eggs on the panel that the Minecraft part does not cover. */
 final class OtherGames
@@ -14,7 +15,7 @@ final class OtherGames
     /** @return Builder<Egg> */
     public static function query(): Builder
     {
-        return Egg::query()->orderBy('name');
+        return Access::eggs();
     }
 
     /**

@@ -7,6 +7,7 @@ namespace Simplify\ServerMaker\Creation;
 use App\Models\Allocation;
 use App\Models\Node;
 use Illuminate\Database\Eloquent\Builder;
+use Simplify\ServerMaker\Access;
 
 /** Nodes and free ports (allocations) for a new server. */
 final class Ports
@@ -14,7 +15,7 @@ final class Ports
     /** @return Builder<Node> */
     public static function nodes(): Builder
     {
-        return user()?->accessibleNodes() ?? Node::query()->whereRaw('1 = 0');
+        return Access::nodes();
     }
 
     /** @return Builder<Allocation> */

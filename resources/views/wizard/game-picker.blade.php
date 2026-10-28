@@ -9,23 +9,25 @@
 @endphp
 <x-dynamic-component :component="$getFieldWrapperView()" :field="$field">
     <div class="smk-picker">
-        <section class="smk-group" aria-labelledby="smk-minecraft">
-            <h3 id="smk-minecraft">Minecraft</h3>
-            <div class="smk-cards" role="radiogroup" aria-labelledby="smk-minecraft">
-                @foreach ($types as $type)
-                    @php($picked = ($data['game'] ?? null) === 'minecraft' && ($data['type'] ?? null) === $type)
-                    <button type="button" role="radio" aria-checked="{{ $picked ? 'true' : 'false' }}"
-                        @class(['smk-card', 'is-picked' => $picked])
-                        wire:click="pickGame('minecraft', @js($type))" wire:loading.attr="disabled" wire:target="pickGame">
-                        <x-dynamic-component :component="$icons[$type]" class="smk-card-icon" aria-hidden="true" />
-                        <span class="smk-card-text">
-                            <strong>{{ $t('minecraft.types.' . $type . '.label') }}</strong>
-                            <small>{{ $t('minecraft.types.' . $type . '.help') }}</small>
-                        </span>
-                    </button>
-                @endforeach
-            </div>
-        </section>
+        @if ($types !== [])
+            <section class="smk-group" aria-labelledby="smk-minecraft">
+                <h3 id="smk-minecraft">Minecraft</h3>
+                <div class="smk-cards" role="radiogroup" aria-labelledby="smk-minecraft">
+                    @foreach ($types as $type)
+                        @php($picked = ($data['game'] ?? null) === 'minecraft' && ($data['type'] ?? null) === $type)
+                        <button type="button" role="radio" aria-checked="{{ $picked ? 'true' : 'false' }}"
+                            @class(['smk-card', 'is-picked' => $picked])
+                            wire:click="pickGame('minecraft', @js($type))" wire:loading.attr="disabled" wire:target="pickGame">
+                            <x-dynamic-component :component="$icons[$type]" class="smk-card-icon" aria-hidden="true" />
+                            <span class="smk-card-text">
+                                <strong>{{ $t('minecraft.types.' . $type . '.label') }}</strong>
+                                <small>{{ $t('minecraft.types.' . $type . '.help') }}</small>
+                            </span>
+                        </button>
+                    @endforeach
+                </div>
+            </section>
+        @endif
 
         <section class="smk-group" aria-labelledby="smk-games"
             x-data="{

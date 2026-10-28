@@ -6,7 +6,9 @@ namespace Simplify\ServerMaker;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
+use Simplify\ServerMaker\Filament\Admin\Pages\MakerSettings;
 use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
+use Simplify\ServerMaker\Filament\App\Pages\ServerMaker as AppServerMaker;
 
 final class ServerMakerPlugin implements Plugin
 {
@@ -17,9 +19,11 @@ final class ServerMakerPlugin implements Plugin
 
     public function register(Panel $panel): void
     {
-        if ($panel->getId() === 'admin') {
-            $panel->pages([ServerMaker::class]);
-        }
+        match ($panel->getId()) {
+            'admin' => $panel->pages([ServerMaker::class, MakerSettings::class]),
+            'app' => $panel->pages([AppServerMaker::class]),
+            default => null,
+        };
     }
 
     public function boot(Panel $panel): void {}

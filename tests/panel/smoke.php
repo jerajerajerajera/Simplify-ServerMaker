@@ -16,19 +16,36 @@ use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithAuthentication;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithSession;
 use Illuminate\Foundation\Testing\Concerns\MakesHttpRequests;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Testing\TestResponse;
 use Simplify\ServerMaker\Creation\Ports;
+use Simplify\ServerMaker\Filament\Admin\Pages\MakerSettings;
 use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
+use Simplify\ServerMaker\Filament\App\Pages\ServerMaker as AppServerMaker;
 use Simplify\ServerMaker\Games\BundledEggs;
 use Simplify\ServerMaker\Games\OtherGames;
 use Simplify\ServerMaker\Models\Draft;
 use Simplify\ServerMaker\Modpacks\Remote;
 use Simplify\ServerMaker\ServerMakerAddon;
+use Simplify\ServerMaker\Settings;
 
 define('LARAVEL_START', microtime(true));
 require getcwd().'/vendor/autoload.php';
-$app = require getcwd().'/bootstrap/app.php';
-$app->make(Kernel::class)->bootstrap();
+
+// Each step gets a fresh application, like a real request: Filament keeps panel state for the whole process, so an
+// admin page and then an app page in one application can fail where a browser would not.
+function boot(): void
+{
+    $app = require getcwd().'/bootstrap/app.php';
+    $app->make(Kernel::class)->bootstrap();
+    // Anything that fails outside a step (for example making the test user) must fail the job too: Laravel's own
+    // handler prints the error and still exits with 0.
+    set_exception_handler(function (Throwable $e): void {
+        echo 'FAIL setup: '.get_class($e).': '.substr($e->getMessage(), 0, 400)."\n";
+        exit(1);
+    });
+}
+boot();
 
 $failed = false;
 
@@ -36,6 +53,7 @@ function step(string $what, callable $run): void
 {
     global $failed;
     try {
+        boot();
         $run();
         echo "PASS $what\n";
     } catch (Throwable $e) {
@@ -66,12 +84,6 @@ function expectOk(TestResponse $response, string $url): void
         throw new RuntimeException('HTTP '.$response->getStatusCode().' at '.$url.$detail);
     }
 }
-
-// Anything that fails outside a step (for example making the test user) must fail the job too.
-set_exception_handler(function (Throwable $e): void {
-    echo 'FAIL setup: '.get_class($e).': '.substr($e->getMessage(), 0, 400)."\n";
-    exit(1);
-});
 
 $admin = User::where('email', 'smoke-maker@example.com')->first()
     ?? User::factory()->create(['email' => 'smoke-maker@example.com']);
@@ -132,6 +144,7 @@ step('the egg is imported only once', function () {
 });
 
 step('another game shows its own settings', function () use ($admin) {
+    auth()->setUser($admin);
     $egg = Egg::query()->where('name', 'Smoke Valheim')->first();
     if (! $egg) {
         $definition = json_decode((string) file_get_contents(BundledEggs::directory().'/egg-vanilla-bedrock.json'), true);
@@ -193,6 +206,88 @@ step('a Modrinth modpack is found and gets its egg', function () use ($admin) {
         throw new RuntimeException('expected Java 17 for 1.20.1, got '.var_export($test->instance()->java(), true));
     }
     Remote::$transport = null;
+});
+
+step('the settings page renders', function () use ($admin) {
+    $url = MakerSettings::getUrl(panel: 'admin');
+    expectOk(http($admin, $url), $url);
+});
+
+step('settings are saved and the CurseForge key stays encrypted', function () use ($admin, $node) {
+    Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('admin'));
+    Livewire\Livewire::actingAs($admin)->test(MakerSettings::class)
+        ->set('data.self_service', true)
+        ->set('data.node_ids', [$node->id])
+        ->set('data.minecraft', true)
+        ->set('data.egg_ids', [])
+        ->set('data.max_servers', 2)
+        ->set('data.max_ram', 8)
+        ->set('data.curseforge_key', 'smoke-secret-key')
+        ->call('save')
+        ->assertHasNoErrors()
+        ->assertSet('data.curseforge_key', '');
+    if (Settings::get('curseforge_key') !== 'smoke-secret-key' || ! Settings::get('self_service')) {
+        throw new RuntimeException('not saved');
+    }
+    $raw = (string) DB::table('simplify_server_maker_settings')->where('key', 'curseforge_key')->value('value');
+    if ($raw === '' || str_contains($raw, 'smoke-secret-key')) {
+        throw new RuntimeException('the key is stored readable');
+    }
+});
+
+$user = User::where('email', 'smoke-maker-user@example.com')->first()
+    ?? User::factory()->create(['email' => 'smoke-maker-user@example.com']);
+$user->syncRoles([]);
+
+step('a user makes a server within their allowance, in the normal panel', function () use ($user, $node) {
+    $url = AppServerMaker::getUrl(panel: 'app');
+    expectOk(http($user, $url), $url);
+    Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('app'));
+    auth()->setUser($user);
+    if (Ports::nodes()->pluck('id')->all() !== [$node->id]) {
+        throw new RuntimeException('the user sees other nodes');
+    }
+    if (OtherGames::cards() !== []) {
+        throw new RuntimeException('the user is offered games that are not allowed');
+    }
+    $test = Livewire\Livewire::actingAs($user)->test(AppServerMaker::class)
+        ->call('pickGame', 'minecraft', 'plugins')
+        ->set('data.version', '1.21.1')
+        ->call('prepareEgg')
+        ->assertHasNoErrors()
+        ->set('data.name', 'smoke-user')
+        ->set('data.node_id', $node->id)
+        ->set('data.allocation_id', Ports::first($node->id))
+        ->set('data.ram', 'custom')
+        ->set('data.ram_custom', 16)
+        ->call('create')
+        ->assertHasErrors(['data.ram_custom']);
+    $test->set('data.ram', '4')->call('create')->assertHasNoErrors();
+    Server::query()->where('name', 'smoke-user')->delete();
+});
+
+step('a user without servers left is stopped', function () use ($user, $node) {
+    Settings::put(['max_servers' => 0]);
+    Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('app'));
+    Livewire\Livewire::actingAs($user)->test(AppServerMaker::class)
+        ->call('pickGame', 'minecraft', 'plugins')
+        ->set('data.version', '1.21.1')
+        ->call('prepareEgg')
+        ->set('data.name', 'smoke-user')
+        ->set('data.node_id', $node->id)
+        ->set('data.allocation_id', Ports::first($node->id))
+        ->set('data.ram', '4')
+        ->call('create')
+        ->assertHasErrors(['data.name']);
+});
+
+step('without self-service a user cannot open the Server Maker', function () use ($user) {
+    Settings::put(['self_service' => false, 'max_servers' => null, 'curseforge_key' => null]);
+    $url = AppServerMaker::getUrl(panel: 'app');
+    $status = http($user, $url)->getStatusCode();
+    if ($status !== 403) {
+        throw new RuntimeException('HTTP '.$status);
+    }
 });
 
 if (! $failed) {

@@ -8,6 +8,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\ToggleButtons;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Wizard\Step;
+use Simplify\ServerMaker\Access;
 use Simplify\ServerMaker\Creation\Resources;
 use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
 use Simplify\ServerMaker\Games\Minecraft;
@@ -27,8 +28,9 @@ final class ResourcesStep
             $fields[] = ToggleButtons::make($resource)
                 ->label($t('resources.'.$resource))
                 ->options(function (Get $get) use ($resource, $start, $t): array {
+                    $limit = Access::resourceLimits()[$resource] ?? null;
                     $options = [];
-                    foreach (Resources::presets($resource, $start($get, $resource)) as $value) {
+                    foreach (Resources::presets($resource, $start($get, $resource), $limit) as $value) {
                         $options[(string) $value] = self::label($resource, $value, $t);
                     }
 
@@ -41,7 +43,7 @@ final class ResourcesStep
                 ->hiddenLabel()
                 ->integer()
                 ->minValue($resource === 'disk' ? 1024 : 1)
-                ->maxValue(Resources::MAX[$resource])
+                ->maxValue(fn () => Access::resourceLimits()[$resource] ?? Resources::MAX[$resource])
                 ->suffix($t('resources.unit.'.$resource))
                 ->helperText($t('resources.custom_help.'.$resource))
                 ->visible(fn (Get $get) => $get($resource) === 'custom')
@@ -50,12 +52,28 @@ final class ResourcesStep
 
         return Step::make('resources')
             ->label($t('steps.resources'))
-            ->description(fn (Get $get) => $get('game') === 'minecraft' ? $t('resources.help_type') : $t('resources.help_game'))
+            ->description(fn (Get $get) => self::help($get, $t))
             ->schema($fields)
             ->afterValidation(function () use ($page): void {
-                Resources::payload($page->data);
+                Resources::payload($page->data, Access::resourceLimits());
                 $page->stepDone(4);
             });
+    }
+
+    /** What the step is about, plus what is left of the allowance for people who are not administrators. */
+    private static function help(Get $get, callable $t): string
+    {
+        $help = $get('game') === 'minecraft' ? $t('resources.help_type') : $t('resources.help_game');
+        $limits = Access::resourceLimits();
+        if ($limits === null) {
+            return $help;
+        }
+
+        return $help.' '.$t('access.left', [
+            'ram' => $limits['ram'],
+            'disk' => Resources::gb($limits['disk']),
+            'cpu' => rtrim(rtrim(number_format($limits['cpu'] / 100, 1, '.', ''), '0'), '.'),
+        ]);
     }
 
     private static function label(string $resource, int $value, callable $t): string

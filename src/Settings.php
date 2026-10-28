@@ -11,7 +11,7 @@ use Throwable;
 
 /**
  * The Server Maker's settings, in its own table. Secrets (the CurseForge key) are stored encrypted and never shown
- * again. Read once per request from a short cache.
+ * again. Read from a short cache, in which secrets stay encrypted.
  */
 final class Settings
 {
@@ -23,12 +23,27 @@ final class Settings
 
     public static function get(string $key, mixed $default = null): mixed
     {
-        return self::all()[$key] ?? $default;
+        $stored = self::stored()[$key] ?? null;
+        if ($stored === null) {
+            return $default;
+        }
+        try {
+            $text = in_array($key, self::SECRETS, true) ? Crypt::decryptString($stored) : $stored;
+
+            return json_decode($text, true, 16, JSON_THROW_ON_ERROR);
+        } catch (Throwable $exception) {
+            // For example a secret saved under another APP_KEY: treat it as not set.
+            report($exception);
+
+            return $default;
+        }
     }
 
     public static function has(string $key): bool
     {
-        return array_key_exists($key, self::all()) && self::all()[$key] !== '' && self::all()[$key] !== null;
+        $value = self::get($key);
+
+        return $value !== null && $value !== '' && $value !== [];
     }
 
     /** @param  array<string, mixed>  $values  null removes a setting */
@@ -49,21 +64,17 @@ final class Settings
         Cache::forget(self::CACHE);
     }
 
-    /** @return array<string, mixed> */
-    private static function all(): array
+    /** @return array<string, string> key => the value as stored, so secrets stay encrypted in the cache too */
+    private static function stored(): array
     {
         return Cache::remember(self::CACHE, 60, function (): array {
-            $values = [];
             try {
-                foreach (DB::table(self::TABLE)->get(['key', 'value']) as $row) {
-                    $text = in_array($row->key, self::SECRETS, true) ? Crypt::decryptString($row->value) : $row->value;
-                    $values[$row->key] = json_decode($text, true, 16, JSON_THROW_ON_ERROR);
-                }
+                return DB::table(self::TABLE)->pluck('value', 'key')->all();
             } catch (Throwable $exception) {
                 report($exception);
-            }
 
-            return $values;
+                return [];
+            }
         });
     }
 }

@@ -7,6 +7,7 @@ namespace Simplify\ServerMaker\Filament\Wizard;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\ViewField;
 use Filament\Schemas\Components\Wizard\Step;
+use Simplify\ServerMaker\Access;
 use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
 use Simplify\ServerMaker\Games\Minecraft;
 use Simplify\ServerMaker\Games\OtherGames;
@@ -23,7 +24,7 @@ final class GameStep
                     ->hiddenLabel()
                     ->view('simplify-server-maker::wizard.game-picker')
                     ->viewData(fn () => [
-                        'types' => Minecraft::TYPES,
+                        'types' => Access::minecraft() ? Minecraft::TYPES : [],
                         'games' => OtherGames::cards(),
                     ])
                     ->required()
