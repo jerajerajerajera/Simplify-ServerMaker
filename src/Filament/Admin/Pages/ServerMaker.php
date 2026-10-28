@@ -29,11 +29,13 @@ use Simplify\ServerMaker\Filament\Wizard\ResourcesStep;
 use Simplify\ServerMaker\Filament\Wizard\ReviewStep;
 use Simplify\ServerMaker\Filament\Wizard\ServerStep;
 use Simplify\ServerMaker\Filament\Wizard\SetupStep;
+use Simplify\ServerMaker\Games\Java;
 use Simplify\ServerMaker\Games\Minecraft;
 use Simplify\ServerMaker\Games\MinecraftEggs;
 use Simplify\ServerMaker\Games\MinecraftVersions;
 use Simplify\ServerMaker\Games\OtherGames;
 use Simplify\ServerMaker\Models\Draft;
+use Simplify\ServerMaker\Modpacks\Sources;
 use Throwable;
 
 /** The Server Maker: a wizard that creates a game server in a few steps. */
@@ -95,6 +97,8 @@ class ServerMaker extends Page implements HasForms
             'version' => null,
             'egg_id' => null,
             'variables' => [],
+            'modpack' => null,
+            'modpack_version' => null,
             'name' => '',
             'node_id' => $node,
             'allocation_id' => Ports::first($node),
@@ -181,6 +185,8 @@ class ServerMaker extends Page implements HasForms
                 'version' => $this->data['version'] ?? MinecraftVersions::newest(),
                 'egg_id' => null,
                 'variables' => [],
+                'modpack' => $choice === 'modpack' ? ($this->data['modpack'] ?? null) : null,
+                'modpack_version' => $choice === 'modpack' ? ($this->data['modpack_version'] ?? null) : null,
                 ...$this->resourceDefaults($choice),
             ]);
 
@@ -213,25 +219,35 @@ class ServerMaker extends Page implements HasForms
         return $values;
     }
 
-    /** Leaving the setup step: the egg for the chosen Minecraft type, added from the bundled eggs when missing. */
+    /** Leaving the setup step: the egg for the chosen Minecraft type or modpack, added from the bundled eggs when missing. */
     public function prepareEgg(): void
     {
-        if (($this->data['game'] ?? null) !== 'minecraft' || ($this->data['type'] ?? null) === 'modpack') {
+        if (($this->data['game'] ?? null) !== 'minecraft') {
             return;
         }
         $type = (string) $this->data['type'];
         $software = $this->data['software'] ?? null;
-        $egg = MinecraftEggs::find($type, $software);
-        if (! $egg && ! user()?->can('create', Egg::class)) {
-            throw ValidationException::withMessages(['data.type' => __('simplify-server-maker::maker.minecraft.egg_missing')]);
-        }
+        $mayImport = (bool) user()?->can('create', Egg::class);
         try {
-            $egg ??= MinecraftEggs::ensure($type, $software);
+            if ($type === 'modpack') {
+                $key = (string) ($this->data['modpack'] ?? '');
+                if (! array_key_exists((string) ($this->data['modpack_version'] ?? ''), Sources::versions($key))) {
+                    throw ValidationException::withMessages(['data.modpack_version' => __('simplify-server-maker::maker.modpack.version_required')]);
+                }
+                $egg = Sources::egg($key, $mayImport);
+            } else {
+                $egg = MinecraftEggs::find($type, $software) ?? ($mayImport ? MinecraftEggs::ensure($type, $software) : null);
+            }
+        } catch (ValidationException $exception) {
+            throw $exception;
         } catch (Throwable $exception) {
             report($exception);
             throw ValidationException::withMessages(['data.type' => __('simplify-server-maker::maker.minecraft.egg_failed')]);
         }
-        $this->data['egg_id'] = $egg?->id;
+        if (! $egg) {
+            throw ValidationException::withMessages(['data.type' => __('simplify-server-maker::maker.minecraft.egg_missing')]);
+        }
+        $this->data['egg_id'] = $egg->id;
     }
 
     public function egg(): ?Egg
@@ -250,6 +266,14 @@ class ServerMaker extends Page implements HasForms
         }
         if ($type === 'proxy') {
             return 21;
+        }
+        if ($type === 'modpack') {
+            $runtime = Sources::runtime($this->data['modpack'] ?? null, $this->data['modpack_version'] ?? null);
+            if (in_array($runtime['java'] ?? null, Java::MAJORS, true)) {
+                return $runtime['java'];
+            }
+
+            return isset($runtime['minecraft']) ? MinecraftVersions::java($runtime['minecraft'], $type) : null;
         }
         $version = (string) ($this->data['version'] ?? '');
 
@@ -285,6 +309,11 @@ class ServerMaker extends Page implements HasForms
             $allocationId,
             $this->java(),
             $this->isAdmin(),
+            fn (array $environment) => Sources::environment(
+                (string) ($state['modpack'] ?? ''),
+                (string) ($state['modpack_version'] ?? ''),
+                $environment,
+            ),
         );
 
         try {

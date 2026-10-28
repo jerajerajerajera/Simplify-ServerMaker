@@ -15,10 +15,15 @@ admin area.
 
 - **Mojang** (`piston-meta.mojang.com`): the list of Minecraft releases and the Java version each one needs. No
   data about your panel is sent. Answers are cached for six hours.
+- **Modrinth** (`api.modrinth.com`), **FTB** (`api.feed-the-beast.com`, `api.modpacks.ch`) and, only when you add an
+  API key in the settings, **CurseForge** (`api.curseforge.com`): searching modpacks and listing their versions, when
+  someone picks Modpack. Only the search words are sent. The browser shows the packs' icons from those sites.
+  Technic packs come from a list in the plugin.
 
 ## Bundled eggs
 
-The Minecraft eggs (Vanilla, Paper, Purpur, Fabric, Forge, NeoForge, Quilt, Bedrock, Velocity and BungeeCord) come
+The Minecraft eggs (Vanilla, Paper, Purpur, Fabric, Forge, NeoForge, Quilt, Bedrock, Velocity, BungeeCord and the
+modpack eggs for Modrinth, CurseForge, FTB and ten Technic packs) come
 from [pelican-eggs/minecraft](https://github.com/pelican-eggs/minecraft) (MIT, see `resources/eggs/LICENSE`). When
 the panel has no egg for the chosen type, the Server Maker adds the bundled one with Pelican's own egg importer. It
 never changes an egg that is already on the panel. The eggs' install scripts download the server software on the

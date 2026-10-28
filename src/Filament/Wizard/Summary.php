@@ -10,6 +10,7 @@ use Simplify\ServerMaker\Creation\Resources;
 use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
 use Simplify\ServerMaker\Games\Java;
 use Simplify\ServerMaker\Games\Minecraft;
+use Simplify\ServerMaker\Modpacks\Sources;
 
 /** The rows of the Review step. */
 final class Summary
@@ -28,6 +29,10 @@ final class Summary
             $software = Minecraft::software($type, $data['software'] ?? null);
             $rows[$t('review.game')] = 'Minecraft · '.$t('minecraft.types.'.$type.'.label')
                 .($software ? ' · '.Minecraft::SOFTWARE[$type][$software] : '');
+            if ($type === 'modpack') {
+                $rows[$t('modpack.pack')] = Sources::pack($data['modpack'] ?? null)?->title ?? '—';
+                $rows[$t('modpack.version')] = Sources::versions($data['modpack'] ?? null)[(string) ($data['modpack_version'] ?? '')] ?? '—';
+            }
             if (Minecraft::usesVersion($type)) {
                 $rows[$t('minecraft.version')] = (string) ($data['version'] ?? '—');
             }

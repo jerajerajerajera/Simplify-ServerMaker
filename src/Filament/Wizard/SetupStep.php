@@ -6,15 +6,18 @@ namespace Simplify\ServerMaker\Filament\Wizard;
 
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Text;
 use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Components\Wizard\Step;
 use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
 use Simplify\ServerMaker\Games\Minecraft;
 use Simplify\ServerMaker\Games\MinecraftVersions;
+use Simplify\ServerMaker\Modpacks\Sources;
 
 /** Step 2: the software and version for Minecraft, or the game's own settings for every other game. */
 final class SetupStep
@@ -48,6 +51,36 @@ final class SetupStep
                             ->visible(fn (Get $get) => Minecraft::usesVersion((string) $get('type')))
                             ->required(fn (Get $get) => Minecraft::usesVersion((string) $get('type')))
                             ->live(),
+                        TextInput::make('modpack_search')
+                            ->label($t('modpack.search'))
+                            ->placeholder($t('modpack.search_placeholder'))
+                            ->prefixIcon('tabler-search')
+                            ->dehydrated(false)
+                            ->live(debounce: 600)
+                            ->visible(fn (Get $get) => $get('type') === 'modpack'),
+                        Radio::make('modpack')
+                            ->hiddenLabel()
+                            ->view('simplify-server-maker::wizard.modpacks')
+                            ->options(fn (Get $get) => array_column(
+                                Sources::results((string) $get('modpack_search'), $get('modpack')),
+                                'title',
+                                'key',
+                            ))
+                            ->visible(fn (Get $get) => $get('type') === 'modpack')
+                            ->required(fn (Get $get) => $get('type') === 'modpack')
+                            ->validationMessages(['required' => $t('modpack.required')])
+                            ->live()
+                            ->afterStateUpdated(fn (Set $set) => $set('modpack_version', null)),
+                        Select::make('modpack_version')
+                            ->label($t('modpack.version'))
+                            ->helperText($t('modpack.version_help'))
+                            ->options(fn (Get $get) => Sources::versions($get('modpack')))
+                            ->searchable()
+                            ->native(false)
+                            ->visible(fn (Get $get) => $get('type') === 'modpack' && filled($get('modpack')))
+                            ->required(fn (Get $get) => $get('type') === 'modpack'),
+                        Text::make($t('modpack.curseforge_off'))
+                            ->visible(fn (Get $get) => $get('type') === 'modpack' && ! Sources::get('curseforge')),
                         Text::make($t('minecraft.bedrock_help'))
                             ->visible(fn (Get $get) => $get('type') === 'bedrock'),
                         Text::make($t('minecraft.proxy_help'))

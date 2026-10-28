@@ -22,6 +22,7 @@ use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
 use Simplify\ServerMaker\Games\BundledEggs;
 use Simplify\ServerMaker\Games\OtherGames;
 use Simplify\ServerMaker\Models\Draft;
+use Simplify\ServerMaker\Modpacks\Remote;
 use Simplify\ServerMaker\ServerMakerAddon;
 
 define('LARAVEL_START', microtime(true));
@@ -165,6 +166,33 @@ step('a draft is saved after a step and opened again', function () use ($admin) 
         ->assertSet('step', 2)
         ->assertSet('restored', true);
     $draft->delete();
+});
+
+step('a Modrinth modpack is found and gets its egg', function () use ($admin) {
+    // A fake Modrinth: one pack with one version for Minecraft 1.20.1.
+    Remote::$transport = fn (string $url) => match (true) {
+        str_ends_with($url, '/search') => ['hits' => [['project_id' => 'SMOKE1', 'slug' => 'smoke', 'title' => 'Smoke Pack', 'description' => 'A pack']]],
+        str_ends_with($url, '/project/SMOKE1') => ['project_type' => 'modpack', 'slug' => 'smoke', 'title' => 'Smoke Pack'],
+        str_ends_with($url, '/project/SMOKE1/version') => [['id' => 'SV1', 'version_number' => '1.0']],
+        str_ends_with($url, '/version/SV1') => ['project_id' => 'SMOKE1', 'game_versions' => ['1.20.1']],
+        default => [],
+    };
+    $test = Livewire\Livewire::actingAs($admin)->test(ServerMaker::class)
+        ->call('pickGame', 'minecraft', 'modpack')
+        ->set('data.modpack_search', 'smoke')
+        ->assertSee('Smoke Pack')
+        ->set('data.modpack', 'modrinth:SMOKE1')
+        ->set('data.modpack_version', 'SV1')
+        ->call('prepareEgg')
+        ->assertHasNoErrors();
+    $egg = Egg::query()->find($test->get('data.egg_id'));
+    if ($egg?->name !== 'Modrinth Generic') {
+        throw new RuntimeException('the Modrinth egg was not imported');
+    }
+    if ($test->instance()->java() !== 17) {
+        throw new RuntimeException('expected Java 17 for 1.20.1, got '.var_export($test->instance()->java(), true));
+    }
+    Remote::$transport = null;
 });
 
 if (! $failed) {

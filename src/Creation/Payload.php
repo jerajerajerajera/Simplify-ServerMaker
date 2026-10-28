@@ -19,6 +19,7 @@ final class Payload
      * @param  array{memory: int, cpu: int, disk: int}  $resources
      * @param  int|null  $java  the Java major version for Minecraft Java servers
      * @param  bool  $admin  administrators may override the image, the startup command and every variable
+     * @param  (callable(array<string, string>): array<string, string>)|null  $modpack  fills in a modpack's variables
      */
     public static function build(
         array $state,
@@ -29,6 +30,7 @@ final class Payload
         int $allocationId,
         ?int $java,
         bool $admin,
+        ?callable $modpack = null,
     ): array {
         $name = trim((string) ($state['name'] ?? ''));
         if ($name === '' || mb_strlen($name) > 191) {
@@ -39,6 +41,12 @@ final class Payload
         $environment = $minecraft
             ? self::minecraftEnvironment($state, $egg, $java)
             : self::gameEnvironment((array) ($state['variables'] ?? []), $egg, $admin);
+        if ($minecraft && ($state['type'] ?? '') === 'modpack') {
+            if ($modpack === null) {
+                throw ValidationException::withMessages(['data.modpack' => __('simplify-server-maker::maker.modpack.invalid')]);
+            }
+            $environment = $modpack($environment);
+        }
         if ($admin) {
             $environment = self::overrides($environment, (array) ($state['environment'] ?? []));
         }

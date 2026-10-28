@@ -1,7 +1,19 @@
 {
+  "egg-attack-of-the-b--team.json": {
+    "name": "Attack of the B-Team",
+    "sha256": "4161b74d6f75eb0d5ef553b21ff24934902524cb474b63ba16850d84fca8e78a"
+  },
+  "egg-blightfall.json": {
+    "name": "Blightfall",
+    "sha256": "7ee2c9a36fe463249b9f175fafc218ea71073a57079899b96d3fa8ee3535a3e1"
+  },
   "egg-bungeecord.json": {
     "name": "Bungeecord",
     "sha256": "13fcb6f711738507b8ca96abaa27903f69c8b8e01c3f27652f746b3f7107a926"
+  },
+  "egg-curseforge-generic.json": {
+    "name": "CurseForge Generic",
+    "sha256": "0bf537677134641686c5fd5306c4a705b0ab813dc82542eb6696530660d8f795"
   },
   "egg-fabric.json": {
     "name": "Fabric",
@@ -10,6 +22,18 @@
   "egg-forge.json": {
     "name": "Forge Minecraft",
     "sha256": "58a0c50686dd8ca334ac367e25af751eff0074dc5ad52362b3dfe7833a03cf97"
+  },
+  "egg-ftb-server.json": {
+    "name": "FTB Server",
+    "sha256": "396b852265b3ac109193417623ec316543cf721cc63cf06871cf27c339f929ab"
+  },
+  "egg-hexxit.json": {
+    "name": "Hexxit",
+    "sha256": "f2b6e369e9b3fe865a95759de3afcf0c6012ae473cca8858cbfb0bf7e99d093d"
+  },
+  "egg-modrinth-generic.json": {
+    "name": "Modrinth Generic",
+    "sha256": "e9230b8f31c9beddc0aba00bf753aa349297ff08483e3c9151b0b34e3d61c5a6"
   },
   "egg-neoforge.json": {
     "name": "NeoForge",
@@ -26,6 +50,34 @@
   "egg-quilt.json": {
     "name": "Quilt",
     "sha256": "3b4fac03b873541b174acc48800a33c42b6433afe43880ca839fe9437f2fe195"
+  },
+  "egg-tekkit-classic.json": {
+    "name": "Tekkit Classic",
+    "sha256": "b8327442ec5792342dd1823944a0c5c9063f40ee18598901d7fe9b0691706afe"
+  },
+  "egg-tekkit-legends.json": {
+    "name": "Tekkit Legends",
+    "sha256": "367849c77f8185ac1a685a1839e98147303fc27c211aba696cea41b5bb21f63f"
+  },
+  "egg-tekkit-smp.json": {
+    "name": "Tekkit SMP",
+    "sha256": "52e5eb544ae054c2750822f88f49e88f44742ef5007d7197baa7e19560194ff4"
+  },
+  "egg-tekkit.json": {
+    "name": "Tekkit",
+    "sha256": "28c798b6f87b01eb0165747a303cb6a01e60ca8ca6023f0a67e0f33b60a066f3"
+  },
+  "egg-tekkit2.json": {
+    "name": "Tekkit 2",
+    "sha256": "77cbceba05040f14282f897d940e80f1432f504b2377fac76db5da1bf0a26691"
+  },
+  "egg-the1-12-2-pack.json": {
+    "name": "The 1.12.2 Pack",
+    "sha256": "f97bafafdb97b4883e3cd70314af0d516b9d76b67764a4bed8118b9eb25be35b"
+  },
+  "egg-the1-7-10-pack.json": {
+    "name": "The 1.7.10 Pack",
+    "sha256": "facd19992dee2bcc8fde6ca5130da574116228373aacf6c44b324fa302f19329"
   },
   "egg-vanilla-bedrock.json": {
     "name": "Vanilla Bedrock",
