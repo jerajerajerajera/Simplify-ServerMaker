@@ -64,8 +64,15 @@ function expectOk(TestResponse $response, string $url): void
     }
 }
 
+// Anything that fails outside a step (for example making the test user) must fail the job too.
+set_exception_handler(function (Throwable $e): void {
+    echo 'FAIL setup: '.get_class($e).': '.substr($e->getMessage(), 0, 400)."\n";
+    exit(1);
+});
+
 $admin = User::where('email', 'smoke-maker@example.com')->first()
-    ?? User::factory()->create(['email' => 'smoke-maker@example.com', 'root_admin' => true]);
+    ?? User::factory()->create(['email' => 'smoke-maker@example.com']);
+$admin->syncRoles(App\Models\Role::getRootAdmin());
 
 step('the translations load', function () {
     if (__('simplify-server-maker::maker.addon.name') !== 'Server Maker') {
