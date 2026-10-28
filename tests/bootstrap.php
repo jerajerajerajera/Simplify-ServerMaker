@@ -4,6 +4,7 @@
 // English lookups for __(). Laravel and Pelican classes are not available here; tests only use pure code.
 
 declare(strict_types=1);
+use Illuminate\Validation\ValidationException;
 
 spl_autoload_register(function (string $class): void {
     $prefix = 'Simplify\\ServerMaker\\';
@@ -15,6 +16,7 @@ spl_autoload_register(function (string $class): void {
     }
 });
 require __DIR__.'/stubs/simplify.php';
+require __DIR__.'/stubs/laravel.php';
 
 if (! function_exists('__')) {
     function __($key = null, $replace = [], $locale = null)
@@ -50,4 +52,16 @@ function check(string $what, bool $passed, string $detail = ''): void
         echo "FAIL $what".($detail !== '' ? ": $detail" : '')."\n";
         exit(1);
     }
+}
+
+/** The field a validation error is for, or null when the call did not fail. */
+function failsOn(callable $run): ?string
+{
+    try {
+        $run();
+    } catch (ValidationException $exception) {
+        return (string) array_key_first($exception->errors());
+    }
+
+    return null;
 }
