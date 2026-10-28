@@ -8,6 +8,7 @@ use App\Enums\EggFormat;
 use App\Models\Allocation;
 use App\Models\Egg;
 use App\Models\Node;
+use App\Models\Role;
 use App\Models\Server;
 use App\Models\User;
 use App\Services\Eggs\Sharing\EggImporterService;
@@ -72,7 +73,7 @@ set_exception_handler(function (Throwable $e): void {
 
 $admin = User::where('email', 'smoke-maker@example.com')->first()
     ?? User::factory()->create(['email' => 'smoke-maker@example.com']);
-$admin->syncRoles(App\Models\Role::getRootAdmin());
+$admin->syncRoles(Role::getRootAdmin());
 
 step('the translations load', function () {
     if (__('simplify-server-maker::maker.addon.name') !== 'Server Maker') {
@@ -148,4 +149,7 @@ step('another game shows its own settings', function () use ($admin) {
         ->assertSee('Smoke Valheim');
 });
 
+if (! $failed) {
+    echo "All steps passed\n";
+}
 exit($failed ? 1 : 0);

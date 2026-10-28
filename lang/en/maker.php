@@ -32,12 +32,30 @@ return [
     ],
     'minecraft' => [
         'types' => [
-            'vanilla' => ['label' => 'Vanilla', 'help' => 'Plain Minecraft, no extras.'],
-            'plugins' => ['label' => 'Plugins', 'help' => 'Paper or Purpur. Players need nothing extra.'],
-            'mods' => ['label' => 'Mods', 'help' => 'Fabric, Forge, NeoForge or Quilt. You add the mods.'],
-            'modpack' => ['label' => 'Modpack', 'help' => 'A ready-made pack from Modrinth or CurseForge.'],
-            'bedrock' => ['label' => 'Bedrock', 'help' => 'For phones, consoles and Windows.'],
-            'proxy' => ['label' => 'Proxy', 'help' => 'Velocity or BungeeCord in front of several servers.'],
+            'vanilla' => [
+                'label' => 'Vanilla',
+                'help' => 'Plain Minecraft, no extras.',
+            ],
+            'plugins' => [
+                'label' => 'Plugins',
+                'help' => 'Paper or Purpur. Players need nothing extra.',
+            ],
+            'mods' => [
+                'label' => 'Mods',
+                'help' => 'Fabric, Forge, NeoForge or Quilt. You add the mods.',
+            ],
+            'modpack' => [
+                'label' => 'Modpack',
+                'help' => 'A ready-made pack from Modrinth or CurseForge.',
+            ],
+            'bedrock' => [
+                'label' => 'Bedrock',
+                'help' => 'For phones, consoles and Windows.',
+            ],
+            'proxy' => [
+                'label' => 'Proxy',
+                'help' => 'Velocity or BungeeCord in front of several servers.',
+            ],
         ],
         'software' => [
             'plugins' => 'Server software',
