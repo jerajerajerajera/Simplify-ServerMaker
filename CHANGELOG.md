@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.1
+
+- Simplify's add-on list shows the same icon as the admin menu.
+- Ctrl+S (Cmd+S on a Mac) saves the settings.
+
 ## 1.0.0
 
 First version as its own plugin.
