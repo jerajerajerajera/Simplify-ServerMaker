@@ -21,6 +21,7 @@ use Simplify\ServerMaker\Creation\Ports;
 use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
 use Simplify\ServerMaker\Games\BundledEggs;
 use Simplify\ServerMaker\Games\OtherGames;
+use Simplify\ServerMaker\Models\Draft;
 use Simplify\ServerMaker\ServerMakerAddon;
 
 define('LARAVEL_START', microtime(true));
@@ -147,6 +148,23 @@ step('another game shows its own settings', function () use ($admin) {
         ->assertSet('data.game', 'other')
         ->assertSet('data.egg_id', $egg->id)
         ->assertSee('Smoke Valheim');
+});
+
+step('a draft is saved after a step and opened again', function () use ($admin) {
+    Draft::query()->where('user_id', $admin->id)->delete();
+    Livewire\Livewire::actingAs($admin)->test(ServerMaker::class)
+        ->call('pickGame', 'minecraft', 'mods')
+        ->set('data.name', 'smoke-draft')
+        ->call('stepDone', 1);
+    $draft = Draft::for($admin->id);
+    if (! $draft || $draft->step !== 2 || ($draft->data['type'] ?? null) !== 'mods') {
+        throw new RuntimeException('no draft: '.json_encode($draft?->toArray()));
+    }
+    Livewire\Livewire::actingAs($admin)->test(ServerMaker::class)
+        ->assertSet('data.name', 'smoke-draft')
+        ->assertSet('step', 2)
+        ->assertSet('restored', true);
+    $draft->delete();
 });
 
 if (! $failed) {

@@ -35,6 +35,7 @@ final class GameStep
                 Hidden::make('type'),
                 Hidden::make('software'),
                 Hidden::make('egg_id'),
-            ]);
+            ])
+            ->afterValidation(fn () => $page->stepDone(1));
     }
 }

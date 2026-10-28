@@ -71,6 +71,7 @@ final class ServerStep
                 if ($page->data['allocation_id'] === null) {
                     throw ValidationException::withMessages(['data.allocation_id' => $t('server.no_port_short')]);
                 }
+                $page->stepDone(3);
             });
     }
 

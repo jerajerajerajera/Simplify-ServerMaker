@@ -75,6 +75,9 @@ final class SetupStep
                         ];
                     }),
             ])
-            ->afterValidation(fn () => $page->prepareEgg());
+            ->afterValidation(function () use ($page): void {
+                $page->prepareEgg();
+                $page->stepDone(2);
+            });
     }
 }
