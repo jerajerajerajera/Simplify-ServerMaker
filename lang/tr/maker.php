@@ -116,6 +116,11 @@ return [
         'disk_range' => '1 ile :max GB arasında disk girin.',
         'no_room' => 'Bu node\'da bu kaynaklar için yer yok. Daha azını veya başka bir node seçin.',
     ],
+    'draft' => [
+        'restored' => 'Kaldığınız yerden devam ediyorsunuz.',
+        'start_over' => 'Baştan başla',
+        'start_over_help' => 'Şimdiye kadarki yanıtlarınız silinir.',
+    ],
     'review' => [
         'name' => 'Ad',
         'game' => 'Oyun',

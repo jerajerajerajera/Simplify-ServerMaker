@@ -116,6 +116,11 @@ return [
         'disk_range' => 'Digite um disco de 1 a :max GB.',
         'no_room' => 'Este node não tem espaço para esses recursos. Escolha menos ou outro node.',
     ],
+    'draft' => [
+        'restored' => 'Você continua de onde parou.',
+        'start_over' => 'Recomeçar',
+        'start_over_help' => 'Suas respostas até agora são removidas.',
+    ],
     'review' => [
         'name' => 'Nome',
         'game' => 'Jogo',

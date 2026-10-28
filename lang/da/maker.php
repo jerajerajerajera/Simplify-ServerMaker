@@ -116,6 +116,11 @@ return [
         'disk_range' => 'Indtast disk fra 1 til :max GB.',
         'no_room' => 'Denne node har ikke plads til disse ressourcer. Vælg mindre eller en anden node.',
     ],
+    'draft' => [
+        'restored' => 'Du fortsætter, hvor du slap.',
+        'start_over' => 'Start forfra',
+        'start_over_help' => 'Dine svar indtil nu fjernes.',
+    ],
     'review' => [
         'name' => 'Navn',
         'game' => 'Spil',

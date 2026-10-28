@@ -116,6 +116,11 @@ return [
         'disk_range' => 'Introdu disc între 1 și :max GB.',
         'no_room' => 'Acest node nu are loc pentru aceste resurse. Alege mai puțin sau alt node.',
     ],
+    'draft' => [
+        'restored' => 'Continui de unde ai rămas.',
+        'start_over' => 'Ia-o de la capăt',
+        'start_over_help' => 'Răspunsurile tale de până acum sunt șterse.',
+    ],
     'review' => [
         'name' => 'Nume',
         'game' => 'Joc',

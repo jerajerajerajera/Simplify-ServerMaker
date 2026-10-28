@@ -116,6 +116,11 @@ return [
         'disk_range' => 'Adj meg lemezt 1 és :max GB között.',
         'no_room' => 'Ezen a node-on nincs hely ezekhez az erőforrásokhoz. Válassz kevesebbet vagy másik node-ot.',
     ],
+    'draft' => [
+        'restored' => 'Ott folytatod, ahol abbahagytad.',
+        'start_over' => 'Újrakezdés',
+        'start_over_help' => 'Az eddigi válaszaid törlődnek.',
+    ],
     'review' => [
         'name' => 'Név',
         'game' => 'Játék',

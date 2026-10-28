@@ -116,6 +116,11 @@ return [
         'disk_range' => 'Įveskite diską nuo 1 iki :max GB.',
         'no_room' => 'Šiame node nėra vietos šiems ištekliams. Pasirinkite mažiau arba kitą node.',
     ],
+    'draft' => [
+        'restored' => 'Tęsiate nuo ten, kur baigėte.',
+        'start_over' => 'Pradėti iš naujo',
+        'start_over_help' => 'Jūsų iki šiol pateikti atsakymai bus pašalinti.',
+    ],
     'review' => [
         'name' => 'Pavadinimas',
         'game' => 'Žaidimas',

@@ -116,6 +116,11 @@ return [
         'disk_range' => '请输入 1 到 :max GB 的磁盘。',
         'no_room' => '此节点没有足够空间分配这些资源。请减少用量或选择其他节点。',
     ],
+    'draft' => [
+        'restored' => '你将从上次中断的地方继续。',
+        'start_over' => '重新开始',
+        'start_over_help' => '你目前的回答将被清除。',
+    ],
     'review' => [
         'name' => '名称',
         'game' => '游戏',

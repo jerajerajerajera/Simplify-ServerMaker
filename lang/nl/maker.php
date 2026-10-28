@@ -116,6 +116,11 @@ return [
         'disk_range' => 'Vul schijfruimte in van 1 tot :max GB.',
         'no_room' => 'Deze node heeft geen ruimte voor deze middelen. Kies minder of een andere node.',
     ],
+    'draft' => [
+        'restored' => 'Je gaat verder waar je gebleven was.',
+        'start_over' => 'Opnieuw beginnen',
+        'start_over_help' => 'Je antwoorden tot nu toe worden verwijderd.',
+    ],
     'review' => [
         'name' => 'Naam',
         'game' => 'Game',
