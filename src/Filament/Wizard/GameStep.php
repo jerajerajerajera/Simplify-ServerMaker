@@ -23,7 +23,7 @@ final class GameStep
                     ->hiddenLabel()
                     ->view('simplify-server-maker::wizard.game-picker')
                     ->viewData(fn () => [
-                        'types' => array_values(array_filter(Minecraft::TYPES, fn (string $type) => $type !== 'modpack')),
+                        'types' => Minecraft::TYPES,
                         'games' => OtherGames::cards(),
                     ])
                     ->required()
