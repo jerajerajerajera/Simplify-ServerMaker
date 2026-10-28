@@ -62,7 +62,16 @@
     .smk-review { display: grid; grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); gap: 1rem 2rem; margin: 0; }
     .smk-review dt { color: var(--smk-muted); font-size: .75rem; }
     .smk-review dd { margin: .125rem 0 0; font-size: .875rem; font-weight: 500; overflow-wrap: anywhere; }
+    /* Back and Next stay in reach at the bottom of the screen, whatever the length of a step. */
+    .smk .fi-sc-wizard-footer {
+        position: sticky; bottom: 0; z-index: 10; padding-block: .75rem;
+        border-top: 1px solid var(--smk-line); background: var(--smk-bar, var(--color-white, #fff));
+    }
+    .dark .smk .fi-sc-wizard-footer { --smk-bar: var(--gray-900); }
     @media (max-width: 600px) {
+        .smk .fi-sc-wizard-footer { flex-wrap: nowrap; padding-bottom: calc(.75rem + env(safe-area-inset-bottom)); }
+        .smk .fi-sc-wizard-footer > * { flex: 1 1 0; }
+        .smk .fi-sc-wizard-footer .fi-btn { justify-content: center; width: 100%; min-height: 2.75rem; }
         .smk-cards { grid-template-columns: minmax(0, 1fr); }
         .smk-search { width: 100%; }
     }
