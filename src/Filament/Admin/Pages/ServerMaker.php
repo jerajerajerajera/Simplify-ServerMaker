@@ -17,6 +17,7 @@ use Filament\Schemas\Components\Wizard;
 use Filament\Schemas\Schema;
 use Illuminate\Support\HtmlString;
 use Illuminate\Validation\ValidationException;
+use Livewire\Attributes\Locked;
 use Simplify\ServerMaker\Creation\Creator;
 use Simplify\ServerMaker\Creation\EggData;
 use Simplify\ServerMaker\Creation\Payload;
@@ -32,6 +33,7 @@ use Simplify\ServerMaker\Games\Minecraft;
 use Simplify\ServerMaker\Games\MinecraftEggs;
 use Simplify\ServerMaker\Games\MinecraftVersions;
 use Simplify\ServerMaker\Games\OtherGames;
+use Simplify\ServerMaker\Models\Draft;
 use Throwable;
 
 /** The Server Maker: a wizard that creates a game server in a few steps. */
@@ -49,6 +51,13 @@ class ServerMaker extends Page implements HasForms
 
     /** @var array<string, mixed> */
     public ?array $data = [];
+
+    /** The step to open on: 1, or where a saved draft left off. */
+    #[Locked]
+    public int $step = 1;
+
+    #[Locked]
+    public bool $restored = false;
 
     public static function getNavigationLabel(): string
     {
@@ -79,7 +88,7 @@ class ServerMaker extends Page implements HasForms
     public function mount(): void
     {
         $node = Ports::nodes()->orderBy('id')->value('id');
-        $this->form->fill([
+        $fresh = [
             'game' => null,
             'type' => null,
             'software' => null,
@@ -95,7 +104,48 @@ class ServerMaker extends Page implements HasForms
             'startup' => '',
             'environment' => [],
             ...$this->resourceDefaults('vanilla'),
-        ]);
+        ];
+        $draft = Draft::for((int) user()->id);
+        if ($draft) {
+            try {
+                $fresh = array_replace($fresh, $draft->data);
+                $this->step = max(1, min(5, $draft->step));
+                $this->restored = true;
+                Notification::make()->title(__('simplify-server-maker::maker.draft.restored'))->info()->send();
+            } catch (Throwable $exception) {
+                // A draft that cannot be read (for example after a new APP_KEY) is dropped.
+                report($exception);
+                $draft->delete();
+            }
+        }
+        $this->form->fill($fresh);
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            Action::make('start_over')
+                ->label(__('simplify-server-maker::maker.draft.start_over'))
+                ->icon('tabler-restore')
+                ->color('gray')
+                ->visible(fn () => $this->restored)
+                ->requiresConfirmation()
+                ->modalDescription(__('simplify-server-maker::maker.draft.start_over_help'))
+                ->action(function (): void {
+                    Draft::query()->where('user_id', user()->id)->delete();
+                    $this->redirect(static::getUrl());
+                }),
+        ];
+    }
+
+    /** Saves the answers so far after each step, so a closed tab or a lost connection costs nothing. */
+    public function stepDone(int $step): void
+    {
+        abort_unless(static::canAccess(), 403);
+        Draft::query()->updateOrCreate(
+            ['user_id' => (int) user()->id],
+            ['data' => Draft::clean($this->data ?? []), 'step' => min(5, $step + 1)],
+        );
     }
 
     public function form(Schema $schema): Schema
@@ -111,6 +161,7 @@ class ServerMaker extends Page implements HasForms
                     ReviewStep::make($this),
                 ])
                     ->columnSpanFull()
+                    ->startOnStep(fn () => $this->step)
                     ->nextAction(fn (Action $action) => $action->label(__('simplify-server-maker::maker.next')))
                     ->previousAction(fn (Action $action) => $action->label(__('simplify-server-maker::maker.back')))
                     ->submitAction(new HtmlString(view('simplify-server-maker::wizard.create-button')->render())),
@@ -251,6 +302,7 @@ class ServerMaker extends Page implements HasForms
             return;
         }
 
+        Draft::query()->where('user_id', user()->id)->delete();
         Notification::make()
             ->title(__('simplify-server-maker::maker.review.created'))
             ->body(__('simplify-server-maker::maker.review.created_body'))

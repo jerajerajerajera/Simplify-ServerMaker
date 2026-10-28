@@ -116,6 +116,11 @@ return [
         'disk_range' => 'Nhập ổ đĩa từ 1 đến :max GB.',
         'no_room' => 'Node này không đủ chỗ cho các tài nguyên này. Chọn ít hơn hoặc node khác.',
     ],
+    'draft' => [
+        'restored' => 'Bạn tiếp tục từ chỗ đã dừng.',
+        'start_over' => 'Bắt đầu lại',
+        'start_over_help' => 'Các câu trả lời của bạn đến giờ sẽ bị xóa.',
+    ],
     'review' => [
         'name' => 'Tên',
         'game' => 'Trò chơi',

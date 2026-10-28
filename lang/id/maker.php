@@ -116,6 +116,11 @@ return [
         'disk_range' => 'Masukkan disk dari 1 sampai :max GB.',
         'no_room' => 'Node ini tidak punya ruang untuk sumber daya ini. Pilih lebih sedikit, atau node lain.',
     ],
+    'draft' => [
+        'restored' => 'Kamu melanjutkan dari tempat terakhir.',
+        'start_over' => 'Mulai ulang',
+        'start_over_help' => 'Jawabanmu sejauh ini akan dihapus.',
+    ],
     'review' => [
         'name' => 'Nama',
         'game' => 'Game',

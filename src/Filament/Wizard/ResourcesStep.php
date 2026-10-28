@@ -52,7 +52,10 @@ final class ResourcesStep
             ->label($t('steps.resources'))
             ->description(fn (Get $get) => $get('game') === 'minecraft' ? $t('resources.help_type') : $t('resources.help_game'))
             ->schema($fields)
-            ->afterValidation(fn () => Resources::payload($page->data));
+            ->afterValidation(function () use ($page): void {
+                Resources::payload($page->data);
+                $page->stepDone(4);
+            });
     }
 
     private static function label(string $resource, int $value, callable $t): string

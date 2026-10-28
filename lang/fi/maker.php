@@ -116,6 +116,11 @@ return [
         'disk_range' => 'Anna levytila väliltä 1–:max GB.',
         'no_room' => 'Tässä nodessa ei ole tilaa näille resursseille. Valitse vähemmän tai toinen node.',
     ],
+    'draft' => [
+        'restored' => 'Jatkat siitä, mihin jäit.',
+        'start_over' => 'Aloita alusta',
+        'start_over_help' => 'Tähänastiset vastauksesi poistetaan.',
+    ],
     'review' => [
         'name' => 'Nimi',
         'game' => 'Peli',

@@ -116,6 +116,11 @@ return [
         'disk_range' => 'Enter disk from 1 to :max GB.',
         'no_room' => 'This node has no room for these resources. Pick less, or another node.',
     ],
+    'draft' => [
+        'restored' => 'You carry on where you left off.',
+        'start_over' => 'Start over',
+        'start_over_help' => 'Your answers so far are removed.',
+    ],
     'review' => [
         'name' => 'Name',
         'game' => 'Game',

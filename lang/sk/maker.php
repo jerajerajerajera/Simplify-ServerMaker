@@ -116,6 +116,11 @@ return [
         'disk_range' => 'Zadaj disk od 1 do :max GB.',
         'no_room' => 'Tento node nemá miesto pre tieto prostriedky. Vyber menej alebo iný node.',
     ],
+    'draft' => [
+        'restored' => 'Pokračuješ tam, kde si skončil.',
+        'start_over' => 'Začať odznova',
+        'start_over_help' => 'Tvoje doterajšie odpovede sa vymažú.',
+    ],
     'review' => [
         'name' => 'Názov',
         'game' => 'Hra',
