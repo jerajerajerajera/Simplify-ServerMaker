@@ -4,6 +4,7 @@ return [
     'addon' => [
         'name' => 'Server Maker',
         'description' => 'Buat server game dalam beberapa langkah yang jelas.',
+        'create' => 'Buat server',
     ],
     'title' => 'Server Maker',
     'next' => 'Lanjut',
@@ -105,6 +106,8 @@ return [
         'no_port_short' => 'Tidak ada port kosong di node ini.',
         'node_denied' => 'Kamu tidak bisa membuat server di node ini.',
         'port_taken' => 'Port ini baru saja dipakai. Kembali ke langkah Server dan pilih port lain.',
+        'subdomain' => 'Subdomain',
+        'subdomain_help' => 'Pemain bisa bergabung dengan nama ini. Biarkan kosong jika tidak ingin memakai subdomain.',
     ],
     'resources' => [
         'help_type' => 'Nilai awal cocok untuk jenis server ini. Pilih lebih banyak atau sedikit jika mau.',

@@ -4,6 +4,7 @@ return [
     'addon' => [
         'name' => 'Server Maker',
         'description' => 'Birkaç net adımda bir oyun sunucusu oluşturun.',
+        'create' => 'Sunucu oluştur',
     ],
     'title' => 'Server Maker',
     'next' => 'İleri',
@@ -105,6 +106,8 @@ return [
         'no_port_short' => 'Bu node\'da boş port yok.',
         'node_denied' => 'Bu node\'da sunucu oluşturamazsınız.',
         'port_taken' => 'Bu port az önce alındı. Sunucu adımına dönüp başka bir port seçin.',
+        'subdomain' => 'Alt alan adı',
+        'subdomain_help' => 'Oyuncular bu adla bağlanabilir. Alt alan adı istemiyorsanız boş bırakın.',
     ],
     'resources' => [
         'help_type' => 'Başlangıç değerleri bu sunucu türüne uygundur. İsterseniz daha fazla veya daha az seçin.',

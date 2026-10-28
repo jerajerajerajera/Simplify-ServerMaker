@@ -31,6 +31,12 @@ final class Ports
         return $id === null ? null : (int) $id;
     }
 
+    /** The port a new server starts with: a forwarded one when Simplify Subdomains is set up, else the first free one. */
+    public static function preferred(?int $nodeId): ?int
+    {
+        return Subdomain::allocationFor((int) $nodeId) ?? self::first($nodeId);
+    }
+
     /** @return array<int, string> allocation id => ip:port */
     public static function options(?int $nodeId): array
     {

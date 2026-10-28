@@ -4,6 +4,7 @@ return [
     'addon' => [
         'name' => 'Server Maker',
         'description' => 'Creează un server de joc în câțiva pași clari.',
+        'create' => 'Creează serverul',
     ],
     'title' => 'Server Maker',
     'next' => 'Înainte',
@@ -105,6 +106,8 @@ return [
         'no_port_short' => 'Nu există niciun port liber pe acest node.',
         'node_denied' => 'Nu poți crea servere pe acest node.',
         'port_taken' => 'Acest port tocmai a fost ocupat. Întoarce-te la pasul Server și alege altul.',
+        'subdomain' => 'Subdomeniu',
+        'subdomain_help' => 'Jucătorii se pot conecta folosind acest nume. Lasă gol pentru niciun subdomeniu.',
     ],
     'resources' => [
         'help_type' => 'Valorile de pornire se potrivesc acestui tip de server. Alege mai mult sau mai puțin, dacă vrei.',

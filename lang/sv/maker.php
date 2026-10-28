@@ -4,6 +4,7 @@ return [
     'addon' => [
         'name' => 'Server Maker',
         'description' => 'Skapa en spelserver i några enkla steg.',
+        'create' => 'Skapa server',
     ],
     'title' => 'Server Maker',
     'next' => 'Nästa',
@@ -105,6 +106,8 @@ return [
         'no_port_short' => 'Det finns ingen ledig port på den här noden.',
         'node_denied' => 'Du kan inte skapa servrar på den här noden.',
         'port_taken' => 'Den här porten togs precis. Gå tillbaka till steget Server och välj en annan.',
+        'subdomain' => 'Underdomän',
+        'subdomain_help' => 'Spelare kan ansluta med det här namnet. Lämna tomt för ingen underdomän.',
     ],
     'resources' => [
         'help_type' => 'Startvärdena passar den här servertypen. Välj mer eller mindre om du vill.',

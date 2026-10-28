@@ -4,6 +4,7 @@ return [
     'addon' => [
         'name' => 'Server Maker',
         'description' => 'Luo pelipalvelin muutamassa selkeässä vaiheessa.',
+        'create' => 'Luo palvelin',
     ],
     'title' => 'Server Maker',
     'next' => 'Seuraava',
@@ -105,6 +106,8 @@ return [
         'no_port_short' => 'Tässä nodessa ei ole vapaata porttia.',
         'node_denied' => 'Et voi luoda palvelimia tähän nodeen.',
         'port_taken' => 'Tämä portti varattiin juuri. Palaa Palvelin-vaiheeseen ja valitse toinen.',
+        'subdomain' => 'Aliverkkotunnus',
+        'subdomain_help' => 'Pelaajat voivat liittyä tällä nimellä. Jätä tyhjäksi, jos et halua aliverkkotunnusta.',
     ],
     'resources' => [
         'help_type' => 'Alkuarvot sopivat tälle palvelintyypille. Valitse halutessasi enemmän tai vähemmän.',

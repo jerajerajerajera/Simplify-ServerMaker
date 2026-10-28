@@ -4,6 +4,7 @@ return [
     'addon' => [
         'name' => 'Server Maker',
         'description' => '只需幾個清楚的步驟即可建立遊戲伺服器。',
+        'create' => '建立伺服器',
     ],
     'title' => 'Server Maker',
     'next' => '下一步',
@@ -105,6 +106,8 @@ return [
         'no_port_short' => '此節點上沒有可用的連接埠。',
         'node_denied' => '你無法在此節點上建立伺服器。',
         'port_taken' => '此連接埠剛剛被占用。請返回「伺服器」步驟並選擇另一個。',
+        'subdomain' => '子網域',
+        'subdomain_help' => '玩家可以透過此名稱加入。留空則不使用子網域。',
     ],
     'resources' => [
         'help_type' => '初始值適合此伺服器類型。你可以依需要增加或減少。',

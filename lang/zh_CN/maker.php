@@ -4,6 +4,7 @@ return [
     'addon' => [
         'name' => 'Server Maker',
         'description' => '只需几个清晰的步骤即可创建游戏服务器。',
+        'create' => '创建服务器',
     ],
     'title' => 'Server Maker',
     'next' => '下一步',
@@ -105,6 +106,8 @@ return [
         'no_port_short' => '此节点上没有空闲端口。',
         'node_denied' => '你不能在此节点上创建服务器。',
         'port_taken' => '此端口刚刚被占用。请返回“服务器”步骤并选择另一个。',
+        'subdomain' => '子域名',
+        'subdomain_help' => '玩家可以通过此名称加入。留空则不使用子域名。',
     ],
     'resources' => [
         'help_type' => '初始值适合此服务器类型。你可以按需增加或减少。',

@@ -23,6 +23,7 @@ use Simplify\ServerMaker\Creation\EggData;
 use Simplify\ServerMaker\Creation\Payload;
 use Simplify\ServerMaker\Creation\Ports;
 use Simplify\ServerMaker\Creation\Resources;
+use Simplify\ServerMaker\Creation\Subdomain;
 use Simplify\ServerMaker\Filament\Wizard\GameStep;
 use Simplify\ServerMaker\Filament\Wizard\GameVariables;
 use Simplify\ServerMaker\Filament\Wizard\ResourcesStep;
@@ -102,7 +103,8 @@ class ServerMaker extends Page implements HasForms
             'modpack_version' => null,
             'name' => '',
             'node_id' => $node,
-            'allocation_id' => Ports::first($node),
+            'allocation_id' => Ports::preferred($node),
+            'subdomain' => '',
             'backups' => 2,
             'skip_scripts' => false,
             'image' => '',
@@ -326,8 +328,14 @@ class ServerMaker extends Page implements HasForms
             throw ValidationException::withMessages(['data.game' => __('simplify-server-maker::maker.game.required')]);
         }
 
+        $subdomain = strtolower(trim((string) ($state['subdomain'] ?? '')));
+        if ($subdomain !== '' && ($reason = Subdomain::check($subdomain))) {
+            throw ValidationException::withMessages(['data.subdomain' => $reason]);
+        }
+        $state['subdomain'] = $subdomain;
+
         $nodeId = (int) ($state['node_id'] ?? 0);
-        $allocationId = (int) ($state['allocation_id'] ?? 0) ?: Ports::first($nodeId);
+        $allocationId = (int) ($state['allocation_id'] ?? 0) ?: Ports::preferred($nodeId);
         if (! $allocationId) {
             throw ValidationException::withMessages(['data.allocation_id' => __('simplify-server-maker::maker.server.no_port_short')]);
         }
@@ -367,6 +375,7 @@ class ServerMaker extends Page implements HasForms
             return;
         }
 
+        Subdomain::request($server, (string) ($state['subdomain'] ?? ''));
         Draft::query()->where('user_id', user()->id)->delete();
         Notification::make()
             ->title(__('simplify-server-maker::maker.review.created'))

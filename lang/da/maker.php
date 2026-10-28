@@ -4,6 +4,7 @@ return [
     'addon' => [
         'name' => 'Server Maker',
         'description' => 'Opret en spilserver i nogle få klare trin.',
+        'create' => 'Opret server',
     ],
     'title' => 'Server Maker',
     'next' => 'Næste',
@@ -105,6 +106,8 @@ return [
         'no_port_short' => 'Der er ingen ledig port på denne node.',
         'node_denied' => 'Du kan ikke oprette servere på denne node.',
         'port_taken' => 'Denne port blev lige taget. Gå tilbage til trinnet Server, og vælg en anden.',
+        'subdomain' => 'Underdomæne',
+        'subdomain_help' => 'Spillere kan forbinde med dette navn. Lad feltet være tomt for intet underdomæne.',
     ],
     'resources' => [
         'help_type' => 'Startværdierne passer til denne servertype. Vælg mere eller mindre, hvis du vil.',

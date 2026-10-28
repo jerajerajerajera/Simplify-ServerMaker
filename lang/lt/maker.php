@@ -4,6 +4,7 @@ return [
     'addon' => [
         'name' => 'Server Maker',
         'description' => 'Sukurkite žaidimo serverį keliais aiškiais žingsniais.',
+        'create' => 'Sukurti serverį',
     ],
     'title' => 'Server Maker',
     'next' => 'Toliau',
@@ -105,6 +106,8 @@ return [
         'no_port_short' => 'Šiame node nėra laisvo prievado.',
         'node_denied' => 'Šiame node negalite kurti serverių.',
         'port_taken' => 'Šis prievadas ką tik buvo užimtas. Grįžkite į žingsnį Serveris ir pasirinkite kitą.',
+        'subdomain' => 'Subdomenas',
+        'subdomain_help' => 'Žaidėjai galės prisijungti naudodami šį pavadinimą. Palikite tuščią, jei nenorite subdomeno.',
     ],
     'resources' => [
         'help_type' => 'Pradinės reikšmės tinka šiam serverio tipui. Jei norite, pasirinkite daugiau ar mažiau.',
