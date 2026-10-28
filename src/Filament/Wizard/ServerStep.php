@@ -42,6 +42,7 @@ final class ServerStep
                     ->label($t('server.node'))
                     ->options(fn () => Ports::nodes()->orderBy('name')->pluck('name', 'id')->all())
                     ->visible($several)
+                    ->dehydratedWhenHidden()
                     ->required()
                     ->native(false)
                     ->live()
@@ -51,6 +52,7 @@ final class ServerStep
                     ->helperText($t('server.port_help'))
                     ->options(fn (Get $get) => Ports::options((int) $get('node_id')))
                     ->visible(fn (Get $get) => Ports::first((int) $get('node_id')) !== null)
+                    ->dehydratedWhenHidden()
                     ->searchable()
                     ->native(false),
                 View::make('simplify-server-maker::wizard.no-port')
