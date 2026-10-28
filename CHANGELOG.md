@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.2
+
+- Server Maker now sits in the Simplify group of Pelican's admin menu, together with the other Simplify add-ons,
+  in the same order everywhere. This works with or without the Simplify core.
+
 ## 1.0.1
 
 - Simplify's add-on list shows the same icon as the admin menu.
