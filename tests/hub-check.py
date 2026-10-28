@@ -78,6 +78,10 @@ for name in listed_all:
 for name in listed_all:
     if not name.startswith('src/') and not name.startswith('resources/'):
         continue
+    # Bundled egg definitions (pelican-eggs, MIT): their install scripts run on the node when a server is installed,
+    # and their update_url is Pelican's own egg update. The plugin itself never fetches anything from GitHub.
+    if name.startswith('resources/eggs/'):
+        continue
     text = (root / name).read_text('utf-8', 'replace') if (root / name).is_file() else ''
     for pattern in ['raw.githubusercontent.com', 'api.github.com', 'download_url']:
         if pattern in text:

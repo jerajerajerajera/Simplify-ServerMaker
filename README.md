@@ -13,7 +13,16 @@ admin area.
 
 ## What it sends where
 
-Nothing yet. This list grows with the features that need an outside service.
+- **Mojang** (`piston-meta.mojang.com`): the list of Minecraft releases and the Java version each one needs. No
+  data about your panel is sent. Answers are cached for six hours.
+
+## Bundled eggs
+
+The Minecraft eggs (Vanilla, Paper, Purpur, Fabric, Forge, NeoForge, Quilt, Bedrock, Velocity and BungeeCord) come
+from [pelican-eggs/minecraft](https://github.com/pelican-eggs/minecraft) (MIT, see `resources/eggs/LICENSE`). When
+the panel has no egg for the chosen type, the Server Maker adds the bundled one with Pelican's own egg importer. It
+never changes an egg that is already on the panel. The eggs' install scripts download the server software on the
+node, as every egg does.
 
 ## License
 
