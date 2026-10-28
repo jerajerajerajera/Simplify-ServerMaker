@@ -4,6 +4,7 @@ return [
     'addon' => [
         'name' => 'Server Maker',
         'description' => 'Hozz létre játékszervert néhány egyszerű lépésben.',
+        'create' => 'Szerver létrehozása',
     ],
     'title' => 'Server Maker',
     'next' => 'Tovább',
@@ -105,6 +106,8 @@ return [
         'no_port_short' => 'Ezen a node-on nincs szabad port.',
         'node_denied' => 'Ezen a node-on nem hozhatsz létre szervereket.',
         'port_taken' => 'Ezt a portot épp most foglalták le. Menj vissza a Szerver lépéshez, és válassz másikat.',
+        'subdomain' => 'Aldomain',
+        'subdomain_help' => 'A játékosok ezzel a névvel csatlakozhatnak. Hagyd üresen, ha nem kérsz aldomaint.',
     ],
     'resources' => [
         'help_type' => 'A kezdőértékek illenek ehhez a szervertípushoz. Ha szeretnéd, válassz többet vagy kevesebbet.',

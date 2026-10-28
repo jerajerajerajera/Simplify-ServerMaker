@@ -4,6 +4,7 @@ return [
     'addon' => [
         'name' => 'Server Maker',
         'description' => '몇 단계만으로 게임 서버를 만드세요.',
+        'create' => '서버 만들기',
     ],
     'title' => 'Server Maker',
     'next' => '다음',
@@ -105,6 +106,8 @@ return [
         'no_port_short' => '이 노드에는 사용 가능한 포트가 없습니다.',
         'node_denied' => '이 노드에서는 서버를 만들 수 없습니다.',
         'port_taken' => '이 포트가 방금 사용되었습니다. 서버 단계로 돌아가 다른 포트를 선택하세요.',
+        'subdomain' => '하위 도메인',
+        'subdomain_help' => '플레이어가 이 이름으로 접속할 수 있습니다. 하위 도메인을 사용하지 않으려면 비워 두세요.',
     ],
     'resources' => [
         'help_type' => '시작 값은 이 서버 유형에 맞춰져 있습니다. 원하면 더 많이 또는 적게 선택하세요.',

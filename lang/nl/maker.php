@@ -4,6 +4,7 @@ return [
     'addon' => [
         'name' => 'Server Maker',
         'description' => 'Maak een gameserver in een paar duidelijke stappen.',
+        'create' => 'Server maken',
     ],
     'title' => 'Server Maker',
     'next' => 'Volgende',
@@ -105,6 +106,8 @@ return [
         'no_port_short' => 'Er is geen vrije poort op deze node.',
         'node_denied' => 'Je kunt geen servers maken op deze node.',
         'port_taken' => 'Deze poort is net bezet. Ga terug naar de stap Server en kies een andere.',
+        'subdomain' => 'Subdomein',
+        'subdomain_help' => 'Spelers kunnen met deze naam joinen. Laat leeg voor geen subdomein.',
     ],
     'resources' => [
         'help_type' => 'De beginwaarden passen bij dit servertype. Kies gerust meer of minder.',

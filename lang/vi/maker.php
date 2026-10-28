@@ -4,6 +4,7 @@ return [
     'addon' => [
         'name' => 'Server Maker',
         'description' => 'Tạo máy chủ game chỉ với vài bước rõ ràng.',
+        'create' => 'Tạo máy chủ',
     ],
     'title' => 'Server Maker',
     'next' => 'Tiếp',
@@ -105,6 +106,8 @@ return [
         'no_port_short' => 'Node này không còn cổng trống.',
         'node_denied' => 'Bạn không thể tạo máy chủ trên node này.',
         'port_taken' => 'Cổng này vừa bị dùng. Quay lại bước Máy chủ và chọn cổng khác.',
+        'subdomain' => 'Tên miền phụ',
+        'subdomain_help' => 'Người chơi có thể tham gia bằng tên này. Để trống nếu không dùng tên miền phụ.',
     ],
     'resources' => [
         'help_type' => 'Giá trị ban đầu phù hợp với loại máy chủ này. Chọn nhiều hơn hoặc ít hơn nếu muốn.',

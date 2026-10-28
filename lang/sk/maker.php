@@ -4,6 +4,7 @@ return [
     'addon' => [
         'name' => 'Server Maker',
         'description' => 'Vytvor herný server v niekoľkých jasných krokoch.',
+        'create' => 'Vytvoriť server',
     ],
     'title' => 'Server Maker',
     'next' => 'Ďalej',
@@ -105,6 +106,8 @@ return [
         'no_port_short' => 'Na tomto node nie je žiadny voľný port.',
         'node_denied' => 'Na tomto node nemôžeš vytvárať servery.',
         'port_taken' => 'Tento port bol práve obsadený. Vráť sa ku kroku Server a vyber iný.',
+        'subdomain' => 'Subdoména',
+        'subdomain_help' => 'Hráči sa môžu pripojiť pomocou tohto názvu. Nechaj prázdne pre žiadnu subdoménu.',
     ],
     'resources' => [
         'help_type' => 'Počiatočné hodnoty zodpovedajú tomuto typu servera. Pokojne vyber viac alebo menej.',

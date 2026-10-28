@@ -4,6 +4,7 @@ return [
     'addon' => [
         'name' => 'Server Maker',
         'description' => 'Crea un servidor de juego en unos pocos pasos claros.',
+        'create' => 'Crear servidor',
     ],
     'title' => 'Server Maker',
     'next' => 'Siguiente',
@@ -105,6 +106,8 @@ return [
         'no_port_short' => 'No hay ningún puerto libre en este nodo.',
         'node_denied' => 'No puedes crear servidores en este nodo.',
         'port_taken' => 'Este puerto se acaba de ocupar. Vuelve al paso Servidor y elige otro.',
+        'subdomain' => 'Subdominio',
+        'subdomain_help' => 'Los jugadores pueden unirse con este nombre. Déjalo vacío para no usar subdominio.',
     ],
     'resources' => [
         'help_type' => 'Los valores iniciales se ajustan a este tipo de servidor. Elige más o menos si quieres.',
