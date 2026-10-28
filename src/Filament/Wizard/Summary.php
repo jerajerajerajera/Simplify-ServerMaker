@@ -7,6 +7,7 @@ namespace Simplify\ServerMaker\Filament\Wizard;
 use App\Models\Allocation;
 use Simplify\ServerMaker\Creation\EggData;
 use Simplify\ServerMaker\Creation\Resources;
+use Simplify\ServerMaker\Creation\Subdomain;
 use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
 use Simplify\ServerMaker\Games\Java;
 use Simplify\ServerMaker\Games\Minecraft;
@@ -44,6 +45,10 @@ final class Summary
         }
         $allocation = Allocation::query()->find((int) ($data['allocation_id'] ?? 0));
         $rows[$t('review.address')] = $allocation?->address ?? '—';
+        $subdomain = trim((string) ($data['subdomain'] ?? ''));
+        if ($subdomain !== '' && Subdomain::available()) {
+            $rows[$t('server.subdomain')] = $subdomain.'.'.Subdomain::domain();
+        }
         $rows[$t('resources.ram')] = $t('resources.gb', ['amount' => Resources::amount($data, 'ram')]);
         $rows[$t('resources.cpu')] = Resources::amount($data, 'cpu').'%';
         $rows[$t('resources.disk')] = $t('resources.gb', ['amount' => Resources::gb(Resources::amount($data, 'disk'))]);

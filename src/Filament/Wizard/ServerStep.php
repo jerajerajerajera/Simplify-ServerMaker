@@ -13,6 +13,7 @@ use Filament\Schemas\Components\View;
 use Filament\Schemas\Components\Wizard\Step;
 use Illuminate\Validation\ValidationException;
 use Simplify\ServerMaker\Creation\Ports;
+use Simplify\ServerMaker\Creation\Subdomain;
 use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
 
 /** Step 3: the name, and the node and port when there is something to choose. */
@@ -32,12 +33,24 @@ final class ServerStep
                     ->placeholder(fn () => $page->randomName())
                     ->required()
                     ->maxLength(191)
+                    ->live(onBlur: true)
+                    ->afterStateUpdated(fn (?string $state, ?string $old, Get $get, Set $set) => self::suggest($state, $old, $get, $set))
                     ->suffixAction(
                         Action::make('random_name')
                             ->icon('tabler-dice-5')
                             ->tooltip($t('server.random'))
-                            ->action(fn (Set $set) => $set('name', $page->randomName())),
+                            ->action(function (Get $get, Set $set) use ($page): void {
+                                $old = $get('name');
+                                $set('name', $name = $page->randomName());
+                                self::suggest($name, $old, $get, $set);
+                            }),
                     ),
+                TextInput::make('subdomain')
+                    ->label($t('server.subdomain'))
+                    ->helperText($t('server.subdomain_help'))
+                    ->suffix(fn () => '.'.Subdomain::domain())
+                    ->maxLength(63)
+                    ->visible(fn () => Subdomain::available()),
                 Select::make('node_id')
                     ->label($t('server.node'))
                     ->options(fn () => Ports::nodes()->orderBy('name')->pluck('name', 'id')->all())
@@ -46,7 +59,7 @@ final class ServerStep
                     ->required()
                     ->native(false)
                     ->live()
-                    ->afterStateUpdated(fn ($state, Set $set) => $set('allocation_id', Ports::first((int) $state))),
+                    ->afterStateUpdated(fn ($state, Set $set) => $set('allocation_id', Ports::preferred((int) $state))),
                 Select::make('allocation_id')
                     ->label($t('server.port'))
                     ->helperText($t('server.port_help'))
@@ -66,13 +79,27 @@ final class ServerStep
                 }
                 $allocation = (int) ($page->data['allocation_id'] ?? 0);
                 if (! Ports::free($nodeId)->whereKey($allocation)->exists()) {
-                    $page->data['allocation_id'] = Ports::first($nodeId);
+                    $page->data['allocation_id'] = Ports::preferred($nodeId);
+                }
+                $subdomain = strtolower(trim((string) ($page->data['subdomain'] ?? '')));
+                $page->data['subdomain'] = $subdomain;
+                if ($subdomain !== '' && ($reason = Subdomain::check($subdomain))) {
+                    throw ValidationException::withMessages(['data.subdomain' => $reason]);
                 }
                 if ($page->data['allocation_id'] === null) {
                     throw ValidationException::withMessages(['data.allocation_id' => $t('server.no_port_short')]);
                 }
                 $page->stepDone(3);
             });
+    }
+
+    /** Fills in a subdomain from the name, unless someone typed their own. */
+    private static function suggest(?string $name, ?string $old, Get $get, Set $set): void
+    {
+        $current = (string) $get('subdomain');
+        if (Subdomain::available() && ($current === '' || $current === Subdomain::suggest((string) $old))) {
+            $set('subdomain', Subdomain::suggest((string) $name));
+        }
     }
 
     /** @return array{node: string, url: ?string} */

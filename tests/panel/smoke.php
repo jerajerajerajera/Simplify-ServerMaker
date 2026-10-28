@@ -18,6 +18,7 @@ use Illuminate\Foundation\Testing\Concerns\InteractsWithSession;
 use Illuminate\Foundation\Testing\Concerns\MakesHttpRequests;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Testing\TestResponse;
+use Simplify\Core\Addons\Addon;
 use Simplify\ServerMaker\Creation\Ports;
 use Simplify\ServerMaker\Filament\Admin\Pages\MakerSettings;
 use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
@@ -28,6 +29,7 @@ use Simplify\ServerMaker\Models\Draft;
 use Simplify\ServerMaker\Modpacks\Remote;
 use Simplify\ServerMaker\ServerMakerAddon;
 use Simplify\ServerMaker\Settings;
+use Simplify\Subdomains\Subdomains;
 
 define('LARAVEL_START', microtime(true));
 require getcwd().'/vendor/autoload.php';
@@ -288,6 +290,41 @@ step('without self-service a user cannot open the Server Maker', function () use
     if ($status !== 403) {
         throw new RuntimeException('HTTP '.$status);
     }
+});
+
+step('Simplify shows a Create server button to those who may use it', function () use ($admin, $user) {
+    if (! class_exists(Addon::class)) {
+        require dirname(__DIR__).'/stubs/simplify.php';
+    }
+    auth()->setUser($admin);
+    $addon = new ServerMakerAddon;
+    $buttons = $addon->dashboardActions();
+    if (count($buttons) !== 1 || ! str_ends_with($buttons[0]->url, '/server-maker') || $addon->settingsUrl() === null) {
+        throw new RuntimeException('admin: '.json_encode($buttons));
+    }
+    auth()->setUser($user);
+    if ($addon->dashboardActions() !== [] || $addon->settingsUrl() !== null) {
+        throw new RuntimeException('a user without self-service gets the button');
+    }
+});
+
+require dirname(__DIR__).'/stubs/subdomains.php';
+$forwarded = Allocation::query()->where('node_id', $node->id)->where('port', 25566)->value('id');
+Subdomains::$allocation = (int) $forwarded;
+
+step('with Simplify Subdomains a server gets a subdomain on a forwarded port', function () use ($admin, $node, $forwarded) {
+    Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('admin'));
+    Livewire\Livewire::actingAs($admin)->test(ServerMaker::class)
+        ->assertSet('data.allocation_id', (int) $forwarded)
+        ->call('pickGame', 'minecraft', 'plugins')
+        ->set('data.version', '1.21.1')
+        ->call('prepareEgg')
+        ->set('data.name', 'Oak Survival')
+        ->assertSet('data.subdomain', 'oak-survival')
+        ->set('data.subdomain', 'taken')
+        ->set('data.node_id', $node->id)
+        ->call('create')
+        ->assertHasErrors(['data.subdomain']);
 });
 
 if (! $failed) {
