@@ -6,7 +6,6 @@ namespace Simplify\ServerMaker\Filament\Admin\Pages;
 
 use App\Filament\Server\Pages\Console;
 use App\Models\Egg;
-use App\Models\Server;
 use App\Services\Servers\RandomWordService;
 use Filament\Actions\Action;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -18,6 +17,7 @@ use Filament\Schemas\Schema;
 use Illuminate\Support\HtmlString;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Locked;
+use Simplify\ServerMaker\Access;
 use Simplify\ServerMaker\Creation\Creator;
 use Simplify\ServerMaker\Creation\EggData;
 use Simplify\ServerMaker\Creation\Payload;
@@ -29,6 +29,7 @@ use Simplify\ServerMaker\Filament\Wizard\ResourcesStep;
 use Simplify\ServerMaker\Filament\Wizard\ReviewStep;
 use Simplify\ServerMaker\Filament\Wizard\ServerStep;
 use Simplify\ServerMaker\Filament\Wizard\SetupStep;
+use Simplify\ServerMaker\Games\BundledEggs;
 use Simplify\ServerMaker\Games\Java;
 use Simplify\ServerMaker\Games\Minecraft;
 use Simplify\ServerMaker\Games\MinecraftEggs;
@@ -78,13 +79,13 @@ class ServerMaker extends Page implements HasForms
 
     public static function canAccess(): bool
     {
-        return (bool) user()?->can('create', Server::class);
+        return Access::canUse();
     }
 
     /** Whether the person may change everything: the egg, the image, every variable. */
     public function isAdmin(): bool
     {
-        return (bool) user()?->can('create', Server::class);
+        return Access::admin();
     }
 
     public function mount(): void
@@ -123,11 +124,24 @@ class ServerMaker extends Page implements HasForms
             }
         }
         $this->form->fill($fresh);
+        if (! $this->isAdmin() && Access::remaining(user())['servers'] < 1) {
+            Notification::make()
+                ->title(__('simplify-server-maker::maker.access.no_servers_left'))
+                ->warning()
+                ->persistent()
+                ->send();
+        }
     }
 
     protected function getHeaderActions(): array
     {
         return [
+            Action::make('settings')
+                ->label(__('simplify-server-maker::maker.settings.title'))
+                ->icon('tabler-settings')
+                ->color('gray')
+                ->visible(fn () => MakerSettings::canAccess())
+                ->url(fn () => MakerSettings::getUrl(panel: 'admin')),
             Action::make('start_over')
                 ->label(__('simplify-server-maker::maker.draft.start_over'))
                 ->icon('tabler-restore')
@@ -176,7 +190,7 @@ class ServerMaker extends Page implements HasForms
     public function pickGame(string $game, string $choice): void
     {
         abort_unless(static::canAccess(), 403);
-        if ($game === 'minecraft' && Minecraft::isType($choice)) {
+        if ($game === 'minecraft' && Minecraft::isType($choice) && Access::minecraft()) {
             $software = Minecraft::software($choice, $this->data['software'] ?? null);
             $this->data = array_replace($this->data, [
                 'game' => 'minecraft',
@@ -210,9 +224,13 @@ class ServerMaker extends Page implements HasForms
     private function resourceDefaults(?string $type): array
     {
         $start = $type === null ? ['cpu' => 100, 'ram' => 4, 'disk' => 10240] : Minecraft::resources($type);
+        $limits = Access::resourceLimits();
         $values = [];
         foreach ($start as $resource => $amount) {
-            $values[$resource] = Resources::choice($amount, Resources::presets($resource, $amount));
+            if ($limits !== null) {
+                $amount = max(1, min($amount, $limits[$resource]));
+            }
+            $values[$resource] = Resources::choice($amount, Resources::presets($resource, $amount, $limits[$resource] ?? null));
             $values[$resource.'_custom'] = $amount;
         }
 
@@ -227,7 +245,7 @@ class ServerMaker extends Page implements HasForms
         }
         $type = (string) $this->data['type'];
         $software = $this->data['software'] ?? null;
-        $mayImport = (bool) user()?->can('create', Egg::class);
+        $mayImport = Access::mayImportEggs();
         try {
             if ($type === 'modpack') {
                 $key = (string) ($this->data['modpack'] ?? '');
@@ -250,11 +268,25 @@ class ServerMaker extends Page implements HasForms
         $this->data['egg_id'] = $egg->id;
     }
 
+    /** The chosen egg. For people who are not administrators only an egg they may use, whatever the browser sends. */
     public function egg(): ?Egg
     {
         $id = $this->data['egg_id'] ?? null;
+        if (! is_numeric($id)) {
+            return null;
+        }
+        if ($this->isAdmin()) {
+            return Egg::query()->find((int) $id);
+        }
+        if (($this->data['game'] ?? null) !== 'minecraft') {
+            return OtherGames::find($id);
+        }
+        $egg = Egg::query()->find((int) $id);
+        $bundled = array_map(fn (array $entry) => mb_strtolower((string) $entry['name']), BundledEggs::manifest());
 
-        return is_numeric($id) ? Egg::query()->find((int) $id) : null;
+        return $egg && Access::minecraft() && (Minecraft::isMinecraftEgg($egg->name) || in_array(mb_strtolower($egg->name), $bundled, true))
+            ? $egg
+            : null;
     }
 
     /** The Java major version for a Minecraft Java server, else null. */
@@ -300,15 +332,19 @@ class ServerMaker extends Page implements HasForms
             throw ValidationException::withMessages(['data.allocation_id' => __('simplify-server-maker::maker.server.no_port_short')]);
         }
 
+        $admin = $this->isAdmin();
+        if (! $admin) {
+            $state['backups'] = min(2, Access::limits()['max_backups']);
+        }
         $payload = Payload::build(
             $state,
             EggData::from($egg),
-            Resources::payload($state),
+            Resources::payload($state, Access::resourceLimits()),
             (int) user()->id,
             $nodeId,
             $allocationId,
             $this->java(),
-            $this->isAdmin(),
+            $admin,
             fn (array $environment) => Sources::environment(
                 (string) ($state['modpack'] ?? ''),
                 (string) ($state['modpack_version'] ?? ''),
@@ -317,7 +353,7 @@ class ServerMaker extends Page implements HasForms
         );
 
         try {
-            $server = Creator::create($payload);
+            $server = Creator::create($payload, $admin ? null : fn () => Access::check($payload, Access::remaining(user())));
         } catch (ValidationException $exception) {
             throw $exception;
         } catch (Throwable $exception) {
