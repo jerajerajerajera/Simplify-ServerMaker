@@ -139,7 +139,8 @@ class MakerSettings extends Page implements HasForms
                 ->label(__('simplify-server-maker::maker.settings.save'))
                 ->icon('tabler-device-floppy')
                 ->visible(fn () => static::mayChange())
-                ->action(fn () => $this->save()),
+                ->action(fn () => $this->save())
+                ->keyBindings(['mod+s']),
         ];
     }
 
