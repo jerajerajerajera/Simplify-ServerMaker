@@ -118,6 +118,7 @@ return [
         'custom' => '사용자 지정',
         'gb' => ':amount GB',
         'cores' => ':amount 코어',
+        'one_core' => '1 코어',
         'unit' => [
             'ram' => 'GB',
             'cpu' => '%',

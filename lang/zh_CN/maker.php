@@ -118,6 +118,7 @@ return [
         'custom' => '自定义',
         'gb' => ':amount GB',
         'cores' => ':amount 核',
+        'one_core' => '1 核',
         'unit' => [
             'ram' => 'GB',
             'cpu' => '%',

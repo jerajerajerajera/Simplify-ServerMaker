@@ -118,6 +118,7 @@ return [
         'custom' => 'Egyéni',
         'gb' => ':amount GB',
         'cores' => ':amount mag',
+        'one_core' => '1 mag',
         'unit' => [
             'ram' => 'GB',
             'cpu' => '%',

@@ -118,6 +118,7 @@ return [
         'custom' => 'Mukautettu',
         'gb' => ':amount GB',
         'cores' => ':amount ydintä',
+        'one_core' => '1 ydin',
         'unit' => [
             'ram' => 'GB',
             'cpu' => '%',

@@ -118,6 +118,7 @@ return [
         'custom' => 'مخصص',
         'gb' => ':amount GB',
         'cores' => ':amount أنوية',
+        'one_core' => 'نواة واحدة',
         'unit' => [
             'ram' => 'GB',
             'cpu' => '%',

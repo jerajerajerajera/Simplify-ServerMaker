@@ -17,7 +17,8 @@
     .smk-group { display: grid; gap: .75rem; }
     .smk-group h3 { font-size: .875rem; font-weight: 600; }
     .smk-group-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem; }
-    .smk-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: .75rem; }
+    .smk-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; }
+    @media (max-width: 900px) { .smk-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
     .smk-card {
         display: flex; align-items: flex-start; gap: .75rem; min-width: 0; padding: .875rem 1rem;
         border: 1px solid var(--smk-line); border-radius: .5rem; background: var(--smk-surface);
@@ -78,11 +79,11 @@
         .smk .fi-sc-wizard-footer > * { flex: 1 1 0; }
         .smk .fi-sc-wizard-footer .fi-btn { justify-content: center; width: 100%; min-height: 2.75rem; }
         .smk-cards { grid-template-columns: minmax(0, 1fr); }
-        .smk-card-image { flex: none; width: 2.5rem; height: 2.5rem; border-radius: .375rem; object-fit: cover; }
+        .smk-search { width: 100%; }
+    }
+    .smk-card-image { flex: none; width: 2.5rem; height: 2.5rem; border-radius: .375rem; object-fit: cover; }
     .smk-card-meta { color: var(--smk-muted); font-size: .75rem; }
     .smk-card-meta a { color: var(--smk-accent); }
     .smk-card:has(input:focus-visible) { outline: 2px solid var(--smk-accent); outline-offset: 2px; }
     .smk-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
-    .smk-search { width: 100%; }
-    }
 </style>

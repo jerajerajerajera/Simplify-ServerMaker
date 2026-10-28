@@ -6,6 +6,7 @@ namespace Simplify\ServerMaker\Filament\Wizard;
 
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\ToggleButtons;
+use Filament\Schemas\Components\Text;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Wizard\Step;
 use Simplify\ServerMaker\Access;
@@ -23,7 +24,8 @@ final class ResourcesStep
             ? Minecraft::resources((string) $get('type'))[$resource]
             : ['cpu' => 100, 'ram' => 4, 'disk' => 10240][$resource];
 
-        $fields = [];
+        // The help sits above the fields, not in the step header, so every step in the header stays the same height.
+        $fields = [Text::make(fn (Get $get) => self::help($get, $t))->color('gray')];
         foreach (['ram', 'cpu', 'disk'] as $resource) {
             $fields[] = ToggleButtons::make($resource)
                 ->label($t('resources.'.$resource))
@@ -52,7 +54,6 @@ final class ResourcesStep
 
         return Step::make('resources')
             ->label($t('steps.resources'))
-            ->description(fn (Get $get) => self::help($get, $t))
             ->schema($fields)
             ->afterValidation(function () use ($page): void {
                 Resources::payload($page->data, Access::resourceLimits());
@@ -80,7 +81,9 @@ final class ResourcesStep
     {
         return match ($resource) {
             'ram' => $t('resources.gb', ['amount' => $value]),
-            'cpu' => $t('resources.cores', ['amount' => rtrim(rtrim(number_format($value / 100, 1, '.', ''), '0'), '.')]),
+            'cpu' => $value === 100
+                ? $t('resources.one_core')
+                : $t('resources.cores', ['amount' => rtrim(rtrim(number_format($value / 100, 1, '.', ''), '0'), '.')]),
             default => $t('resources.gb', ['amount' => Resources::gb($value)]),
         };
     }

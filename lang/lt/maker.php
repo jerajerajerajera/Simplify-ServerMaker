@@ -118,6 +118,7 @@ return [
         'custom' => 'Pasirinktinai',
         'gb' => ':amount GB',
         'cores' => 'Branduoliai: :amount',
+        'one_core' => '1 branduolys',
         'unit' => [
             'ram' => 'GB',
             'cpu' => '%',

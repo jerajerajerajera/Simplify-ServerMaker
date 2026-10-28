@@ -118,6 +118,7 @@ return [
         'custom' => 'Vlastné',
         'gb' => ':amount GB',
         'cores' => 'Jadrá: :amount',
+        'one_core' => '1 jadro',
         'unit' => [
             'ram' => 'GB',
             'cpu' => '%',

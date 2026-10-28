@@ -118,6 +118,7 @@ return [
         'custom' => 'Прилагођено',
         'gb' => ':amount GB',
         'cores' => 'Језгара: :amount',
+        'one_core' => '1 језгро',
         'unit' => [
             'ram' => 'GB',
             'cpu' => '%',

@@ -118,6 +118,7 @@ return [
         'custom' => 'Własne',
         'gb' => ':amount GB',
         'cores' => 'Rdzenie: :amount',
+        'one_core' => '1 rdzeń',
         'unit' => [
             'ram' => 'GB',
             'cpu' => '%',
