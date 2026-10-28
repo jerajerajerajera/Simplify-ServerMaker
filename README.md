@@ -3,13 +3,32 @@
 A [Pelican](https://pelican.dev) plugin to create a game server in a few clear steps: pick Minecraft or another game,
 give it a name, choose the resources and press Create. The Server Maker picks the egg, the port and the Docker image.
 
-It works on its own. With [Simplify](https://github.com/jerajerajerajera/Simplify) installed it also gets a
-**Create server** button on the Simplify dashboard.
+It works on its own. Two other plugins add to it when they are installed:
+
+- [Simplify](https://github.com/jerajerajerajera/Simplify): a **Create server** button on the Simplify dashboard and a
+  link to the settings in its add-on list.
+- [Simplify Subdomains](https://github.com/jerajerajerajera/Simplify-subdomains): a subdomain for the new server,
+  suggested from its name, on a port that is forwarded.
 
 ## Use
 
 Install the plugin from the [Pelican Hub](https://hub.pelican.dev). Administrators find **Server Maker** in the
-admin area.
+admin area. The gear button on that page opens the settings.
+
+### Letting people make their own servers
+
+Turn on **Let people make their own servers** in the settings and choose:
+
+- which roles may do it (empty for everyone with an account), on which nodes, with Minecraft and which other games;
+- the allowance per person: servers, RAM and disk over all their servers, CPU and backups per server.
+
+Those people find the Server Maker in the normal panel. They only see the chosen nodes and games, and cannot go over
+their allowance. Administrators who may create servers in Pelican can always use everything.
+
+### CurseForge
+
+CurseForge modpacks need an API key from [console.curseforge.com](https://console.curseforge.com). Paste it in the
+settings. It is stored encrypted and never shown again.
 
 ## What it sends where
 
