@@ -118,6 +118,7 @@ return [
         'custom' => 'Персонализирано',
         'gb' => ':amount GB',
         'cores' => 'Ядра: :amount',
+        'one_core' => '1 ядро',
         'unit' => [
             'ram' => 'GB',
             'cpu' => '%',

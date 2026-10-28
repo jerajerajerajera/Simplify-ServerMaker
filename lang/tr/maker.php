@@ -118,6 +118,7 @@ return [
         'custom' => 'Özel',
         'gb' => ':amount GB',
         'cores' => ':amount çekirdek',
+        'one_core' => '1 çekirdek',
         'unit' => [
             'ram' => 'GB',
             'cpu' => '%',

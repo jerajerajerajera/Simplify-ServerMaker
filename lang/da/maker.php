@@ -118,6 +118,7 @@ return [
         'custom' => 'Brugerdefineret',
         'gb' => ':amount GB',
         'cores' => ':amount kerner',
+        'one_core' => '1 kerne',
         'unit' => [
             'ram' => 'GB',
             'cpu' => '%',

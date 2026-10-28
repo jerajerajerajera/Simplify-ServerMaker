@@ -118,6 +118,7 @@ return [
         'custom' => 'Προσαρμογή',
         'gb' => ':amount GB',
         'cores' => 'Πυρήνες: :amount',
+        'one_core' => '1 πυρήνας',
         'unit' => [
             'ram' => 'GB',
             'cpu' => '%',

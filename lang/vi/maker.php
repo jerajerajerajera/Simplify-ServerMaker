@@ -118,6 +118,7 @@ return [
         'custom' => 'Tùy chỉnh',
         'gb' => ':amount GB',
         'cores' => ':amount nhân',
+        'one_core' => '1 nhân',
         'unit' => [
             'ram' => 'GB',
             'cpu' => '%',

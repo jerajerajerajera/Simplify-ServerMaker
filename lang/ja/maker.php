@@ -118,6 +118,7 @@ return [
         'custom' => 'カスタム',
         'gb' => ':amount GB',
         'cores' => ':amount コア',
+        'one_core' => '1 コア',
         'unit' => [
             'ram' => 'GB',
             'cpu' => '%',

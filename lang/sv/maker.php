@@ -118,6 +118,7 @@ return [
         'custom' => 'Anpassat',
         'gb' => ':amount GB',
         'cores' => ':amount kärnor',
+        'one_core' => '1 kärna',
         'unit' => [
             'ram' => 'GB',
             'cpu' => '%',
