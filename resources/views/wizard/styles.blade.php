@@ -74,6 +74,10 @@
         border-top: 1px solid var(--smk-line); background: var(--smk-bar, var(--color-white, #fff));
     }
     .dark .smk .fi-sc-wizard-footer { --smk-bar: var(--gray-900); }
+    /* The wizard is one box that fits the window (--smk-fit, measured below): only the step scrolls, never the page. */
+    html.smk-fit .smk .fi-sc-wizard { display: flex; flex-direction: column; height: var(--smk-fit); }
+    html.smk-fit .smk .fi-sc-wizard-header, html.smk-fit .smk .fi-sc-wizard-footer { flex: none; }
+    html.smk-fit .smk .fi-sc-wizard-step { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
     @media (max-width: 600px) {
         .smk .fi-sc-wizard-footer { flex-wrap: nowrap; padding-bottom: calc(.75rem + env(safe-area-inset-bottom)); }
         .smk .fi-sc-wizard-footer > * { flex: 1 1 0; }
@@ -94,3 +98,25 @@
     .fi-page:has(.smk) .fi-header-actions-ctn .fi-icon-btn:hover { border-color: var(--s-accent, var(--primary-600)); background: var(--s-raised, var(--gray-100)); color: var(--s-accent, var(--primary-600)); }
     .dark .fi-page:has(.smk) .fi-header-actions-ctn .fi-icon-btn:hover { border-color: var(--s-accent, var(--primary-500)); background: var(--s-raised, var(--gray-800)); color: var(--s-accent, var(--primary-500)); }
 </style>
+<script>
+    // Height left under the wizard's top edge, so the page itself never scrolls; a very low window keeps the page scroll.
+    (() => {
+        const fit = () => {
+            const wizard = document.querySelector('.smk .fi-sc-wizard');
+            const root = document.documentElement;
+            if (!wizard) return root.classList.remove('smk-fit');
+            const height = Math.floor(innerHeight - (wizard.getBoundingClientRect().top + scrollY) - 16);
+            root.classList.toggle('smk-fit', height >= 320);
+            root.style.setProperty('--smk-fit', height + 'px');
+            // Whatever the page still has below the wizard (its bottom padding) comes off too.
+            const extra = root.scrollHeight - innerHeight;
+            if (extra > 0 && height - extra >= 320) root.style.setProperty('--smk-fit', (height - extra) + 'px');
+        };
+        addEventListener('resize', fit);
+        document.addEventListener('livewire:navigated', fit);
+        requestAnimationFrame(fit);
+        // Announcements and Simplify's top bar may arrive a moment later and push the wizard down.
+        setTimeout(fit, 400);
+        setTimeout(fit, 1500);
+    })();
+</script>
