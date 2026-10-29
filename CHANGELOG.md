@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.5
+
+- The Settings and Start over buttons above the Server Maker are Simplify icon buttons (a quiet bordered square, accent
+  colour on hover) instead of plain Pelican icons, like the rest of Simplify.
+
 ## 1.0.4
 
 - Simplify 1.3's setup now also asks who may make servers and how much, so a new panel is set up in one go.

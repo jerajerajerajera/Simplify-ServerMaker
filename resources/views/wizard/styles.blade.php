@@ -86,4 +86,11 @@
     .smk-card-meta a { color: var(--smk-accent); }
     .smk-card:has(input:focus-visible) { outline: 2px solid var(--smk-accent); outline-offset: 2px; }
     .smk-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    /* The header buttons (Settings, Start over) as Simplify icon buttons: a quiet bordered square, the icon turns the
+       accent colour on hover. Simplify's colours when it is installed, Pelican's otherwise. */
+    .fi-page:has(.smk) .fi-header-actions-ctn .fi-icon-btn { display: inline-grid; place-items: center; width: var(--s-h, 36px); height: var(--s-h, 36px); margin: 0; border: 1px solid var(--s-line, var(--gray-200)); border-radius: var(--s-radius-sm, 6px); background: var(--s-surface, #fff); color: var(--s-ink, var(--gray-950)); transition: background .15s, border-color .15s, color .15s; }
+    .dark .fi-page:has(.smk) .fi-header-actions-ctn .fi-icon-btn { border-color: var(--s-line, var(--gray-700)); background: var(--s-surface, var(--gray-900)); color: var(--s-ink, var(--gray-50)); }
+    .fi-page:has(.smk) .fi-header-actions-ctn .fi-icon-btn .fi-icon { width: 18px; height: 18px; color: inherit; }
+    .fi-page:has(.smk) .fi-header-actions-ctn .fi-icon-btn:hover { border-color: var(--s-accent, var(--primary-600)); background: var(--s-raised, var(--gray-100)); color: var(--s-accent, var(--primary-600)); }
+    .dark .fi-page:has(.smk) .fi-header-actions-ctn .fi-icon-btn:hover { border-color: var(--s-accent, var(--primary-500)); background: var(--s-raised, var(--gray-800)); color: var(--s-accent, var(--primary-500)); }
 </style>
