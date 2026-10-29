@@ -46,7 +46,7 @@ final class Sources
             $query = '';
         }
         $available = array_filter(self::all(), fn (Source $source) => $source->available());
-        $cacheKey = 'simplify-server-maker.modpacks.'.hash('sha256', mb_strtolower($query).'|'.implode(',', array_keys($available)));
+        $cacheKey = 'simplify-servermaker.modpacks.'.hash('sha256', mb_strtolower($query).'|'.implode(',', array_keys($available)));
         $results = Cache::remember($cacheKey, 600, function () use ($query, $available): array {
             $lists = array_map(fn (Source $source) => $source->search($query), $available);
 
@@ -84,7 +84,7 @@ final class Sources
         if ($source === null || ! self::get($source)) {
             return null;
         }
-        $pack = Cache::remember('simplify-server-maker.modpack.'.$key, 1800, fn () => self::get($source)->pack($id)?->toArray() ?? false);
+        $pack = Cache::remember('simplify-servermaker.modpack.'.$key, 1800, fn () => self::get($source)->pack($id)?->toArray() ?? false);
 
         return is_array($pack)
             ? new Pack($source, $id, $pack['title'], $pack['description'], $pack['icon'], $pack['url'])
@@ -99,7 +99,7 @@ final class Sources
             return [];
         }
 
-        return Cache::remember('simplify-server-maker.modpack-versions.'.$key, 600, fn () => self::get($source)->versions($id));
+        return Cache::remember('simplify-servermaker.modpack-versions.'.$key, 600, fn () => self::get($source)->versions($id));
     }
 
     /** @return array{minecraft?: string, java?: int} */
@@ -111,7 +111,7 @@ final class Sources
         }
 
         return Cache::remember(
-            'simplify-server-maker.modpack-runtime.'.$key.':'.$version,
+            'simplify-servermaker.modpack-runtime.'.$key.':'.$version,
             600,
             fn () => self::get($source)->runtime($id, $version),
         );
@@ -145,7 +145,7 @@ final class Sources
     {
         [$source, $id] = Pack::split($key) ?? [null, null];
         if ($source === null || ! self::get($source) || ! array_key_exists($version, self::versions($key))) {
-            throw ValidationException::withMessages(['data.modpack' => __('simplify-server-maker::maker.modpack.invalid')]);
+            throw ValidationException::withMessages(['data.modpack' => __('simplify-servermaker::maker.modpack.invalid')]);
         }
 
         return self::get($source)->environment($id, $version, $environment);
@@ -162,7 +162,7 @@ final class Sources
     {
         foreach ($values as $name => $value) {
             if (! array_key_exists($name, $environment)) {
-                throw ValidationException::withMessages(['data.modpack' => __('simplify-server-maker::maker.modpack.wrong_egg', ['name' => $name])]);
+                throw ValidationException::withMessages(['data.modpack' => __('simplify-servermaker::maker.modpack.wrong_egg', ['name' => $name])]);
             }
             $environment[$name] = $value;
         }

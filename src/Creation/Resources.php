@@ -62,13 +62,13 @@ final class Resources
         $disk = self::amount($state, 'disk');
         $limits ??= self::MAX;
         if ($ram < 1 || $ram > $limits['ram']) {
-            self::fail('ram', __('simplify-server-maker::maker.resources.ram_range', ['max' => $limits['ram']]));
+            self::fail('ram', __('simplify-servermaker::maker.resources.ram_range', ['max' => $limits['ram']]));
         }
         if ($cpu < 1 || $cpu > $limits['cpu']) {
-            self::fail('cpu', __('simplify-server-maker::maker.resources.cpu_range', ['max' => $limits['cpu']]));
+            self::fail('cpu', __('simplify-servermaker::maker.resources.cpu_range', ['max' => $limits['cpu']]));
         }
         if ($disk < 1024 || $disk > $limits['disk']) {
-            self::fail('disk', __('simplify-server-maker::maker.resources.disk_range', ['max' => self::gb($limits['disk'])]));
+            self::fail('disk', __('simplify-servermaker::maker.resources.disk_range', ['max' => self::gb($limits['disk'])]));
         }
 
         return ['memory' => $ram * 1024, 'cpu' => $cpu, 'disk' => $disk];

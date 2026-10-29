@@ -1,6 +1,6 @@
 {{-- Game step: Minecraft's server types on top, then every other game on the panel, searched in the browser. --}}
 @php
-    $t = fn (string $key, array $replace = []) => __('simplify-server-maker::maker.' . $key, $replace);
+    $t = fn (string $key, array $replace = []) => __('simplify-servermaker::maker.' . $key, $replace);
     $data = $this->data;
     $icons = [
         'vanilla' => 'tabler-cube', 'plugins' => 'tabler-plug', 'mods' => 'tabler-tools',

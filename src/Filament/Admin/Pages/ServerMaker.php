@@ -51,7 +51,7 @@ class ServerMaker extends Page implements HasForms
 
     protected static ?int $navigationSort = 80;
 
-    protected string $view = 'simplify-server-maker::pages.server-maker';
+    protected string $view = 'simplify-servermaker::pages.server-maker';
 
     /** @var array<string, mixed> */
     public ?array $data = [];
@@ -65,7 +65,7 @@ class ServerMaker extends Page implements HasForms
 
     public static function getNavigationLabel(): string
     {
-        return __('simplify-server-maker::maker.title');
+        return __('simplify-servermaker::maker.title');
     }
 
     /** In the Simplify group of Pelican's menu, with the other Simplify add-ons (Simplify's ADDONS.md, "Admin menu"). */
@@ -76,7 +76,7 @@ class ServerMaker extends Page implements HasForms
 
     public function getTitle(): string
     {
-        return __('simplify-server-maker::maker.title');
+        return __('simplify-servermaker::maker.title');
     }
 
     public static function canAccess(): bool
@@ -119,7 +119,7 @@ class ServerMaker extends Page implements HasForms
                 $fresh = array_replace($fresh, $draft->data);
                 $this->step = max(1, min(5, $draft->step));
                 $this->restored = true;
-                Notification::make()->title(__('simplify-server-maker::maker.draft.restored'))->info()->send();
+                Notification::make()->title(__('simplify-servermaker::maker.draft.restored'))->info()->send();
             } catch (Throwable $exception) {
                 // A draft that cannot be read (for example after a new APP_KEY) is dropped.
                 report($exception);
@@ -129,7 +129,7 @@ class ServerMaker extends Page implements HasForms
         $this->form->fill($fresh);
         if (! $this->isAdmin() && Access::remaining(user())['servers'] < 1) {
             Notification::make()
-                ->title(__('simplify-server-maker::maker.access.no_servers_left'))
+                ->title(__('simplify-servermaker::maker.access.no_servers_left'))
                 ->warning()
                 ->persistent()
                 ->send();
@@ -140,18 +140,18 @@ class ServerMaker extends Page implements HasForms
     {
         return [
             Action::make('settings')
-                ->label(__('simplify-server-maker::maker.settings.title'))
+                ->label(__('simplify-servermaker::maker.settings.title'))
                 ->icon('tabler-settings')
                 ->color('gray')
                 ->visible(fn () => MakerSettings::canAccess())
                 ->url(fn () => MakerSettings::getUrl(panel: 'admin')),
             Action::make('start_over')
-                ->label(__('simplify-server-maker::maker.draft.start_over'))
+                ->label(__('simplify-servermaker::maker.draft.start_over'))
                 ->icon('tabler-restore')
                 ->color('gray')
                 ->visible(fn () => $this->restored)
                 ->requiresConfirmation()
-                ->modalDescription(__('simplify-server-maker::maker.draft.start_over_help'))
+                ->modalDescription(__('simplify-servermaker::maker.draft.start_over_help'))
                 ->action(function (): void {
                     Draft::query()->where('user_id', user()->id)->delete();
                     $this->redirect(static::getUrl());
@@ -183,9 +183,9 @@ class ServerMaker extends Page implements HasForms
                 ])
                     ->columnSpanFull()
                     ->startOnStep(fn () => $this->step)
-                    ->nextAction(fn (Action $action) => $action->label(__('simplify-server-maker::maker.next')))
-                    ->previousAction(fn (Action $action) => $action->label(__('simplify-server-maker::maker.back')))
-                    ->submitAction(new HtmlString(view('simplify-server-maker::wizard.create-button')->render())),
+                    ->nextAction(fn (Action $action) => $action->label(__('simplify-servermaker::maker.next')))
+                    ->previousAction(fn (Action $action) => $action->label(__('simplify-servermaker::maker.back')))
+                    ->submitAction(new HtmlString(view('simplify-servermaker::wizard.create-button')->render())),
             ]);
     }
 
@@ -211,7 +211,7 @@ class ServerMaker extends Page implements HasForms
         }
         $egg = $game === 'other' ? OtherGames::find($choice) : null;
         if (! $egg) {
-            throw ValidationException::withMessages(['data.game' => __('simplify-server-maker::maker.game.required')]);
+            throw ValidationException::withMessages(['data.game' => __('simplify-servermaker::maker.game.required')]);
         }
         $this->data = array_replace($this->data, [
             'game' => 'other',
@@ -253,7 +253,7 @@ class ServerMaker extends Page implements HasForms
             if ($type === 'modpack') {
                 $key = (string) ($this->data['modpack'] ?? '');
                 if (! array_key_exists((string) ($this->data['modpack_version'] ?? ''), Sources::versions($key))) {
-                    throw ValidationException::withMessages(['data.modpack_version' => __('simplify-server-maker::maker.modpack.version_required')]);
+                    throw ValidationException::withMessages(['data.modpack_version' => __('simplify-servermaker::maker.modpack.version_required')]);
                 }
                 $egg = Sources::egg($key, $mayImport);
             } else {
@@ -263,10 +263,10 @@ class ServerMaker extends Page implements HasForms
             throw $exception;
         } catch (Throwable $exception) {
             report($exception);
-            throw ValidationException::withMessages(['data.type' => __('simplify-server-maker::maker.minecraft.egg_failed')]);
+            throw ValidationException::withMessages(['data.type' => __('simplify-servermaker::maker.minecraft.egg_failed')]);
         }
         if (! $egg) {
-            throw ValidationException::withMessages(['data.type' => __('simplify-server-maker::maker.minecraft.egg_missing')]);
+            throw ValidationException::withMessages(['data.type' => __('simplify-servermaker::maker.minecraft.egg_missing')]);
         }
         $this->data['egg_id'] = $egg->id;
     }
@@ -326,7 +326,7 @@ class ServerMaker extends Page implements HasForms
         $state = $this->form->getState();
         $egg = $this->egg();
         if (! $egg) {
-            throw ValidationException::withMessages(['data.game' => __('simplify-server-maker::maker.game.required')]);
+            throw ValidationException::withMessages(['data.game' => __('simplify-servermaker::maker.game.required')]);
         }
 
         $subdomain = strtolower(trim((string) ($state['subdomain'] ?? '')));
@@ -338,7 +338,7 @@ class ServerMaker extends Page implements HasForms
         $nodeId = (int) ($state['node_id'] ?? 0);
         $allocationId = (int) ($state['allocation_id'] ?? 0) ?: Ports::preferred($nodeId);
         if (! $allocationId) {
-            throw ValidationException::withMessages(['data.allocation_id' => __('simplify-server-maker::maker.server.no_port_short')]);
+            throw ValidationException::withMessages(['data.allocation_id' => __('simplify-servermaker::maker.server.no_port_short')]);
         }
 
         $admin = $this->isAdmin();
@@ -368,7 +368,7 @@ class ServerMaker extends Page implements HasForms
         } catch (Throwable $exception) {
             report($exception);
             Notification::make()
-                ->title(__('simplify-server-maker::maker.review.failed'))
+                ->title(__('simplify-servermaker::maker.review.failed'))
                 ->body($exception->getMessage())
                 ->danger()
                 ->send();
@@ -379,8 +379,8 @@ class ServerMaker extends Page implements HasForms
         Subdomain::request($server, (string) ($state['subdomain'] ?? ''));
         Draft::query()->where('user_id', user()->id)->delete();
         Notification::make()
-            ->title(__('simplify-server-maker::maker.review.created'))
-            ->body(__('simplify-server-maker::maker.review.created_body'))
+            ->title(__('simplify-servermaker::maker.review.created'))
+            ->body(__('simplify-servermaker::maker.review.created_body'))
             ->success()
             ->send();
         $this->redirect(Console::getUrl(panel: 'server', tenant: $server));

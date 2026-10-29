@@ -21,7 +21,7 @@ final class ServerStep
 {
     public static function make(ServerMaker $page): Step
     {
-        $t = fn (string $key, array $replace = []) => __('simplify-server-maker::maker.'.$key, $replace);
+        $t = fn (string $key, array $replace = []) => __('simplify-servermaker::maker.'.$key, $replace);
         $several = fn () => Ports::nodes()->count() > 1;
 
         return Step::make('server')
@@ -68,7 +68,7 @@ final class ServerStep
                     ->dehydratedWhenHidden()
                     ->searchable()
                     ->native(false),
-                View::make('simplify-server-maker::wizard.no-port')
+                View::make('simplify-servermaker::wizard.no-port')
                     ->viewData(fn (Get $get) => self::noPort((int) $get('node_id')))
                     ->visible(fn (Get $get) => Ports::first((int) $get('node_id')) === null),
             ])

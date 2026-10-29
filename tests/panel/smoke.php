@@ -1,8 +1,8 @@
 <?php
 
 // Loads the plugin inside a real Pelican panel and checks what unit tests cannot: the panel loads the code, the
-// translations and the pages. Run from the panel folder after `php artisan p:plugin:install simplify-server-maker`:
-// php plugins/simplify-server-maker/tests/panel/smoke.php
+// translations and the pages. Run from the panel folder after `php artisan p:plugin:install simplify-servermaker`:
+// php plugins/simplify-servermaker/tests/panel/smoke.php
 
 use App\Enums\EggFormat;
 use App\Models\Allocation;
@@ -92,8 +92,8 @@ $admin = User::where('email', 'smoke-maker@example.com')->first()
 $admin->syncRoles(Role::getRootAdmin());
 
 step('the translations load', function () {
-    if (__('simplify-server-maker::maker.addon.name') !== 'Server Maker') {
-        throw new RuntimeException('got '.__('simplify-server-maker::maker.addon.name'));
+    if (__('simplify-servermaker::maker.addon.name') !== 'Server Maker') {
+        throw new RuntimeException('got '.__('simplify-servermaker::maker.addon.name'));
     }
 });
 step('the add-on is tagged for Simplify', function () {

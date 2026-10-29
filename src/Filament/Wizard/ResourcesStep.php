@@ -19,7 +19,7 @@ final class ResourcesStep
 {
     public static function make(ServerMaker $page): Step
     {
-        $t = fn (string $key, array $replace = []) => __('simplify-server-maker::maker.'.$key, $replace);
+        $t = fn (string $key, array $replace = []) => __('simplify-servermaker::maker.'.$key, $replace);
         $start = fn (Get $get, string $resource): int => $get('game') === 'minecraft'
             ? Minecraft::resources((string) $get('type'))[$resource]
             : ['cpu' => 100, 'ram' => 4, 'disk' => 10240][$resource];

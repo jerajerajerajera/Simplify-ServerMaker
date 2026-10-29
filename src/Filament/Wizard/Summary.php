@@ -19,7 +19,7 @@ final class Summary
     /** @return array<string, string> label => value */
     public static function rows(ServerMaker $page): array
     {
-        $t = fn (string $key, array $replace = []) => __('simplify-server-maker::maker.'.$key, $replace);
+        $t = fn (string $key, array $replace = []) => __('simplify-servermaker::maker.'.$key, $replace);
         $data = $page->data;
         $minecraft = ($data['game'] ?? null) === 'minecraft';
         $type = (string) ($data['type'] ?? '');

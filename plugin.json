@@ -1,8 +1,8 @@
 {
-    "id": "simplify-server-maker",
+    "id": "simplify-servermaker",
     "name": "Simplify Server Maker",
     "author": "jera",
-    "version": "1.0.5",
+    "version": "1.1.0",
     "description": "Create a game server in a few clear steps: pick Minecraft or another game, a name and the resources, and the Server Maker sets up the rest.",
     "category": "plugin",
     "namespace": "Simplify\\ServerMaker",
@@ -13,5 +13,5 @@
     ],
     "panel_version": "^1.0.0-beta38",
     "api_version": 1,
-    "update_url": "https://hub.pelican.dev/plugins/simplify-server-maker/update.json"
+    "update_url": "https://hub.pelican.dev/plugins/simplify-servermaker/update.json"
 }

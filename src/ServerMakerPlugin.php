@@ -14,7 +14,7 @@ final class ServerMakerPlugin implements Plugin
 {
     public function getId(): string
     {
-        return 'simplify-server-maker';
+        return 'simplify-servermaker';
     }
 
     public function register(Panel $panel): void

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Builds the plugin zip for the Pelican Hub: dist/simplify-server-maker-v<version>.zip.
+"""Builds the plugin zip for the Pelican Hub: dist/simplify-servermaker-v<version>.zip.
 
 The zip holds one folder named after the plugin id with plugin.json, README.md, LICENSE.md, src, resources and lang.
 Updates are published on the Hub only; this repository has no update files.

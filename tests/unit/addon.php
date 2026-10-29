@@ -12,6 +12,6 @@ $addon = new ServerMakerAddon;
 $manifest = json_decode((string) file_get_contents(__DIR__.'/../../plugin.json'), true);
 check('the add-on id is the plugin id', $addon->id() === $manifest['id']);
 check('the name is translated', $addon->name() === 'Server Maker', $addon->name());
-check('the description is translated', ! str_contains($addon->description(), 'simplify-server-maker::'));
+check('the description is translated', ! str_contains($addon->description(), 'simplify-servermaker::'));
 check('the icon is a Tabler icon', str_starts_with($addon->icon(), 'tabler-'));
 echo "PASS add-on\n";

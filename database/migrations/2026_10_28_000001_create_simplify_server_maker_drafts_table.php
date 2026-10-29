@@ -8,6 +8,11 @@ return new class extends Migration
 {
     public function up(): void
     {
+        // Kept when the plugin is reinstalled or takes over an older copy, so the settings stay.
+        if (Schema::hasTable('simplify_server_maker_drafts')) {
+            return;
+        }
+
         Schema::create('simplify_server_maker_drafts', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('user_id')->unique();

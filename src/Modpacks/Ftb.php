@@ -107,7 +107,7 @@ final class Ftb implements Source
 
     private function data(string $id): array
     {
-        return Cache::remember('simplify-server-maker.ftb.'.$id, 1800, function () use ($id): array {
+        return Cache::remember('simplify-servermaker.ftb.'.$id, 1800, function () use ($id): array {
             $data = $this->get('/modpack/'.$id);
 
             return (string) ($data['id'] ?? '') === $id && ! empty($data['name']) ? $data : [];

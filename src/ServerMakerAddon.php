@@ -14,17 +14,17 @@ final class ServerMakerAddon extends Addon
 {
     public function id(): string
     {
-        return 'simplify-server-maker';
+        return 'simplify-servermaker';
     }
 
     public function name(): string
     {
-        return __('simplify-server-maker::maker.addon.name');
+        return __('simplify-servermaker::maker.addon.name');
     }
 
     public function description(): string
     {
-        return __('simplify-server-maker::maker.addon.description');
+        return __('simplify-servermaker::maker.addon.description');
     }
 
     public function icon(): string
@@ -39,7 +39,7 @@ final class ServerMakerAddon extends Addon
             return [];
         }
 
-        return [new Button(__('simplify-server-maker::maker.addon.create'), AppServerMaker::getUrl(panel: 'app'), 'tabler-plus', true)];
+        return [new Button(__('simplify-servermaker::maker.addon.create'), AppServerMaker::getUrl(panel: 'app'), 'tabler-plus', true)];
     }
 
     public function settingsUrl(): ?string
