@@ -2,7 +2,7 @@
     "id": "simplify-server-maker",
     "name": "Simplify Server Maker",
     "author": "jera",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "Create a game server in a few clear steps: pick Minecraft or another game, a name and the resources, and the Server Maker sets up the rest.",
     "category": "plugin",
     "namespace": "Simplify\\ServerMaker",
