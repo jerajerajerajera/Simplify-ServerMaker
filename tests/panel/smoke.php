@@ -308,6 +308,19 @@ step('Simplify shows a Create server button to those who may use it', function (
     }
 });
 
+step("Simplify's setup asks who may make servers and saves it", function () use ($admin, $node) {
+    auth()->setUser($admin);
+    $addon = new ServerMakerAddon;
+    if (count($addon->setupFields()) !== 2 || ! array_key_exists('self_service', $addon->setupState())) {
+        throw new RuntimeException('no setup fields');
+    }
+    $addon->saveSetup([...$addon->setupState(), 'self_service' => true, 'node_ids' => [(string) $node->id], 'max_servers' => '3']);
+    if (! Settings::get('self_service') || Settings::get('node_ids') !== [$node->id] || Settings::get('max_servers') !== 3) {
+        throw new RuntimeException('not saved: '.json_encode($addon->setupState()));
+    }
+    Settings::put(['self_service' => false, 'node_ids' => null, 'max_servers' => null]);
+});
+
 require dirname(__DIR__).'/stubs/subdomains.php';
 $forwarded = Allocation::query()->where('node_id', $node->id)->where('port', 25566)->value('id');
 Subdomains::$allocation = (int) $forwarded;
