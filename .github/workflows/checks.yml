@@ -74,7 +74,9 @@ jobs:
           mkdir -p panel/plugins/simplify-servermaker
           tar -C plugin --exclude=.git --exclude=dist -cf - . | tar -C panel/plugins/simplify-servermaker -xf -
           cd panel
-          php artisan p:plugin:install simplify-servermaker
+          # As Admin → Plugins and the Hub install it: in a queue job.
+          php artisan tinker --execute="App\Jobs\Plugin\InstallPlugin::dispatch(App\Models\User::factory()->create(), 'simplify-servermaker');"
+          php artisan queue:work --max-jobs=1 --stop-when-empty
           php artisan p:plugin:list | tee plugins.txt
           grep -E 'Simplify Server Maker .*\| enabled' plugins.txt || { echo 'Simplify Server Maker did not install'; exit 1; }
           test ! -e plugins/simplify-server-maker || { echo 'The old simplify-server-maker folder is still there'; exit 1; }
