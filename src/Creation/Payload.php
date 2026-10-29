@@ -34,7 +34,7 @@ final class Payload
     ): array {
         $name = trim((string) ($state['name'] ?? ''));
         if ($name === '' || mb_strlen($name) > 191) {
-            throw ValidationException::withMessages(['data.name' => __('simplify-server-maker::maker.server.name_required')]);
+            throw ValidationException::withMessages(['data.name' => __('simplify-servermaker::maker.server.name_required')]);
         }
 
         $minecraft = ($state['game'] ?? '') === 'minecraft';
@@ -43,7 +43,7 @@ final class Payload
             : self::gameEnvironment((array) ($state['variables'] ?? []), $egg, $admin);
         if ($minecraft && ($state['type'] ?? '') === 'modpack') {
             if ($modpack === null) {
-                throw ValidationException::withMessages(['data.modpack' => __('simplify-server-maker::maker.modpack.invalid')]);
+                throw ValidationException::withMessages(['data.modpack' => __('simplify-servermaker::maker.modpack.invalid')]);
             }
             $environment = $modpack($environment);
         }
@@ -60,7 +60,7 @@ final class Payload
             $startup = trim((string) $state['startup']);
         }
         if ($image === null || $image === '') {
-            throw ValidationException::withMessages(['data.image' => __('simplify-server-maker::maker.review.no_image')]);
+            throw ValidationException::withMessages(['data.image' => __('simplify-servermaker::maker.review.no_image')]);
         }
 
         return [
@@ -93,7 +93,7 @@ final class Payload
         $type = (string) ($state['type'] ?? '');
         $version = (string) ($state['version'] ?? '');
         if (Minecraft::usesVersion($type) && ! Minecraft::validVersion($version)) {
-            throw ValidationException::withMessages(['data.version' => __('simplify-server-maker::maker.minecraft.version_required')]);
+            throw ValidationException::withMessages(['data.version' => __('simplify-servermaker::maker.minecraft.version_required')]);
         }
         $environment = Minecraft::environment($egg->defaults(), $type, $version);
         foreach (['JAVA_VERSION', 'JDK_VERSION'] as $key) {
@@ -117,13 +117,13 @@ final class Payload
             $editable = $admin || $variable['user'];
             $value = $editable && array_key_exists($name, $values) ? $values[$name] : $variable['default'];
             if ($value !== null && ! is_scalar($value)) {
-                throw ValidationException::withMessages(['data.variables.'.$name => __('simplify-server-maker::maker.game.invalid_value')]);
+                throw ValidationException::withMessages(['data.variables.'.$name => __('simplify-servermaker::maker.game.invalid_value')]);
             }
             $environment[$name] = is_bool($value) ? ($value ? '1' : '0') : (string) ($value ?? '');
         }
         foreach (array_keys($values) as $name) {
             if (! isset($egg->variables[$name]) || ! ($admin || $egg->variables[$name]['user'])) {
-                throw ValidationException::withMessages(['data.variables' => __('simplify-server-maker::maker.game.locked_variable')]);
+                throw ValidationException::withMessages(['data.variables' => __('simplify-servermaker::maker.game.locked_variable')]);
             }
         }
 
@@ -135,7 +135,7 @@ final class Payload
     {
         foreach ($overrides as $name => $value) {
             if (! array_key_exists((string) $name, $environment)) {
-                throw ValidationException::withMessages(['data.environment' => __('simplify-server-maker::maker.review.unknown_variable', ['name' => $name])]);
+                throw ValidationException::withMessages(['data.environment' => __('simplify-servermaker::maker.review.unknown_variable', ['name' => $name])]);
             }
             $environment[(string) $name] = (string) $value;
         }

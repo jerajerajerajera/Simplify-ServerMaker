@@ -26,7 +26,7 @@ final class Creator
     public static function create(array $payload, ?callable $checkAllowance = null): Server
     {
         try {
-            return Cache::lock('simplify-server-maker.create', 30)->block(10, function () use ($payload, $checkAllowance): Server {
+            return Cache::lock('simplify-servermaker.create', 30)->block(10, function () use ($payload, $checkAllowance): Server {
                 $payload = DB::transaction(function () use ($payload, $checkAllowance): array {
                     $node = Node::query()->whereKey($payload['node_id'])->lockForUpdate()->first();
                     if (! $node || ! Ports::nodes()->whereKey($node->id)->exists()) {
@@ -56,6 +56,6 @@ final class Creator
 
     private static function fail(string $field, string $key): never
     {
-        throw ValidationException::withMessages(['data.'.$field => __('simplify-server-maker::maker.'.$key)]);
+        throw ValidationException::withMessages(['data.'.$field => __('simplify-servermaker::maker.'.$key)]);
     }
 }

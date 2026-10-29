@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.0
+
+- The plugin id is now `simplify-servermaker` (it was `simplify-server-maker`), like the other Simplify plugins.
+  Installing this version over the old one keeps every setting and draft and removes the old copy, so the panel
+  never shows Server Maker twice.
+
 ## 1.0.5
 
 - The Settings and Start over buttons above the Server Maker are Simplify icon buttons (a quiet bordered square, accent

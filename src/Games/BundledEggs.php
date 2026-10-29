@@ -56,7 +56,7 @@ final class BundledEggs
     /** Adds the egg to the panel as a new egg. One import at a time per file, so two Server Makers share it. */
     public static function import(string $file, callable $existing): Egg
     {
-        return Cache::lock('simplify-server-maker.egg.'.$file, 60)->block(15, function () use ($file, $existing): Egg {
+        return Cache::lock('simplify-servermaker.egg.'.$file, 60)->block(15, function () use ($file, $existing): Egg {
             $egg = $existing();
             if ($egg instanceof Egg) {
                 return $egg;

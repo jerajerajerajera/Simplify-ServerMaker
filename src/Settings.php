@@ -19,7 +19,7 @@ final class Settings
 
     private const TABLE = 'simplify_server_maker_settings';
 
-    private const CACHE = 'simplify-server-maker.settings';
+    private const CACHE = 'simplify-servermaker.settings';
 
     public static function get(string $key, mixed $default = null): mixed
     {

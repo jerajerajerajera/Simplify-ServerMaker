@@ -21,7 +21,7 @@ require __DIR__.'/stubs/laravel.php';
 if (! function_exists('__')) {
     function __($key = null, $replace = [], $locale = null)
     {
-        $prefix = 'simplify-server-maker::';
+        $prefix = 'simplify-servermaker::';
         if (! is_string($key) || ! str_starts_with($key, $prefix)) {
             return $key;
         }

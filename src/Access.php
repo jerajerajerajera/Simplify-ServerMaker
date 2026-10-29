@@ -134,7 +134,7 @@ final class Access
     public static function check(array $payload, array $left): void
     {
         $fail = fn (string $field, string $key, array $replace = []) => throw ValidationException::withMessages([
-            'data.'.$field => __('simplify-server-maker::maker.access.'.$key, $replace),
+            'data.'.$field => __('simplify-servermaker::maker.access.'.$key, $replace),
         ]);
         if ($left['servers'] < 1) {
             $fail('name', 'no_servers_left');

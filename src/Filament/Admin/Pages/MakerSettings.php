@@ -34,7 +34,7 @@ class MakerSettings extends Page implements HasForms
 
     protected static bool $shouldRegisterNavigation = false;
 
-    protected string $view = 'simplify-server-maker::pages.settings';
+    protected string $view = 'simplify-servermaker::pages.settings';
 
     /** @var array<string, mixed> */
     public ?array $data = [];
@@ -51,7 +51,7 @@ class MakerSettings extends Page implements HasForms
 
     public function getTitle(): string
     {
-        return __('simplify-server-maker::maker.settings.title');
+        return __('simplify-servermaker::maker.settings.title');
     }
 
     public function mount(): void
@@ -79,7 +79,7 @@ class MakerSettings extends Page implements HasForms
 
     public function form(Schema $schema): Schema
     {
-        $t = fn (string $key, array $replace = []) => __('simplify-server-maker::maker.settings.'.$key, $replace);
+        $t = fn (string $key, array $replace = []) => __('simplify-servermaker::maker.settings.'.$key, $replace);
 
         return $schema
             ->statePath('data')
@@ -105,7 +105,7 @@ class MakerSettings extends Page implements HasForms
     /** Who besides administrators may make servers, where and which games; also asked in Simplify's setup. */
     public static function whoSection(): Section
     {
-        $t = fn (string $key) => __('simplify-server-maker::maker.settings.'.$key);
+        $t = fn (string $key) => __('simplify-servermaker::maker.settings.'.$key);
         $on = fn (Get $get) => (bool) $get('self_service');
 
         return Section::make($t('who'))
@@ -140,7 +140,7 @@ class MakerSettings extends Page implements HasForms
     /** How much one person may use over all their servers; also asked in Simplify's setup. */
     public static function allowanceSection(): Section
     {
-        $t = fn (string $key) => __('simplify-server-maker::maker.settings.'.$key);
+        $t = fn (string $key) => __('simplify-servermaker::maker.settings.'.$key);
         $on = fn (Get $get) => (bool) $get('self_service');
 
         return Section::make($t('allowance'))
@@ -160,7 +160,7 @@ class MakerSettings extends Page implements HasForms
     {
         return [
             Action::make('save')
-                ->label(__('simplify-server-maker::maker.settings.save'))
+                ->label(__('simplify-servermaker::maker.settings.save'))
                 ->icon('tabler-device-floppy')
                 ->visible(fn () => static::mayChange())
                 ->action(fn () => $this->save())
@@ -184,7 +184,7 @@ class MakerSettings extends Page implements HasForms
         // The key is never sent back to the browser.
         $this->data['curseforge_key'] = '';
         $this->data['curseforge_forget'] = false;
-        Notification::make()->title(__('simplify-server-maker::maker.settings.saved'))->success()->send();
+        Notification::make()->title(__('simplify-servermaker::maker.settings.saved'))->success()->send();
     }
 
     /**

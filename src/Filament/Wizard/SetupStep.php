@@ -24,7 +24,7 @@ final class SetupStep
 {
     public static function make(ServerMaker $page): Step
     {
-        $t = fn (string $key) => __('simplify-server-maker::maker.'.$key);
+        $t = fn (string $key) => __('simplify-servermaker::maker.'.$key);
 
         return Step::make('setup')
             ->label(fn (Get $get) => $get('game') === 'other' ? $t('steps.settings') : $t('steps.minecraft'))
@@ -35,7 +35,7 @@ final class SetupStep
                         Radio::make('software')
                             ->label(fn (Get $get) => $t('minecraft.software.'.$get('type')))
                             ->helperText(fn (Get $get) => $t('minecraft.software_help.'.$get('type')))
-                            ->view('simplify-server-maker::wizard.chips')
+                            ->view('simplify-servermaker::wizard.chips')
                             ->options(fn (Get $get) => Minecraft::SOFTWARE[$get('type')] ?? [])
                             ->visible(fn (Get $get) => isset(Minecraft::SOFTWARE[$get('type')]))
                             ->required(fn (Get $get) => isset(Minecraft::SOFTWARE[$get('type')]))
@@ -60,7 +60,7 @@ final class SetupStep
                             ->visible(fn (Get $get) => $get('type') === 'modpack'),
                         Radio::make('modpack')
                             ->hiddenLabel()
-                            ->view('simplify-server-maker::wizard.modpacks')
+                            ->view('simplify-servermaker::wizard.modpacks')
                             ->options(fn (Get $get) => array_column(
                                 Sources::results((string) $get('modpack_search'), $get('modpack')),
                                 'title',

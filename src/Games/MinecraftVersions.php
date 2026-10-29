@@ -81,7 +81,7 @@ final class MinecraftVersions
 
     private static function remember(string $key, callable $resolve): mixed
     {
-        $key = 'simplify-server-maker.mojang.'.$key;
+        $key = 'simplify-servermaker.mojang.'.$key;
         $cached = Cache::get($key);
         if ($cached !== null) {
             return $cached === false ? null : $cached;

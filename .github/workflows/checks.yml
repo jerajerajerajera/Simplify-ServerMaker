@@ -60,19 +60,31 @@ jobs:
           php artisan key:generate --force
           php artisan migrate --force
           yarn install --silent
-      - name: Install Simplify Server Maker
+      # Until 1.1.0 the plugin id was simplify-server-maker: install that version first, so the job proves the new id
+      # takes over its settings and removes the old folder.
+      - name: Install the old simplify-server-maker 1.0.5
         run: |
-          mkdir -p panel/plugins/simplify-server-maker
-          tar -C plugin --exclude=.git --exclude=dist -cf - . | tar -C panel/plugins/simplify-server-maker -xf -
+          git clone --quiet --depth 1 --branch v1.0.5 "https://github.com/${{ github.repository }}.git" panel/plugins/simplify-server-maker
+          rm -rf panel/plugins/simplify-server-maker/.git
           cd panel
           php artisan p:plugin:install simplify-server-maker
+          php -r '$db = new PDO("sqlite:database/database.sqlite"); $db->exec("INSERT INTO simplify_server_maker_settings (key, value) VALUES (\"ci_takeover\", \"kept\")");'
+      - name: Install Simplify Server Maker
+        run: |
+          mkdir -p panel/plugins/simplify-servermaker
+          tar -C plugin --exclude=.git --exclude=dist -cf - . | tar -C panel/plugins/simplify-servermaker -xf -
+          cd panel
+          php artisan p:plugin:install simplify-servermaker
           php artisan p:plugin:list | tee plugins.txt
           grep -E 'Simplify Server Maker .*\| enabled' plugins.txt || { echo 'Simplify Server Maker did not install'; exit 1; }
+          test ! -e plugins/simplify-server-maker || { echo 'The old simplify-server-maker folder is still there'; exit 1; }
+          test "$(grep -c 'Simplify Server Maker' plugins.txt)" = 1 || { echo 'Simplify Server Maker is listed twice'; exit 1; }
+          php -r '$db = new PDO("sqlite:database/database.sqlite"); $kept = $db->query("SELECT value FROM simplify_server_maker_settings WHERE key = \"ci_takeover\"")->fetchColumn(); $db->exec("DELETE FROM simplify_server_maker_settings WHERE key = \"ci_takeover\""); exit($kept === "kept" ? 0 : 1);' || { echo 'The old settings were lost'; exit 1; }
       - name: Open the pages
         working-directory: panel
         run: |
           # Laravel can end a crashed script with exit code 0, so the job also needs the closing line.
-          php plugins/simplify-server-maker/tests/panel/smoke.php | tee smoke.txt
+          php plugins/simplify-servermaker/tests/panel/smoke.php | tee smoke.txt
           grep -q '^All steps passed$' smoke.txt
       - name: Laravel log
         if: failure()

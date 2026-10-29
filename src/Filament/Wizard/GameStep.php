@@ -18,11 +18,11 @@ final class GameStep
     public static function make(ServerMaker $page): Step
     {
         return Step::make('game')
-            ->label(__('simplify-server-maker::maker.steps.game'))
+            ->label(__('simplify-servermaker::maker.steps.game'))
             ->schema([
                 ViewField::make('game')
                     ->hiddenLabel()
-                    ->view('simplify-server-maker::wizard.game-picker')
+                    ->view('simplify-servermaker::wizard.game-picker')
                     ->viewData(fn () => [
                         'types' => Access::minecraft() ? Minecraft::TYPES : [],
                         'games' => OtherGames::cards(),
@@ -30,8 +30,8 @@ final class GameStep
                     ->required()
                     ->in(['minecraft', 'other'])
                     ->validationMessages([
-                        'required' => __('simplify-server-maker::maker.game.required'),
-                        'in' => __('simplify-server-maker::maker.game.required'),
+                        'required' => __('simplify-servermaker::maker.game.required'),
+                        'in' => __('simplify-servermaker::maker.game.required'),
                     ]),
                 Hidden::make('type'),
                 Hidden::make('software'),

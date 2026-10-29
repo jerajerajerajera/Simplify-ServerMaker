@@ -4,9 +4,9 @@
 @endphp
 <x-dynamic-component :component="$getFieldWrapperView()" :field="$field">
     @if ($packs->isEmpty())
-        <p class="smk-empty">{{ __('simplify-server-maker::maker.modpack.none') }}</p>
+        <p class="smk-empty">{{ __('simplify-servermaker::maker.modpack.none') }}</p>
     @else
-        <div class="smk-cards" role="radiogroup" aria-label="{{ __('simplify-server-maker::maker.modpack.search') }}">
+        <div class="smk-cards" role="radiogroup" aria-label="{{ __('simplify-servermaker::maker.modpack.search') }}">
             @foreach ($packs as $key => $pack)
                 <label @class(['smk-card', 'is-picked' => $getState() === $key]) wire:key="smk-pack-{{ $key }}">
                     <input type="radio" class="smk-sr-only" name="{{ $getStatePath() }}" value="{{ $key }}"
@@ -21,7 +21,7 @@
                         <small>{{ $pack['description'] }}</small>
                         <span class="smk-card-meta">
                             {{ \Simplify\ServerMaker\Modpacks\Sources::all()[$pack['source']]->name() }} ·
-                            <a href="{{ $pack['url'] }}" target="_blank" rel="noopener noreferrer" x-on:click.stop>{{ __('simplify-server-maker::maker.modpack.open') }}</a>
+                            <a href="{{ $pack['url'] }}" target="_blank" rel="noopener noreferrer" x-on:click.stop>{{ __('simplify-servermaker::maker.modpack.open') }}</a>
                         </span>
                     </span>
                 </label>

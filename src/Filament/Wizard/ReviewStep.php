@@ -18,12 +18,12 @@ final class ReviewStep
 {
     public static function make(ServerMaker $page): Step
     {
-        $t = fn (string $key) => __('simplify-server-maker::maker.'.$key);
+        $t = fn (string $key) => __('simplify-servermaker::maker.'.$key);
 
         return Step::make('review')
             ->label($t('steps.review'))
             ->schema([
-                View::make('simplify-server-maker::wizard.review')
+                View::make('simplify-servermaker::wizard.review')
                     ->viewData(fn () => ['rows' => Summary::rows($page)]),
                 Section::make($t('review.advanced'))
                     ->description($t('review.advanced_help'))
