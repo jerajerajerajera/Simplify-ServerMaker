@@ -46,4 +46,22 @@ final class ServerMakerAddon extends Addon
     {
         return MakerSettings::canAccess() ? MakerSettings::getUrl(panel: 'admin') : null;
     }
+
+    /** In Simplify's setup (Simplify 1.3+, add-on API 3): who may make servers and how much. */
+    public function setupFields(): array
+    {
+        return MakerSettings::mayChange() ? [MakerSettings::whoSection(), MakerSettings::allowanceSection()] : [];
+    }
+
+    public function setupState(): array
+    {
+        return MakerSettings::current();
+    }
+
+    public function saveSetup(array $state): void
+    {
+        if (MakerSettings::mayChange()) {
+            Settings::put(MakerSettings::values($state));
+        }
+    }
 }

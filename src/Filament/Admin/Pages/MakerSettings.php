@@ -56,67 +56,37 @@ class MakerSettings extends Page implements HasForms
 
     public function mount(): void
     {
-        $values = [
+        $this->form->fill([...self::current(), 'curseforge_key' => '', 'curseforge_forget' => false]);
+    }
+
+    /**
+     * The saved settings without the CurseForge key, which is never sent back to the browser.
+     *
+     * @return array<string, mixed>
+     */
+    public static function current(): array
+    {
+        return [
             'self_service' => (bool) Settings::get('self_service', false),
             'role_ids' => array_map('intval', (array) Settings::get('role_ids', [])),
             'node_ids' => array_map('intval', (array) Settings::get('node_ids', [])),
             'minecraft' => (bool) Settings::get('minecraft', true),
             'egg_ids' => array_map('intval', (array) Settings::get('egg_ids', [])),
             'import_eggs' => (bool) Settings::get('import_eggs', false),
-            'curseforge_key' => '',
-            'curseforge_forget' => false,
             ...Access::limits(),
         ];
-        $this->form->fill($values);
     }
 
     public function form(Schema $schema): Schema
     {
         $t = fn (string $key, array $replace = []) => __('simplify-server-maker::maker.settings.'.$key, $replace);
-        $on = fn (Get $get) => (bool) $get('self_service');
 
         return $schema
             ->statePath('data')
             ->disabled(fn () => ! static::mayChange())
             ->components([
-                Section::make($t('who'))
-                    ->description($t('who_help'))
-                    ->schema([
-                        Toggle::make('self_service')->label($t('self_service'))->live(),
-                        Select::make('role_ids')
-                            ->label($t('roles'))
-                            ->helperText($t('roles_help'))
-                            ->multiple()
-                            ->options(fn () => Role::query()->orderBy('name')->pluck('name', 'id')->all())
-                            ->visible($on),
-                        Select::make('node_ids')
-                            ->label($t('nodes'))
-                            ->helperText($t('nodes_help'))
-                            ->multiple()
-                            ->options(fn () => Node::query()->orderBy('name')->pluck('name', 'id')->all())
-                            ->required($on)
-                            ->visible($on),
-                        Toggle::make('minecraft')->label($t('minecraft'))->visible($on),
-                        Select::make('egg_ids')
-                            ->label($t('eggs'))
-                            ->helperText($t('eggs_help'))
-                            ->multiple()
-                            ->searchable()
-                            ->options(fn () => Egg::query()->orderBy('name')->pluck('name', 'id')->all())
-                            ->visible($on),
-                        Toggle::make('import_eggs')->label($t('import_eggs'))->helperText($t('import_eggs_help'))->visible($on),
-                    ]),
-                Section::make($t('allowance'))
-                    ->description($t('allowance_help'))
-                    ->visible($on)
-                    ->columns(['default' => 1, 'sm' => 2, 'lg' => 3])
-                    ->schema([
-                        TextInput::make('max_servers')->label($t('max_servers'))->integer()->minValue(0)->maxValue(100)->required(),
-                        TextInput::make('max_ram')->label($t('max_ram'))->integer()->minValue(0)->maxValue(1024)->suffix('GB')->required(),
-                        TextInput::make('max_disk')->label($t('max_disk'))->integer()->minValue(0)->maxValue(10240)->suffix('GB')->required(),
-                        TextInput::make('max_cpu')->label($t('max_cpu'))->helperText($t('max_cpu_help'))->integer()->minValue(0)->maxValue(1600)->suffix('%')->required(),
-                        TextInput::make('max_backups')->label($t('max_backups'))->integer()->minValue(0)->maxValue(100)->required(),
-                    ]),
+                self::whoSection(),
+                self::allowanceSection(),
                 Section::make($t('modpacks'))
                     ->schema([
                         TextInput::make('curseforge_key')
@@ -129,6 +99,60 @@ class MakerSettings extends Page implements HasForms
                             ->label($t('curseforge_forget'))
                             ->visible(fn () => Settings::has('curseforge_key')),
                     ]),
+            ]);
+    }
+
+    /** Who besides administrators may make servers, where and which games; also asked in Simplify's setup. */
+    public static function whoSection(): Section
+    {
+        $t = fn (string $key) => __('simplify-server-maker::maker.settings.'.$key);
+        $on = fn (Get $get) => (bool) $get('self_service');
+
+        return Section::make($t('who'))
+            ->description($t('who_help'))
+            ->schema([
+                Toggle::make('self_service')->label($t('self_service'))->live(),
+                Select::make('role_ids')
+                    ->label($t('roles'))
+                    ->helperText($t('roles_help'))
+                    ->multiple()
+                    ->options(fn () => Role::query()->orderBy('name')->pluck('name', 'id')->all())
+                    ->visible($on),
+                Select::make('node_ids')
+                    ->label($t('nodes'))
+                    ->helperText($t('nodes_help'))
+                    ->multiple()
+                    ->options(fn () => Node::query()->orderBy('name')->pluck('name', 'id')->all())
+                    ->required($on)
+                    ->visible($on),
+                Toggle::make('minecraft')->label($t('minecraft'))->visible($on),
+                Select::make('egg_ids')
+                    ->label($t('eggs'))
+                    ->helperText($t('eggs_help'))
+                    ->multiple()
+                    ->searchable()
+                    ->options(fn () => Egg::query()->orderBy('name')->pluck('name', 'id')->all())
+                    ->visible($on),
+                Toggle::make('import_eggs')->label($t('import_eggs'))->helperText($t('import_eggs_help'))->visible($on),
+            ]);
+    }
+
+    /** How much one person may use over all their servers; also asked in Simplify's setup. */
+    public static function allowanceSection(): Section
+    {
+        $t = fn (string $key) => __('simplify-server-maker::maker.settings.'.$key);
+        $on = fn (Get $get) => (bool) $get('self_service');
+
+        return Section::make($t('allowance'))
+            ->description($t('allowance_help'))
+            ->visible($on)
+            ->columns(['default' => 1, 'sm' => 2, 'lg' => 3])
+            ->schema([
+                TextInput::make('max_servers')->label($t('max_servers'))->integer()->minValue(0)->maxValue(100)->required(),
+                TextInput::make('max_ram')->label($t('max_ram'))->integer()->minValue(0)->maxValue(1024)->suffix('GB')->required(),
+                TextInput::make('max_disk')->label($t('max_disk'))->integer()->minValue(0)->maxValue(10240)->suffix('GB')->required(),
+                TextInput::make('max_cpu')->label($t('max_cpu'))->helperText($t('max_cpu_help'))->integer()->minValue(0)->maxValue(1600)->suffix('%')->required(),
+                TextInput::make('max_backups')->label($t('max_backups'))->integer()->minValue(0)->maxValue(100)->required(),
             ]);
     }
 
@@ -148,6 +172,29 @@ class MakerSettings extends Page implements HasForms
     {
         abort_unless(static::mayChange(), 403);
         $state = $this->form->getState();
+        $values = self::values($state);
+        $key = trim((string) ($state['curseforge_key'] ?? ''));
+        if ($key !== '') {
+            $values['curseforge_key'] = $key;
+        } elseif ($state['curseforge_forget'] ?? false) {
+            $values['curseforge_key'] = null;
+        }
+        Settings::put($values);
+
+        // The key is never sent back to the browser.
+        $this->data['curseforge_key'] = '';
+        $this->data['curseforge_forget'] = false;
+        Notification::make()->title(__('simplify-server-maker::maker.settings.saved'))->success()->send();
+    }
+
+    /**
+     * The settings to save from a form's state, without the CurseForge key. Limits that were not asked stay as they are.
+     *
+     * @param  array<string, mixed>  $state
+     * @return array<string, mixed>
+     */
+    public static function values(array $state): array
+    {
         $values = [
             'self_service' => (bool) ($state['self_service'] ?? false),
             'role_ids' => array_values(array_map('intval', (array) ($state['role_ids'] ?? []))),
@@ -161,17 +208,7 @@ class MakerSettings extends Page implements HasForms
                 $values[$limit] = max(0, (int) $state[$limit]);
             }
         }
-        $key = trim((string) ($state['curseforge_key'] ?? ''));
-        if ($key !== '') {
-            $values['curseforge_key'] = $key;
-        } elseif ($state['curseforge_forget'] ?? false) {
-            $values['curseforge_key'] = null;
-        }
-        Settings::put($values);
 
-        // The key is never sent back to the browser.
-        $this->data['curseforge_key'] = '';
-        $this->data['curseforge_forget'] = false;
-        Notification::make()->title(__('simplify-server-maker::maker.settings.saved'))->success()->send();
+        return $values;
     }
 }

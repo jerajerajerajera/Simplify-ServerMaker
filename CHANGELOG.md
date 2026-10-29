@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.4
+
+- Simplify 1.3's setup now also asks who may make servers and how much, so a new panel is set up in one go.
+  On older Simplify versions, or without Simplify, nothing changes.
+
 ## 1.0.3
 
 - Works with the subdomains built into Simplify 1.2. The separate Simplify Subdomains plugin still works too.
