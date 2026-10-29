@@ -3,12 +3,11 @@
 A [Pelican](https://pelican.dev) plugin to create a game server in a few clear steps: pick Minecraft or another game,
 give it a name, choose the resources and press Create. The Server Maker picks the egg, the port and the Docker image.
 
-It works on its own. Two other plugins add to it when they are installed:
+It works on its own. With [Simplify](https://github.com/jerajerajerajera/Simplify) installed you also get:
 
-- [Simplify](https://github.com/jerajerajerajera/Simplify): a **Create server** button on the Simplify dashboard and a
-  link to the settings in its add-on list.
-- [Simplify Subdomains](https://github.com/jerajerajerajera/Simplify-subdomains): a subdomain for the new server,
-  suggested from its name, on a port that is forwarded.
+- a **Create server** button on the Simplify dashboard and a link to the settings in its add-on list;
+- a subdomain for the new server, suggested from its name, on a port that is forwarded, when Simplify's subdomains
+  are set up (built into Simplify since 1.2; the older separate Simplify Subdomains plugin works too).
 
 ## Use
 
