@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.3
+
+- Works with the subdomains built into Simplify 1.2. The separate Simplify Subdomains plugin still works too.
+
 ## 1.0.2
 
 - Server Maker now sits in the Simplify group of Pelican's admin menu, together with the other Simplify add-ons,
