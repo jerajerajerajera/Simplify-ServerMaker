@@ -5,6 +5,17 @@ Simplify is één product: de kern `simplify` plus de add-ons `simplify-serverma
 `-explain` en `-hosting`. De splitsing is alleen verpakking. Elke add-on volgt dezelfde UI en dezelfde regels.
 Schrijf met de eigenaar in het Nederlands; code, README, CHANGELOG, commits en PR's in het Engels.
 
+## 0. Designfilosofie en doel
+
+- Simplify heeft een designfilosofie: snel, overzichtelijk, duidelijk en overal hetzelfde. §4 zijn die regels.
+- De werking van 0.7.0 is leidend. Bij twijfel: vragen aan de eigenaar (via de regisseur), niet raden.
+- Simplify neemt alle functies over: niemand hoeft terug naar Pelicans admin, tenzij er echt iets breekt.
+- Iconen: alleen Tabler. Servericoon: eigen server-icon.png > Pelican-servericoon > egg-icoon > grasblok (Minecraft) > kubus.
+- Zo klein mogelijk: geen dubbele of onnodige functies, niet meer code dan nodig. Na een aantal wijzigingen een
+  opschoonronde (wat kan weg, samen of korter) als eigen PR.
+- Veiligheid staat voorop: rechten server-side, invoer valideren, geen secrets, geen open routes zonder controle.
+- Testfase: de eerste Hub-versie moet echt goed zijn, zodat er daarna weinig updates nodig zijn.
+
 ## 1. De opdracht: 0.7.0 is de norm
 
 Simplify is een herbouw van PelicanSimplify 0.7.0 (snapshot.10) **met alle functionaliteit**. "Kleiner geschreven"
@@ -83,13 +94,20 @@ Een fix zonder test die eerst rood was, is niet af. Zo komt dezelfde fout niet t
 
 ## 6. GitHub en releases
 
-- Werk op een branch, open een PR, squash-merge met een nette titel. Nooit direct op `main`.
-- Push, merge en release alleen met een uitdrukkelijk ja van de eigenaar voor die stap.
-- Een release van de kern vereist vooraf: stijlaudit groen, upgradetest groen, functielijst bijgewerkt
-  (`docs/REFERENCE-070.md`), en screenshots van de gewijzigde schermen.
+- Elke repo heeft één vaste thread die de eigenaar is. Alleen die thread merget in deze repo.
+- Werk op een branch, open een PR, squash-merge met een nette titel. Nooit direct op `main`. Eén wijziging per PR.
+- De repo-thread mag zelf mergen als CI groen is en de definitie van klaar (§2) gehaald is. Wijzigingen verzamelen
+  zich op `main` onder "Unreleased" in de CHANGELOG.
+- Weinig pushes: push pas als een wijziging lokaal af en getest is. Geen nieuwe versie per kleine wijziging.
+- Een release (kern én add-on) alleen met een uitdrukkelijk ja van de eigenaar; de regisseur van het project stelt
+  een release voor als er genoeg wijzigingen zijn. Daarna tagt de repo-thread (Hub-zip `<id>-v<versie>.zip`) en meldt
+  de zip-link; de Hub-upload doet de eigenaar.
+- Elke zichtbare wijziging, ook een kleine, eerst als voorbeeld (artifact, vóór/na) laten goedkeuren; pas dan bouwen.
+- De kern vereist vóór een release: stijlaudit
+  groen, upgradetest groen, functielijst bijgewerkt (`docs/REFERENCE-070.md`), en screenshots van de gewijzigde schermen.
 - CI kost de eigenaar mails bij elke rode run: niet per poging pushen om CI te testen; test eerst lokaal.
 - Nooit secrets, tokens, wachtwoorden of interne adressen in code, issues, PR's of output.
-- Eén wijziging per PR. Liever drie kleine PR's dan één grote.
+- Een PR die niet doorgaat sluit je zelf, met een korte reden. Geen oude branches laten slingeren.
 
 ## 7. Melden
 
@@ -98,6 +116,32 @@ Een fix zonder test die eerst rood was, is niet af. Zo komt dezelfde fout niet t
 - Geen tijdschattingen.
 - Zeg eerlijk wat niet getest is.
 
+## 8. Samenwerken en vaste afspraken
+
+- **Add-ons werken los, maar als de kern geïnstalleerd is openen ze altijd binnen Simplify** (frame, servermenu,
+  hostmodus of Simplify-popup), nooit als losse Pelican-pagina. Test daarom altijd met én zonder de kern.
+- **Altijd het Simplify-design**: §4 geldt voor elke add-on precies zoals voor de kern.
+- Admin-menu groep "Simplify", volgorde: kern 1/2, Egg Updates 20, Explain 40, Hosting 50, Server Maker 80, Toolkit 95.
+- Plugin-id's `simplify-<naam>` zonder streepje tussen twee woorden. Announcements, Embed en Subdomains zijn kernfuncties.
+- EULA: optioneel bij aanmaken; het verplichte vinkje komt pas bij de eerste start, in de titelkaart, met de knop
+  "First start" (play-icoon). Geen Restart zolang de server nooit gestart is.
+- "Automatic backups" is een tab van "Backups & tasks".
+- Seizoensversiering is stil: nooit in CHANGELOG, releasenotes, README of Hub-teksten, en verborgen op screenshots.
+- Screenshots en Hub: nooit Pelicans gewone beheerschermen (zoals People & roles in Filament-stijl); add-ons in
+  hostmodus; elke add-on-banner "Works best with Simplify"; eerste Hub-changelog "First version on the Hub".
+- Een check heeft altijd de uitkomst ok of fout tegen een regel, nooit alleen informatie. De vaste controles staan in
+  de kernrepo (`tests/audit`): functielijst tegenover 0.7.0, klik-test op elke knop, navigatie zonder herlaad, maten
+  tegenover 0.7.0 + 10%, een testpaneel dat op het echte paneel lijkt, en het updatepad met echte instellingen.
+- Bij testen meteen screenshots van de kernfuncties die je raakte in `docs/screenshots/` van de repo (vaste naam per
+  scherm, licht en donker, desktop en telefoon), zodat documentatie en releases ze hergebruiken.
+- Werk dat een andere repo raakt: vraag de thread van die repo; bouw het nooit zelf daar. Overleg onderling als er
+  iets is, en meld zichtbare wijzigingen altijd aan de documentatie-thread en release-kandidaten aan de release-thread.
+- Melden gaat via de regisseur van het project. Teksten voor de eigenaar als Engels codeblok. Commando's in één
+  codeblok, met erboven op welk systeem ze draaien. Op het paneel draait artisan altijd als
+  `sudo -u www-data php artisan …`.
+- De eigenaar zo min mogelijk zelf laten doen. Bij twijfel kort vragen, niet raden.
+
+<!-- EIGEN DEEL -->
 ## Deze repo: Server Maker (`simplify-servermaker`)
 
 - Maakt een server in een paar stappen (spel, naam, resources, Create). Zonder Simplify werkt hij los; mét Simplify
