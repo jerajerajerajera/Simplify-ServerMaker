@@ -10,6 +10,8 @@ return [
     'next' => 'Înainte',
     'back' => 'Înapoi',
     'steps' => [
+        'label' => 'Pași',
+        'step_of' => 'Pasul :step din :total',
         'game' => 'Joc',
         'minecraft' => 'Minecraft',
         'settings' => 'Setări joc',
@@ -18,6 +20,7 @@ return [
         'review' => 'Verificare',
     ],
     'game' => [
+        'minecraft_help' => 'Java și Bedrock. Alege ce fel de server Minecraft vrei.',
         'required' => 'Alege un joc.',
         'other' => 'Alte jocuri',
         'search' => 'Caută printre :count jocuri',
@@ -32,6 +35,7 @@ return [
         'locked_variable' => 'Această setare nu poate fi schimbată.',
     ],
     'minecraft' => [
+        'type' => 'Tip de server',
         'types' => [
             'vanilla' => [
                 'label' => 'Vanilla',
@@ -110,6 +114,14 @@ return [
         'subdomain_help' => 'Jucătorii se pot conecta folosind acest nume. Lasă gol pentru niciun subdomeniu.',
     ],
     'resources' => [
+        'custom_hint' => 'Alege singur',
+        'storage' => ':amount GB spațiu',
+        'ram_hint' => [
+            'small' => 'Lumi mici',
+            'everyday' => 'Joc zilnic',
+            'headroom' => 'Mai multă rezervă',
+            'modpacks' => 'Modpack-uri mai mari',
+        ],
         'help_type' => 'Valorile de pornire se potrivesc acestui tip de server. Alege mai mult sau mai puțin, dacă vrei.',
         'help_game' => 'Alege de ce are nevoie jocul. Poți schimba mai târziu.',
         'ram' => 'RAM',
@@ -136,10 +148,15 @@ return [
     ],
     'draft' => [
         'restored' => 'Continui de unde ai rămas.',
-        'start_over' => 'Ia-o de la capăt',
-        'start_over_help' => 'Răspunsurile tale de până acum sunt șterse.',
+        'label' => 'Ciornă',
+        'saved' => 'Ciornă salvată',
+        'discard' => 'Renunță',
+        'keep' => 'Păstrează ciorna',
+        'delete' => 'Șterge ciorna',
     ],
     'review' => [
+        'overview' => 'Prezentare server',
+        'overview_help' => 'Totul este pregătit. Verifică, apoi creează serverul.',
         'name' => 'Nume',
         'game' => 'Joc',
         'java' => 'Java',

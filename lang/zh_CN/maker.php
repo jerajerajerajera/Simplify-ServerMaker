@@ -10,6 +10,8 @@ return [
     'next' => '下一步',
     'back' => '返回',
     'steps' => [
+        'label' => '步骤',
+        'step_of' => '第 :step 步，共 :total 步',
         'game' => '游戏',
         'minecraft' => 'Minecraft',
         'settings' => '游戏设置',
@@ -18,6 +20,7 @@ return [
         'review' => '确认',
     ],
     'game' => [
+        'minecraft_help' => 'Java 和 Bedrock。选择你想要的 Minecraft 服务器类型。',
         'required' => '请选择一个游戏。',
         'other' => '其他游戏',
         'search' => '在 :count 个游戏中搜索',
@@ -32,6 +35,7 @@ return [
         'locked_variable' => '此设置无法更改。',
     ],
     'minecraft' => [
+        'type' => '服务器类型',
         'types' => [
             'vanilla' => [
                 'label' => 'Vanilla',
@@ -110,6 +114,14 @@ return [
         'subdomain_help' => '玩家可以通过此名称加入。留空则不使用子域名。',
     ],
     'resources' => [
+        'custom_hint' => '自定义',
+        'storage' => ':amount GB 存储',
+        'ram_hint' => [
+            'small' => '小型世界',
+            'everyday' => '日常游玩',
+            'headroom' => '更多余量',
+            'modpacks' => '大型整合包',
+        ],
         'help_type' => '初始值适合此服务器类型。你可以按需增加或减少。',
         'help_game' => '选择游戏所需的资源。之后可以更改。',
         'ram' => 'RAM',
@@ -136,10 +148,15 @@ return [
     ],
     'draft' => [
         'restored' => '你将从上次中断的地方继续。',
-        'start_over' => '重新开始',
-        'start_over_help' => '你目前的回答将被清除。',
+        'label' => '草稿',
+        'saved' => '草稿已保存',
+        'discard' => '丢弃',
+        'keep' => '保留草稿',
+        'delete' => '删除草稿',
     ],
     'review' => [
+        'overview' => '服务器概览',
+        'overview_help' => '一切就绪。检查后即可创建服务器。',
         'name' => '名称',
         'game' => '游戏',
         'java' => 'Java',

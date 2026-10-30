@@ -10,6 +10,8 @@ return [
     'next' => 'Avanti',
     'back' => 'Indietro',
     'steps' => [
+        'label' => 'Passaggi',
+        'step_of' => 'Passaggio :step di :total',
         'game' => 'Gioco',
         'minecraft' => 'Minecraft',
         'settings' => 'Impostazioni di gioco',
@@ -18,6 +20,7 @@ return [
         'review' => 'Riepilogo',
     ],
     'game' => [
+        'minecraft_help' => 'Java e Bedrock. Scegli che tipo di server Minecraft vuoi.',
         'required' => 'Scegli un gioco.',
         'other' => 'Altri giochi',
         'search' => 'Cerca tra :count giochi',
@@ -32,6 +35,7 @@ return [
         'locked_variable' => 'Questa impostazione non può essere modificata.',
     ],
     'minecraft' => [
+        'type' => 'Tipo di server',
         'types' => [
             'vanilla' => [
                 'label' => 'Vanilla',
@@ -110,6 +114,14 @@ return [
         'subdomain_help' => 'I giocatori possono entrare con questo nome. Lascia vuoto per nessun sottodominio.',
     ],
     'resources' => [
+        'custom_hint' => 'Scegli tu',
+        'storage' => ':amount GB di spazio',
+        'ram_hint' => [
+            'small' => 'Mondi piccoli',
+            'everyday' => 'Gioco quotidiano',
+            'headroom' => 'Più margine',
+            'modpacks' => 'Modpack più grandi',
+        ],
         'help_type' => 'I valori iniziali sono adatti a questo tipo di server. Scegli di più o di meno se vuoi.',
         'help_game' => 'Scegli ciò che serve al gioco. Puoi cambiarlo più tardi.',
         'ram' => 'RAM',
@@ -136,10 +148,15 @@ return [
     ],
     'draft' => [
         'restored' => 'Riprendi da dove avevi lasciato.',
-        'start_over' => 'Ricomincia',
-        'start_over_help' => 'Le risposte date finora vengono eliminate.',
+        'label' => 'Bozza',
+        'saved' => 'Bozza salvata',
+        'discard' => 'Scarta',
+        'keep' => 'Mantieni bozza',
+        'delete' => 'Elimina bozza',
     ],
     'review' => [
+        'overview' => 'Riepilogo server',
+        'overview_help' => 'È tutto pronto. Controlla, poi crea il server.',
         'name' => 'Nome',
         'game' => 'Gioco',
         'java' => 'Java',

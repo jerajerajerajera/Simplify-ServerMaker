@@ -10,6 +10,8 @@ return [
     'next' => 'Toliau',
     'back' => 'Atgal',
     'steps' => [
+        'label' => 'Žingsniai',
+        'step_of' => 'Žingsnis :step iš :total',
         'game' => 'Žaidimas',
         'minecraft' => 'Minecraft',
         'settings' => 'Žaidimo nustatymai',
@@ -18,6 +20,7 @@ return [
         'review' => 'Peržiūra',
     ],
     'game' => [
+        'minecraft_help' => 'Java ir Bedrock. Pasirinkite, kokio Minecraft serverio norite.',
         'required' => 'Pasirinkite žaidimą.',
         'other' => 'Kiti žaidimai',
         'search' => 'Ieškoti tarp žaidimų: :count',
@@ -32,6 +35,7 @@ return [
         'locked_variable' => 'Šio nustatymo pakeisti negalima.',
     ],
     'minecraft' => [
+        'type' => 'Serverio tipas',
         'types' => [
             'vanilla' => [
                 'label' => 'Vanilla',
@@ -110,6 +114,14 @@ return [
         'subdomain_help' => 'Žaidėjai galės prisijungti naudodami šį pavadinimą. Palikite tuščią, jei nenorite subdomeno.',
     ],
     'resources' => [
+        'custom_hint' => 'Pasirinkite patys',
+        'storage' => ':amount GB vietos',
+        'ram_hint' => [
+            'small' => 'Maži pasauliai',
+            'everyday' => 'Kasdienis žaidimas',
+            'headroom' => 'Daugiau atsargos',
+            'modpacks' => 'Didesni modpackai',
+        ],
         'help_type' => 'Pradinės reikšmės tinka šiam serverio tipui. Jei norite, pasirinkite daugiau ar mažiau.',
         'help_game' => 'Pasirinkite, ko reikia žaidimui. Vėliau galėsite pakeisti.',
         'ram' => 'RAM',
@@ -136,10 +148,15 @@ return [
     ],
     'draft' => [
         'restored' => 'Tęsiate nuo ten, kur baigėte.',
-        'start_over' => 'Pradėti iš naujo',
-        'start_over_help' => 'Jūsų iki šiol pateikti atsakymai bus pašalinti.',
+        'label' => 'Juodraštis',
+        'saved' => 'Juodraštis išsaugotas',
+        'discard' => 'Atmesti',
+        'keep' => 'Palikti juodraštį',
+        'delete' => 'Ištrinti juodraštį',
     ],
     'review' => [
+        'overview' => 'Serverio apžvalga',
+        'overview_help' => 'Viskas paruošta. Patikrinkite ir sukurkite serverį.',
         'name' => 'Pavadinimas',
         'game' => 'Žaidimas',
         'java' => 'Java',

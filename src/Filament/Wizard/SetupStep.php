@@ -13,6 +13,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Text;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Components\View;
 use Filament\Schemas\Components\Wizard\Step;
 use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
 use Simplify\ServerMaker\Games\Minecraft;
@@ -32,6 +33,8 @@ final class SetupStep
                 Group::make()
                     ->visible(fn (Get $get) => $get('game') === 'minecraft')
                     ->schema([
+                        View::make('simplify-servermaker::wizard.types')
+                            ->viewData(['types' => Minecraft::TYPES]),
                         Radio::make('software')
                             ->label(fn (Get $get) => $t('minecraft.software.'.$get('type')))
                             ->helperText(fn (Get $get) => $t('minecraft.software_help.'.$get('type')))

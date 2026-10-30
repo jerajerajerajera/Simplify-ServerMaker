@@ -10,6 +10,8 @@ return [
     'next' => 'İleri',
     'back' => 'Geri',
     'steps' => [
+        'label' => 'Adımlar',
+        'step_of' => 'Adım :step / :total',
         'game' => 'Oyun',
         'minecraft' => 'Minecraft',
         'settings' => 'Oyun ayarları',
@@ -18,6 +20,7 @@ return [
         'review' => 'Gözden geçir',
     ],
     'game' => [
+        'minecraft_help' => 'Java ve Bedrock. Nasıl bir Minecraft sunucusu istediğinizi seçin.',
         'required' => 'Bir oyun seçin.',
         'other' => 'Diğer oyunlar',
         'search' => ':count oyunda ara',
@@ -32,6 +35,7 @@ return [
         'locked_variable' => 'Bu ayar değiştirilemez.',
     ],
     'minecraft' => [
+        'type' => 'Sunucu türü',
         'types' => [
             'vanilla' => [
                 'label' => 'Vanilla',
@@ -110,6 +114,14 @@ return [
         'subdomain_help' => 'Oyuncular bu adla bağlanabilir. Alt alan adı istemiyorsanız boş bırakın.',
     ],
     'resources' => [
+        'custom_hint' => 'Kendiniz seçin',
+        'storage' => ':amount GB depolama',
+        'ram_hint' => [
+            'small' => 'Küçük dünyalar',
+            'everyday' => 'Günlük oyun',
+            'headroom' => 'Daha fazla pay',
+            'modpacks' => 'Daha büyük mod paketleri',
+        ],
         'help_type' => 'Başlangıç değerleri bu sunucu türüne uygundur. İsterseniz daha fazla veya daha az seçin.',
         'help_game' => 'Oyunun ihtiyacını seçin. Daha sonra değiştirebilirsiniz.',
         'ram' => 'RAM',
@@ -136,10 +148,15 @@ return [
     ],
     'draft' => [
         'restored' => 'Kaldığınız yerden devam ediyorsunuz.',
-        'start_over' => 'Baştan başla',
-        'start_over_help' => 'Şimdiye kadarki yanıtlarınız silinir.',
+        'label' => 'Taslak',
+        'saved' => 'Taslak kaydedildi',
+        'discard' => 'Vazgeç',
+        'keep' => 'Taslağı koru',
+        'delete' => 'Taslağı sil',
     ],
     'review' => [
+        'overview' => 'Sunucu özeti',
+        'overview_help' => 'Her şey hazır. Kontrol edin, sonra sunucuyu oluşturun.',
         'name' => 'Ad',
         'game' => 'Oyun',
         'java' => 'Java',

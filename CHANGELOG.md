@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.2.0
+
+- The Server Maker looks and works like it did in Simplify 0.7.0 again:
+  - one bar at the bottom with Back, the steps (click a step you have done to go back to it), the saved draft with
+    Discard, and Next. On a phone the bar shows the current step; tap it for the list of steps.
+  - the Game step shows Minecraft in its own block with its server types; picking a type moves on by itself. Other
+    games are listed below with their initials, with a search.
+  - the Minecraft step shows the server types as cards with an icon, so you can still switch type (Proxy is here).
+  - RAM, CPU and disk are cards with what the amount is good for.
+  - the Review step is a server overview in two columns.
+- Start over above the Server Maker is now Discard in the bar at the bottom.
+
 ## 1.1.2
 
 - The Server Maker is one box that fits the window: the steps stay on top and Back and Next at the bottom, and only the

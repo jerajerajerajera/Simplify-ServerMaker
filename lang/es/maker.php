@@ -10,6 +10,8 @@ return [
     'next' => 'Siguiente',
     'back' => 'Atrás',
     'steps' => [
+        'label' => 'Pasos',
+        'step_of' => 'Paso :step de :total',
         'game' => 'Juego',
         'minecraft' => 'Minecraft',
         'settings' => 'Ajustes del juego',
@@ -18,6 +20,7 @@ return [
         'review' => 'Revisar',
     ],
     'game' => [
+        'minecraft_help' => 'Java y Bedrock. Elige qué tipo de servidor de Minecraft quieres.',
         'required' => 'Elige un juego.',
         'other' => 'Otros juegos',
         'search' => 'Buscar entre :count juegos',
@@ -32,6 +35,7 @@ return [
         'locked_variable' => 'Este ajuste no se puede cambiar.',
     ],
     'minecraft' => [
+        'type' => 'Tipo de servidor',
         'types' => [
             'vanilla' => [
                 'label' => 'Vanilla',
@@ -110,6 +114,14 @@ return [
         'subdomain_help' => 'Los jugadores pueden unirse con este nombre. Déjalo vacío para no usar subdominio.',
     ],
     'resources' => [
+        'custom_hint' => 'Elige tú',
+        'storage' => ':amount GB de almacenamiento',
+        'ram_hint' => [
+            'small' => 'Mundos pequeños',
+            'everyday' => 'Juego diario',
+            'headroom' => 'Más margen',
+            'modpacks' => 'Modpacks más grandes',
+        ],
         'help_type' => 'Los valores iniciales se ajustan a este tipo de servidor. Elige más o menos si quieres.',
         'help_game' => 'Elige lo que necesita el juego. Puedes cambiarlo después.',
         'ram' => 'RAM',
@@ -136,10 +148,15 @@ return [
     ],
     'draft' => [
         'restored' => 'Continúas donde lo dejaste.',
-        'start_over' => 'Empezar de nuevo',
-        'start_over_help' => 'Se borran tus respuestas hasta ahora.',
+        'label' => 'Borrador',
+        'saved' => 'Borrador guardado',
+        'discard' => 'Descartar',
+        'keep' => 'Conservar borrador',
+        'delete' => 'Eliminar borrador',
     ],
     'review' => [
+        'overview' => 'Resumen del servidor',
+        'overview_help' => 'Todo está preparado. Revísalo y luego crea el servidor.',
         'name' => 'Nombre',
         'game' => 'Juego',
         'java' => 'Java',

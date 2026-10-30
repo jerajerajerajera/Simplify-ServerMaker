@@ -10,6 +10,8 @@ return [
     'next' => '次へ',
     'back' => '戻る',
     'steps' => [
+        'label' => 'ステップ',
+        'step_of' => 'ステップ :step / :total',
         'game' => 'ゲーム',
         'minecraft' => 'Minecraft',
         'settings' => 'ゲーム設定',
@@ -18,6 +20,7 @@ return [
         'review' => '確認',
     ],
     'game' => [
+        'minecraft_help' => 'Java と Bedrock。作りたい Minecraft サーバーの種類を選んでください。',
         'required' => 'ゲームを選んでください。',
         'other' => 'その他のゲーム',
         'search' => ':count 件のゲームを検索',
@@ -32,6 +35,7 @@ return [
         'locked_variable' => 'この設定は変更できません。',
     ],
     'minecraft' => [
+        'type' => 'サーバーの種類',
         'types' => [
             'vanilla' => [
                 'label' => 'Vanilla',
@@ -110,6 +114,14 @@ return [
         'subdomain_help' => 'プレイヤーはこの名前で参加できます。サブドメインを使わない場合は空欄のままにしてください。',
     ],
     'resources' => [
+        'custom_hint' => '自分で決める',
+        'storage' => ':amount GB ストレージ',
+        'ram_hint' => [
+            'small' => '小さなワールド',
+            'everyday' => '普段のプレイ',
+            'headroom' => '余裕を持たせる',
+            'modpacks' => '大きめの Modpack',
+        ],
         'help_type' => '初期値はこのサーバータイプに合わせてあります。必要に応じて増減してください。',
         'help_game' => 'ゲームに必要な分を選んでください。後で変更できます。',
         'ram' => 'RAM',
@@ -136,10 +148,15 @@ return [
     ],
     'draft' => [
         'restored' => '前回の続きから再開します。',
-        'start_over' => '最初からやり直す',
-        'start_over_help' => 'これまでの回答は削除されます。',
+        'label' => '下書き',
+        'saved' => '下書きを保存しました',
+        'discard' => '破棄',
+        'keep' => '下書きを残す',
+        'delete' => '下書きを削除',
     ],
     'review' => [
+        'overview' => 'サーバーの概要',
+        'overview_help' => '準備ができました。確認してからサーバーを作成してください。',
         'name' => '名前',
         'game' => 'ゲーム',
         'java' => 'Java',

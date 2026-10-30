@@ -10,6 +10,8 @@ return [
     'next' => 'Volgende',
     'back' => 'Terug',
     'steps' => [
+        'label' => 'Stappen',
+        'step_of' => 'Stap :step van :total',
         'game' => 'Game',
         'minecraft' => 'Minecraft',
         'settings' => 'Game-instellingen',
@@ -18,6 +20,7 @@ return [
         'review' => 'Controleren',
     ],
     'game' => [
+        'minecraft_help' => 'Java en Bedrock. Kies wat voor Minecraft-server je wilt.',
         'required' => 'Kies een game.',
         'other' => 'Andere games',
         'search' => 'Zoek in :count games',
@@ -32,6 +35,7 @@ return [
         'locked_variable' => 'Deze instelling kan niet worden gewijzigd.',
     ],
     'minecraft' => [
+        'type' => 'Soort server',
         'types' => [
             'vanilla' => [
                 'label' => 'Vanilla',
@@ -110,6 +114,14 @@ return [
         'subdomain_help' => 'Spelers kunnen met deze naam joinen. Laat leeg voor geen subdomein.',
     ],
     'resources' => [
+        'custom_hint' => 'Kies zelf',
+        'storage' => ':amount GB opslag',
+        'ram_hint' => [
+            'small' => 'Kleine werelden',
+            'everyday' => 'Gewoon spelen',
+            'headroom' => 'Meer ruimte',
+            'modpacks' => 'Grotere modpacks',
+        ],
         'help_type' => 'De beginwaarden passen bij dit servertype. Kies gerust meer of minder.',
         'help_game' => 'Kies wat de game nodig heeft. Je kunt dit later wijzigen.',
         'ram' => 'RAM',
@@ -136,10 +148,15 @@ return [
     ],
     'draft' => [
         'restored' => 'Je gaat verder waar je gebleven was.',
-        'start_over' => 'Opnieuw beginnen',
-        'start_over_help' => 'Je antwoorden tot nu toe worden verwijderd.',
+        'label' => 'Concept',
+        'saved' => 'Concept opgeslagen',
+        'discard' => 'Weggooien',
+        'keep' => 'Concept houden',
+        'delete' => 'Concept verwijderen',
     ],
     'review' => [
+        'overview' => 'Serveroverzicht',
+        'overview_help' => 'Alles staat klaar. Controleer het en maak dan de server.',
         'name' => 'Naam',
         'game' => 'Game',
         'java' => 'Java',

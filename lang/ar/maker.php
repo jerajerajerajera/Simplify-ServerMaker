@@ -10,6 +10,8 @@ return [
     'next' => 'التالي',
     'back' => 'رجوع',
     'steps' => [
+        'label' => 'الخطوات',
+        'step_of' => 'الخطوة :step من :total',
         'game' => 'اللعبة',
         'minecraft' => 'Minecraft',
         'settings' => 'إعدادات اللعبة',
@@ -18,6 +20,7 @@ return [
         'review' => 'المراجعة',
     ],
     'game' => [
+        'minecraft_help' => 'Java و Bedrock. اختر نوع خادم Minecraft الذي تريده.',
         'required' => 'اختر لعبة.',
         'other' => 'ألعاب أخرى',
         'search' => 'ابحث في :count لعبة',
@@ -32,6 +35,7 @@ return [
         'locked_variable' => 'لا يمكن تغيير هذا الإعداد.',
     ],
     'minecraft' => [
+        'type' => 'نوع الخادم',
         'types' => [
             'vanilla' => [
                 'label' => 'Vanilla',
@@ -110,6 +114,14 @@ return [
         'subdomain_help' => 'يمكن للاعبين الانضمام بهذا الاسم. اتركه فارغًا لعدم استخدام نطاق فرعي.',
     ],
     'resources' => [
+        'custom_hint' => 'اختر بنفسك',
+        'storage' => ':amount GB تخزين',
+        'ram_hint' => [
+            'small' => 'عوالم صغيرة',
+            'everyday' => 'لعب يومي',
+            'headroom' => 'مساحة أكبر',
+            'modpacks' => 'حزم تعديلات أكبر',
+        ],
         'help_type' => 'القيم الأولية تناسب نوع الخادم هذا. اختر أكثر أو أقل إذا أردت.',
         'help_game' => 'اختر ما تحتاجه اللعبة. يمكنك تغييره لاحقًا.',
         'ram' => 'RAM',
@@ -136,10 +148,15 @@ return [
     ],
     'draft' => [
         'restored' => 'تتابع من حيث توقفت.',
-        'start_over' => 'البدء من جديد',
-        'start_over_help' => 'ستُحذف إجاباتك حتى الآن.',
+        'label' => 'مسودة',
+        'saved' => 'تم حفظ المسودة',
+        'discard' => 'تجاهل',
+        'keep' => 'الاحتفاظ بالمسودة',
+        'delete' => 'حذف المسودة',
     ],
     'review' => [
+        'overview' => 'نظرة عامة على الخادم',
+        'overview_help' => 'كل شيء جاهز. راجعه ثم أنشئ الخادم.',
         'name' => 'الاسم',
         'game' => 'اللعبة',
         'java' => 'Java',

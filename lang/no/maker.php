@@ -10,6 +10,8 @@ return [
     'next' => 'Neste',
     'back' => 'Tilbake',
     'steps' => [
+        'label' => 'Steg',
+        'step_of' => 'Steg :step av :total',
         'game' => 'Spill',
         'minecraft' => 'Minecraft',
         'settings' => 'Spillinnstillinger',
@@ -18,6 +20,7 @@ return [
         'review' => 'Se over',
     ],
     'game' => [
+        'minecraft_help' => 'Java og Bedrock. Velg hva slags Minecraft-server du vil ha.',
         'required' => 'Velg et spill.',
         'other' => 'Andre spill',
         'search' => 'Søk blant :count spill',
@@ -32,6 +35,7 @@ return [
         'locked_variable' => 'Denne innstillingen kan ikke endres.',
     ],
     'minecraft' => [
+        'type' => 'Servertype',
         'types' => [
             'vanilla' => [
                 'label' => 'Vanilla',
@@ -110,6 +114,14 @@ return [
         'subdomain_help' => 'Spillere kan koble til med dette navnet. La feltet stå tomt for ingen underdomene.',
     ],
     'resources' => [
+        'custom_hint' => 'Velg selv',
+        'storage' => ':amount GB lagring',
+        'ram_hint' => [
+            'small' => 'Små verdener',
+            'everyday' => 'Hverdagsspill',
+            'headroom' => 'Mer rom',
+            'modpacks' => 'Større modpakker',
+        ],
         'help_type' => 'Startverdiene passer denne servertypen. Velg mer eller mindre om du vil.',
         'help_game' => 'Velg det spillet trenger. Du kan endre det senere.',
         'ram' => 'RAM',
@@ -136,10 +148,15 @@ return [
     ],
     'draft' => [
         'restored' => 'Du fortsetter der du slapp.',
-        'start_over' => 'Start på nytt',
-        'start_over_help' => 'Svarene dine så langt blir fjernet.',
+        'label' => 'Utkast',
+        'saved' => 'Utkast lagret',
+        'discard' => 'Forkast',
+        'keep' => 'Behold utkast',
+        'delete' => 'Slett utkast',
     ],
     'review' => [
+        'overview' => 'Serveroversikt',
+        'overview_help' => 'Alt er klart. Sjekk det, og opprett så serveren.',
         'name' => 'Navn',
         'game' => 'Spill',
         'java' => 'Java',

@@ -10,6 +10,8 @@ return [
     'next' => 'Nästa',
     'back' => 'Tillbaka',
     'steps' => [
+        'label' => 'Steg',
+        'step_of' => 'Steg :step av :total',
         'game' => 'Spel',
         'minecraft' => 'Minecraft',
         'settings' => 'Spelinställningar',
@@ -18,6 +20,7 @@ return [
         'review' => 'Granska',
     ],
     'game' => [
+        'minecraft_help' => 'Java och Bedrock. Välj vilken sorts Minecraft-server du vill ha.',
         'required' => 'Välj ett spel.',
         'other' => 'Andra spel',
         'search' => 'Sök bland :count spel',
@@ -32,6 +35,7 @@ return [
         'locked_variable' => 'Den här inställningen kan inte ändras.',
     ],
     'minecraft' => [
+        'type' => 'Servertyp',
         'types' => [
             'vanilla' => [
                 'label' => 'Vanilla',
@@ -110,6 +114,14 @@ return [
         'subdomain_help' => 'Spelare kan ansluta med det här namnet. Lämna tomt för ingen underdomän.',
     ],
     'resources' => [
+        'custom_hint' => 'Välj själv',
+        'storage' => ':amount GB lagring',
+        'ram_hint' => [
+            'small' => 'Små världar',
+            'everyday' => 'Vardagsspel',
+            'headroom' => 'Mer utrymme',
+            'modpacks' => 'Större modpaket',
+        ],
         'help_type' => 'Startvärdena passar den här servertypen. Välj mer eller mindre om du vill.',
         'help_game' => 'Välj det spelet behöver. Du kan ändra det senare.',
         'ram' => 'RAM',
@@ -136,10 +148,15 @@ return [
     ],
     'draft' => [
         'restored' => 'Du fortsätter där du slutade.',
-        'start_over' => 'Börja om',
-        'start_over_help' => 'Dina svar hittills tas bort.',
+        'label' => 'Utkast',
+        'saved' => 'Utkast sparat',
+        'discard' => 'Kasta',
+        'keep' => 'Behåll utkast',
+        'delete' => 'Ta bort utkast',
     ],
     'review' => [
+        'overview' => 'Serveröversikt',
+        'overview_help' => 'Allt är förberett. Kontrollera och skapa sedan servern.',
         'name' => 'Namn',
         'game' => 'Spel',
         'java' => 'Java',

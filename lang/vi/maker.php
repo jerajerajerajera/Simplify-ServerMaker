@@ -10,6 +10,8 @@ return [
     'next' => 'Tiếp',
     'back' => 'Quay lại',
     'steps' => [
+        'label' => 'Các bước',
+        'step_of' => 'Bước :step / :total',
         'game' => 'Trò chơi',
         'minecraft' => 'Minecraft',
         'settings' => 'Cài đặt trò chơi',
@@ -18,6 +20,7 @@ return [
         'review' => 'Xem lại',
     ],
     'game' => [
+        'minecraft_help' => 'Java và Bedrock. Chọn loại máy chủ Minecraft bạn muốn.',
         'required' => 'Chọn một trò chơi.',
         'other' => 'Trò chơi khác',
         'search' => 'Tìm trong :count trò chơi',
@@ -32,6 +35,7 @@ return [
         'locked_variable' => 'Không thể thay đổi cài đặt này.',
     ],
     'minecraft' => [
+        'type' => 'Loại máy chủ',
         'types' => [
             'vanilla' => [
                 'label' => 'Vanilla',
@@ -110,6 +114,14 @@ return [
         'subdomain_help' => 'Người chơi có thể tham gia bằng tên này. Để trống nếu không dùng tên miền phụ.',
     ],
     'resources' => [
+        'custom_hint' => 'Tự chọn',
+        'storage' => ':amount GB lưu trữ',
+        'ram_hint' => [
+            'small' => 'Thế giới nhỏ',
+            'everyday' => 'Chơi hằng ngày',
+            'headroom' => 'Dư dả hơn',
+            'modpacks' => 'Modpack lớn hơn',
+        ],
         'help_type' => 'Giá trị ban đầu phù hợp với loại máy chủ này. Chọn nhiều hơn hoặc ít hơn nếu muốn.',
         'help_game' => 'Chọn những gì trò chơi cần. Bạn có thể đổi sau.',
         'ram' => 'RAM',
@@ -136,10 +148,15 @@ return [
     ],
     'draft' => [
         'restored' => 'Bạn tiếp tục từ chỗ đã dừng.',
-        'start_over' => 'Bắt đầu lại',
-        'start_over_help' => 'Các câu trả lời của bạn đến giờ sẽ bị xóa.',
+        'label' => 'Bản nháp',
+        'saved' => 'Đã lưu bản nháp',
+        'discard' => 'Bỏ',
+        'keep' => 'Giữ bản nháp',
+        'delete' => 'Xoá bản nháp',
     ],
     'review' => [
+        'overview' => 'Tổng quan máy chủ',
+        'overview_help' => 'Mọi thứ đã sẵn sàng. Kiểm tra rồi tạo máy chủ.',
         'name' => 'Tên',
         'game' => 'Trò chơi',
         'java' => 'Java',

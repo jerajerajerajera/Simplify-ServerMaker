@@ -10,6 +10,8 @@ return [
     'next' => 'Dalej',
     'back' => 'Wstecz',
     'steps' => [
+        'label' => 'Kroki',
+        'step_of' => 'Krok :step z :total',
         'game' => 'Gra',
         'minecraft' => 'Minecraft',
         'settings' => 'Ustawienia gry',
@@ -18,6 +20,7 @@ return [
         'review' => 'Podsumowanie',
     ],
     'game' => [
+        'minecraft_help' => 'Java i Bedrock. Wybierz, jakiego serwera Minecraft chcesz.',
         'required' => 'Wybierz grę.',
         'other' => 'Inne gry',
         'search' => 'Szukaj wśród :count gier',
@@ -32,6 +35,7 @@ return [
         'locked_variable' => 'Tego ustawienia nie można zmienić.',
     ],
     'minecraft' => [
+        'type' => 'Typ serwera',
         'types' => [
             'vanilla' => [
                 'label' => 'Vanilla',
@@ -110,6 +114,14 @@ return [
         'subdomain_help' => 'Gracze mogą dołączyć, używając tej nazwy. Zostaw puste, aby nie używać subdomeny.',
     ],
     'resources' => [
+        'custom_hint' => 'Wybierz sam',
+        'storage' => ':amount GB miejsca',
+        'ram_hint' => [
+            'small' => 'Małe światy',
+            'everyday' => 'Codzienna gra',
+            'headroom' => 'Więcej zapasu',
+            'modpacks' => 'Większe modpacki',
+        ],
         'help_type' => 'Wartości początkowe pasują do tego typu serwera. Jeśli chcesz, wybierz więcej lub mniej.',
         'help_game' => 'Wybierz, czego potrzebuje gra. Możesz to później zmienić.',
         'ram' => 'RAM',
@@ -136,10 +148,15 @@ return [
     ],
     'draft' => [
         'restored' => 'Kontynuujesz od miejsca, w którym skończyłeś.',
-        'start_over' => 'Zacznij od nowa',
-        'start_over_help' => 'Twoje dotychczasowe odpowiedzi zostaną usunięte.',
+        'label' => 'Szkic',
+        'saved' => 'Szkic zapisany',
+        'discard' => 'Odrzuć',
+        'keep' => 'Zachowaj szkic',
+        'delete' => 'Usuń szkic',
     ],
     'review' => [
+        'overview' => 'Przegląd serwera',
+        'overview_help' => 'Wszystko gotowe. Sprawdź, a potem utwórz serwer.',
         'name' => 'Nazwa',
         'game' => 'Gra',
         'java' => 'Java',

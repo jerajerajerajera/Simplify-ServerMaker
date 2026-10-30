@@ -10,6 +10,8 @@ return [
     'next' => '다음',
     'back' => '뒤로',
     'steps' => [
+        'label' => '단계',
+        'step_of' => '단계 :step / :total',
         'game' => '게임',
         'minecraft' => 'Minecraft',
         'settings' => '게임 설정',
@@ -18,6 +20,7 @@ return [
         'review' => '검토',
     ],
     'game' => [
+        'minecraft_help' => 'Java와 Bedrock. 원하는 Minecraft 서버 종류를 고르세요.',
         'required' => '게임을 선택하세요.',
         'other' => '다른 게임',
         'search' => '게임 :count개 검색',
@@ -32,6 +35,7 @@ return [
         'locked_variable' => '이 설정은 변경할 수 없습니다.',
     ],
     'minecraft' => [
+        'type' => '서버 종류',
         'types' => [
             'vanilla' => [
                 'label' => 'Vanilla',
@@ -110,6 +114,14 @@ return [
         'subdomain_help' => '플레이어가 이 이름으로 접속할 수 있습니다. 하위 도메인을 사용하지 않으려면 비워 두세요.',
     ],
     'resources' => [
+        'custom_hint' => '직접 선택',
+        'storage' => ':amount GB 저장 공간',
+        'ram_hint' => [
+            'small' => '작은 월드',
+            'everyday' => '일상 플레이',
+            'headroom' => '더 넉넉하게',
+            'modpacks' => '큰 모드팩',
+        ],
         'help_type' => '시작 값은 이 서버 유형에 맞춰져 있습니다. 원하면 더 많이 또는 적게 선택하세요.',
         'help_game' => '게임에 필요한 만큼 선택하세요. 나중에 변경할 수 있습니다.',
         'ram' => 'RAM',
@@ -136,10 +148,15 @@ return [
     ],
     'draft' => [
         'restored' => '중단한 곳에서 이어서 진행합니다.',
-        'start_over' => '처음부터 다시 시작',
-        'start_over_help' => '지금까지의 답변이 삭제됩니다.',
+        'label' => '초안',
+        'saved' => '초안 저장됨',
+        'discard' => '버리기',
+        'keep' => '초안 유지',
+        'delete' => '초안 삭제',
     ],
     'review' => [
+        'overview' => '서버 개요',
+        'overview_help' => '모든 준비가 끝났습니다. 확인한 다음 서버를 만드세요.',
         'name' => '이름',
         'game' => '게임',
         'java' => 'Java',

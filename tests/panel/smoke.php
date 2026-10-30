@@ -179,8 +179,17 @@ step('a draft is saved after a step and opened again', function () use ($admin) 
     Livewire\Livewire::actingAs($admin)->test(ServerMaker::class)
         ->assertSet('data.name', 'smoke-draft')
         ->assertSet('step', 2)
-        ->assertSet('restored', true);
-    $draft->delete();
+        ->assertSet('restored', true)
+        ->assertSet('hasDraft', true)
+        // The 0.7.0 bar at the bottom: the steps (Minecraft as step 2) and the draft with Discard.
+        ->assertSee('smk-navbar', false)
+        ->assertSeeInOrder(['Game', 'Minecraft', 'Server', 'Resources', 'Review'])
+        ->assertSee('Draft saved')
+        ->call('discardDraft')
+        ->assertRedirect();
+    if (Draft::for($admin->id)) {
+        throw new RuntimeException('Discard kept the draft');
+    }
 });
 
 step('a Modrinth modpack is found and gets its egg', function () use ($admin) {

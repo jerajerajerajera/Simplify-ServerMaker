@@ -10,6 +10,8 @@ return [
     'next' => 'Seuraava',
     'back' => 'Takaisin',
     'steps' => [
+        'label' => 'Vaiheet',
+        'step_of' => 'Vaihe :step / :total',
         'game' => 'Peli',
         'minecraft' => 'Minecraft',
         'settings' => 'Peliasetukset',
@@ -18,6 +20,7 @@ return [
         'review' => 'Tarkistus',
     ],
     'game' => [
+        'minecraft_help' => 'Java ja Bedrock. Valitse, millaisen Minecraft-palvelimen haluat.',
         'required' => 'Valitse peli.',
         'other' => 'Muut pelit',
         'search' => 'Hae :count pelistä',
@@ -32,6 +35,7 @@ return [
         'locked_variable' => 'Tätä asetusta ei voi muuttaa.',
     ],
     'minecraft' => [
+        'type' => 'Palvelimen tyyppi',
         'types' => [
             'vanilla' => [
                 'label' => 'Vanilla',
@@ -110,6 +114,14 @@ return [
         'subdomain_help' => 'Pelaajat voivat liittyä tällä nimellä. Jätä tyhjäksi, jos et halua aliverkkotunnusta.',
     ],
     'resources' => [
+        'custom_hint' => 'Valitse itse',
+        'storage' => ':amount Gt tallennustilaa',
+        'ram_hint' => [
+            'small' => 'Pienet maailmat',
+            'everyday' => 'Arkipelaaminen',
+            'headroom' => 'Enemmän tilaa',
+            'modpacks' => 'Isommat modipaketit',
+        ],
         'help_type' => 'Alkuarvot sopivat tälle palvelintyypille. Valitse halutessasi enemmän tai vähemmän.',
         'help_game' => 'Valitse, mitä peli tarvitsee. Voit muuttaa sitä myöhemmin.',
         'ram' => 'RAM',
@@ -136,10 +148,15 @@ return [
     ],
     'draft' => [
         'restored' => 'Jatkat siitä, mihin jäit.',
-        'start_over' => 'Aloita alusta',
-        'start_over_help' => 'Tähänastiset vastauksesi poistetaan.',
+        'label' => 'Luonnos',
+        'saved' => 'Luonnos tallennettu',
+        'discard' => 'Hylkää',
+        'keep' => 'Säilytä luonnos',
+        'delete' => 'Poista luonnos',
     ],
     'review' => [
+        'overview' => 'Palvelimen yhteenveto',
+        'overview_help' => 'Kaikki on valmiina. Tarkista ja luo sitten palvelin.',
         'name' => 'Nimi',
         'game' => 'Peli',
         'java' => 'Java',

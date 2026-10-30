@@ -10,6 +10,8 @@ return [
     'next' => 'Tovább',
     'back' => 'Vissza',
     'steps' => [
+        'label' => 'Lépések',
+        'step_of' => ':step. lépés / :total',
         'game' => 'Játék',
         'minecraft' => 'Minecraft',
         'settings' => 'Játékbeállítások',
@@ -18,6 +20,7 @@ return [
         'review' => 'Áttekintés',
     ],
     'game' => [
+        'minecraft_help' => 'Java és Bedrock. Válaszd ki, milyen Minecraft-szervert szeretnél.',
         'required' => 'Válassz egy játékot.',
         'other' => 'Más játékok',
         'search' => 'Keresés :count játék között',
@@ -32,6 +35,7 @@ return [
         'locked_variable' => 'Ez a beállítás nem módosítható.',
     ],
     'minecraft' => [
+        'type' => 'Szervertípus',
         'types' => [
             'vanilla' => [
                 'label' => 'Vanilla',
@@ -110,6 +114,14 @@ return [
         'subdomain_help' => 'A játékosok ezzel a névvel csatlakozhatnak. Hagyd üresen, ha nem kérsz aldomaint.',
     ],
     'resources' => [
+        'custom_hint' => 'Saját érték',
+        'storage' => ':amount GB tárhely',
+        'ram_hint' => [
+            'small' => 'Kis világok',
+            'everyday' => 'Mindennapi játék',
+            'headroom' => 'Több tartalék',
+            'modpacks' => 'Nagyobb modpackok',
+        ],
         'help_type' => 'A kezdőértékek illenek ehhez a szervertípushoz. Ha szeretnéd, válassz többet vagy kevesebbet.',
         'help_game' => 'Válaszd ki, amire a játéknak szüksége van. Később módosíthatod.',
         'ram' => 'RAM',
@@ -136,10 +148,15 @@ return [
     ],
     'draft' => [
         'restored' => 'Ott folytatod, ahol abbahagytad.',
-        'start_over' => 'Újrakezdés',
-        'start_over_help' => 'Az eddigi válaszaid törlődnek.',
+        'label' => 'Piszkozat',
+        'saved' => 'Piszkozat mentve',
+        'discard' => 'Elvetés',
+        'keep' => 'Piszkozat megtartása',
+        'delete' => 'Piszkozat törlése',
     ],
     'review' => [
+        'overview' => 'Szerver áttekintése',
+        'overview_help' => 'Minden elő van készítve. Ellenőrizd, majd hozd létre a szervert.',
         'name' => 'Név',
         'game' => 'Játék',
         'java' => 'Java',

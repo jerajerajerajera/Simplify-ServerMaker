@@ -63,6 +63,9 @@ class ServerMaker extends Page implements HasForms
     #[Locked]
     public bool $restored = false;
 
+    /** Whether there is a saved draft, shown in the bar at the bottom with Discard. */
+    public bool $hasDraft = false;
+
     public static function getNavigationLabel(): string
     {
         return __('simplify-servermaker::maker.title');
@@ -119,6 +122,7 @@ class ServerMaker extends Page implements HasForms
                 $fresh = array_replace($fresh, $draft->data);
                 $this->step = max(1, min(5, $draft->step));
                 $this->restored = true;
+                $this->hasDraft = true;
                 Notification::make()->title(__('simplify-servermaker::maker.draft.restored'))->info()->send();
             } catch (Throwable $exception) {
                 // A draft that cannot be read (for example after a new APP_KEY) is dropped.
@@ -145,17 +149,6 @@ class ServerMaker extends Page implements HasForms
                 ->color('gray')
                 ->visible(fn () => MakerSettings::canAccess())
                 ->url(fn () => MakerSettings::getUrl(panel: 'admin')),
-            Action::make('start_over')
-                ->label(__('simplify-servermaker::maker.draft.start_over'))
-                ->icon('tabler-restore')
-                ->color('gray')
-                ->visible(fn () => $this->restored)
-                ->requiresConfirmation()
-                ->modalDescription(__('simplify-servermaker::maker.draft.start_over_help'))
-                ->action(function (): void {
-                    Draft::query()->where('user_id', user()->id)->delete();
-                    $this->redirect(static::getUrl());
-                }),
         ];
     }
 
@@ -167,6 +160,33 @@ class ServerMaker extends Page implements HasForms
             ['user_id' => (int) user()->id],
             ['data' => Draft::clean($this->data ?? []), 'step' => min(5, $step + 1)],
         );
+        $this->hasDraft = true;
+    }
+
+    /** Discard in the bar at the bottom: the answers so far are removed and the Server Maker starts empty. */
+    public function discardDraft(): void
+    {
+        abort_unless(static::canAccess(), 403);
+        Draft::query()->where('user_id', user()->id)->delete();
+        $this->redirect(static::getUrl());
+    }
+
+    /**
+     * The step names for the bar at the bottom. The second step is Minecraft, or the game's settings.
+     *
+     * @return list<string>
+     */
+    public function stepLabels(): array
+    {
+        $t = fn (string $key) => __('simplify-servermaker::maker.steps.'.$key);
+
+        return [
+            $t('game'),
+            ($this->data['game'] ?? null) === 'other' ? $t('settings') : $t('minecraft'),
+            $t('server'),
+            $t('resources'),
+            $t('review'),
+        ];
     }
 
     public function form(Schema $schema): Schema
@@ -183,8 +203,10 @@ class ServerMaker extends Page implements HasForms
                 ])
                     ->columnSpanFull()
                     ->startOnStep(fn () => $this->step)
-                    ->nextAction(fn (Action $action) => $action->label(__('simplify-servermaker::maker.next')))
-                    ->previousAction(fn (Action $action) => $action->label(__('simplify-servermaker::maker.back')))
+                    ->nextAction(fn (Action $action) => $action->label(__('simplify-servermaker::maker.next'))
+                        ->color('gray')->extraAttributes(['class' => 'smk-next']))
+                    ->previousAction(fn (Action $action) => $action->label(__('simplify-servermaker::maker.back'))
+                        ->color('gray')->extraAttributes(['class' => 'smk-back']))
                     ->submitAction(new HtmlString(view('simplify-servermaker::wizard.create-button')->render())),
             ]);
     }

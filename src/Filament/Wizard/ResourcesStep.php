@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Simplify\ServerMaker\Filament\Wizard;
 
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\ToggleButtons;
+use Filament\Forms\Components\Radio;
 use Filament\Schemas\Components\Text;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Wizard\Step;
@@ -24,11 +24,13 @@ final class ResourcesStep
             ? Minecraft::resources((string) $get('type'))[$resource]
             : ['cpu' => 100, 'ram' => 4, 'disk' => 10240][$resource];
 
-        // The help sits above the fields, not in the step header, so every step in the header stays the same height.
+        // The help sits above the fields: no box in the box (Simplify's style rules).
         $fields = [Text::make(fn (Get $get) => self::help($get, $t))->color('gray')];
         foreach (['ram', 'cpu', 'disk'] as $resource) {
-            $fields[] = ToggleButtons::make($resource)
+            $fields[] = Radio::make($resource)
                 ->label($t('resources.'.$resource))
+                ->view('simplify-servermaker::wizard.resources')
+                ->viewData(['resource' => $resource])
                 ->options(function (Get $get) use ($resource, $start, $t): array {
                     $limit = Access::resourceLimits()[$resource] ?? null;
                     $options = [];
@@ -38,7 +40,15 @@ final class ResourcesStep
 
                     return $options + ['custom' => $t('resources.custom')];
                 })
-                ->inline()
+                ->descriptions(function (Get $get) use ($resource, $start, $t): array {
+                    $limit = Access::resourceLimits()[$resource] ?? null;
+                    $descriptions = [];
+                    foreach (Resources::presets($resource, $start($get, $resource), $limit) as $value) {
+                        $descriptions[(string) $value] = self::hint($resource, $value, $t);
+                    }
+
+                    return $descriptions + ['custom' => $t('resources.custom_hint')];
+                })
                 ->required()
                 ->live();
             $fields[] = TextInput::make($resource.'_custom')
@@ -75,6 +85,21 @@ final class ResourcesStep
             'disk' => Resources::gb($limits['disk']),
             'cpu' => rtrim(rtrim(number_format($limits['cpu'] / 100, 1, '.', ''), '0'), '.'),
         ]);
+    }
+
+    /** The line under a preset: what the amount is good for, or what it means. */
+    private static function hint(string $resource, int $value, callable $t): string
+    {
+        return match ($resource) {
+            'ram' => $t('resources.ram_hint.'.match (true) {
+                $value <= 2 => 'small',
+                $value <= 4 => 'everyday',
+                $value <= 8 => 'headroom',
+                default => 'modpacks',
+            }),
+            'cpu' => $value.'%',
+            default => $t('resources.storage', ['amount' => Resources::gb($value)]),
+        };
     }
 
     private static function label(string $resource, int $value, callable $t): string

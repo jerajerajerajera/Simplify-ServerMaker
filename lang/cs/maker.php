@@ -10,6 +10,8 @@ return [
     'next' => 'Další',
     'back' => 'Zpět',
     'steps' => [
+        'label' => 'Kroky',
+        'step_of' => 'Krok :step z :total',
         'game' => 'Hra',
         'minecraft' => 'Minecraft',
         'settings' => 'Nastavení hry',
@@ -18,6 +20,7 @@ return [
         'review' => 'Kontrola',
     ],
     'game' => [
+        'minecraft_help' => 'Java a Bedrock. Vyberte, jaký Minecraft server chcete.',
         'required' => 'Vyber hru.',
         'other' => 'Další hry',
         'search' => 'Hledat v :count hrách',
@@ -32,6 +35,7 @@ return [
         'locked_variable' => 'Toto nastavení nelze změnit.',
     ],
     'minecraft' => [
+        'type' => 'Typ serveru',
         'types' => [
             'vanilla' => [
                 'label' => 'Vanilla',
@@ -110,6 +114,14 @@ return [
         'subdomain_help' => 'Hráči se mohou připojit pomocí tohoto názvu. Nech prázdné pro žádnou subdoménu.',
     ],
     'resources' => [
+        'custom_hint' => 'Vlastní volba',
+        'storage' => ':amount GB úložiště',
+        'ram_hint' => [
+            'small' => 'Malé světy',
+            'everyday' => 'Běžné hraní',
+            'headroom' => 'Víc prostoru',
+            'modpacks' => 'Větší modpacky',
+        ],
         'help_type' => 'Výchozí hodnoty odpovídají tomuto typu serveru. Klidně vyber víc nebo méně.',
         'help_game' => 'Vyber, co hra potřebuje. Později to můžeš změnit.',
         'ram' => 'RAM',
@@ -136,10 +148,15 @@ return [
     ],
     'draft' => [
         'restored' => 'Pokračuješ tam, kde jsi skončil.',
-        'start_over' => 'Začít znovu',
-        'start_over_help' => 'Tvoje dosavadní odpovědi se smažou.',
+        'label' => 'Koncept',
+        'saved' => 'Koncept uložen',
+        'discard' => 'Zahodit',
+        'keep' => 'Ponechat koncept',
+        'delete' => 'Smazat koncept',
     ],
     'review' => [
+        'overview' => 'Přehled serveru',
+        'overview_help' => 'Vše je připraveno. Zkontrolujte to a pak vytvořte server.',
         'name' => 'Název',
         'game' => 'Hra',
         'java' => 'Java',

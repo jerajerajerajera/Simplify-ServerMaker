@@ -10,6 +10,8 @@ return [
     'next' => 'Next',
     'back' => 'Back',
     'steps' => [
+        'label' => 'Steps',
+        'step_of' => 'Step :step of :total',
         'game' => 'Game',
         'minecraft' => 'Minecraft',
         'settings' => 'Game settings',
@@ -18,6 +20,7 @@ return [
         'review' => 'Review',
     ],
     'game' => [
+        'minecraft_help' => 'Java and Bedrock. Pick what kind of Minecraft server you want.',
         'required' => 'Choose a game.',
         'other' => 'Other games',
         'search' => 'Search :count games',
@@ -32,6 +35,7 @@ return [
         'locked_variable' => 'This setting cannot be changed.',
     ],
     'minecraft' => [
+        'type' => 'Server type',
         'types' => [
             'vanilla' => [
                 'label' => 'Vanilla',
@@ -110,6 +114,14 @@ return [
         'subdomain_help' => 'Players can join with this name. Leave empty for no subdomain.',
     ],
     'resources' => [
+        'custom_hint' => 'Choose your own',
+        'storage' => ':amount GB storage',
+        'ram_hint' => [
+            'small' => 'Small worlds',
+            'everyday' => 'Everyday play',
+            'headroom' => 'More headroom',
+            'modpacks' => 'Larger modpacks',
+        ],
         'help_type' => 'The starting values suit this server type. Pick more or less if you like.',
         'help_game' => 'Pick what the game needs. You can change it later.',
         'ram' => 'RAM',
@@ -136,10 +148,15 @@ return [
     ],
     'draft' => [
         'restored' => 'You carry on where you left off.',
-        'start_over' => 'Start over',
-        'start_over_help' => 'Your answers so far are removed.',
+        'label' => 'Draft',
+        'saved' => 'Draft saved',
+        'discard' => 'Discard',
+        'keep' => 'Keep draft',
+        'delete' => 'Delete draft',
     ],
     'review' => [
+        'overview' => 'Server overview',
+        'overview_help' => 'Everything is prepared. Check it, then create the server.',
         'name' => 'Name',
         'game' => 'Game',
         'java' => 'Java',

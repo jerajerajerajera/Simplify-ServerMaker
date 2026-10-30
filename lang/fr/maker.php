@@ -10,6 +10,8 @@ return [
     'next' => 'Suivant',
     'back' => 'Retour',
     'steps' => [
+        'label' => 'Étapes',
+        'step_of' => 'Étape :step sur :total',
         'game' => 'Jeu',
         'minecraft' => 'Minecraft',
         'settings' => 'Paramètres du jeu',
@@ -18,6 +20,7 @@ return [
         'review' => 'Vérification',
     ],
     'game' => [
+        'minecraft_help' => 'Java et Bedrock. Choisissez le type de serveur Minecraft que vous voulez.',
         'required' => 'Choisissez un jeu.',
         'other' => 'Autres jeux',
         'search' => 'Rechercher parmi :count jeux',
@@ -32,6 +35,7 @@ return [
         'locked_variable' => 'Ce paramètre ne peut pas être modifié.',
     ],
     'minecraft' => [
+        'type' => 'Type de serveur',
         'types' => [
             'vanilla' => [
                 'label' => 'Vanilla',
@@ -110,6 +114,14 @@ return [
         'subdomain_help' => 'Les joueurs peuvent se connecter avec ce nom. Laissez vide pour ne pas utiliser de sous-domaine.',
     ],
     'resources' => [
+        'custom_hint' => 'Choisir soi-même',
+        'storage' => ':amount Go de stockage',
+        'ram_hint' => [
+            'small' => 'Petits mondes',
+            'everyday' => 'Jeu au quotidien',
+            'headroom' => 'Plus de marge',
+            'modpacks' => 'Modpacks plus grands',
+        ],
         'help_type' => 'Les valeurs de départ conviennent à ce type de serveur. Choisissez plus ou moins si vous le souhaitez.',
         'help_game' => 'Choisissez ce dont le jeu a besoin. Vous pourrez le modifier plus tard.',
         'ram' => 'RAM',
@@ -136,10 +148,15 @@ return [
     ],
     'draft' => [
         'restored' => 'Vous reprenez là où vous vous étiez arrêté.',
-        'start_over' => 'Recommencer',
-        'start_over_help' => 'Vos réponses jusqu\'ici sont supprimées.',
+        'label' => 'Brouillon',
+        'saved' => 'Brouillon enregistré',
+        'discard' => 'Abandonner',
+        'keep' => 'Garder le brouillon',
+        'delete' => 'Supprimer le brouillon',
     ],
     'review' => [
+        'overview' => 'Aperçu du serveur',
+        'overview_help' => 'Tout est prêt. Vérifiez, puis créez le serveur.',
         'name' => 'Nom',
         'game' => 'Jeu',
         'java' => 'Java',

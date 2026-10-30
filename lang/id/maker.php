@@ -10,6 +10,8 @@ return [
     'next' => 'Lanjut',
     'back' => 'Kembali',
     'steps' => [
+        'label' => 'Langkah',
+        'step_of' => 'Langkah :step dari :total',
         'game' => 'Game',
         'minecraft' => 'Minecraft',
         'settings' => 'Pengaturan game',
@@ -18,6 +20,7 @@ return [
         'review' => 'Tinjau',
     ],
     'game' => [
+        'minecraft_help' => 'Java dan Bedrock. Pilih jenis server Minecraft yang Anda inginkan.',
         'required' => 'Pilih game.',
         'other' => 'Game lain',
         'search' => 'Cari :count game',
@@ -32,6 +35,7 @@ return [
         'locked_variable' => 'Pengaturan ini tidak dapat diubah.',
     ],
     'minecraft' => [
+        'type' => 'Jenis server',
         'types' => [
             'vanilla' => [
                 'label' => 'Vanilla',
@@ -110,6 +114,14 @@ return [
         'subdomain_help' => 'Pemain bisa bergabung dengan nama ini. Biarkan kosong jika tidak ingin memakai subdomain.',
     ],
     'resources' => [
+        'custom_hint' => 'Pilih sendiri',
+        'storage' => ':amount GB penyimpanan',
+        'ram_hint' => [
+            'small' => 'Dunia kecil',
+            'everyday' => 'Main sehari-hari',
+            'headroom' => 'Ruang lebih',
+            'modpacks' => 'Modpack lebih besar',
+        ],
         'help_type' => 'Nilai awal cocok untuk jenis server ini. Pilih lebih banyak atau sedikit jika mau.',
         'help_game' => 'Pilih yang dibutuhkan game. Kamu bisa mengubahnya nanti.',
         'ram' => 'RAM',
@@ -136,10 +148,15 @@ return [
     ],
     'draft' => [
         'restored' => 'Kamu melanjutkan dari tempat terakhir.',
-        'start_over' => 'Mulai ulang',
-        'start_over_help' => 'Jawabanmu sejauh ini akan dihapus.',
+        'label' => 'Draf',
+        'saved' => 'Draf disimpan',
+        'discard' => 'Buang',
+        'keep' => 'Simpan draf',
+        'delete' => 'Hapus draf',
     ],
     'review' => [
+        'overview' => 'Ringkasan server',
+        'overview_help' => 'Semua sudah siap. Periksa, lalu buat servernya.',
         'name' => 'Nama',
         'game' => 'Game',
         'java' => 'Java',

@@ -10,6 +10,8 @@ return [
     'next' => 'Ďalej',
     'back' => 'Späť',
     'steps' => [
+        'label' => 'Kroky',
+        'step_of' => 'Krok :step z :total',
         'game' => 'Hra',
         'minecraft' => 'Minecraft',
         'settings' => 'Nastavenia hry',
@@ -18,6 +20,7 @@ return [
         'review' => 'Kontrola',
     ],
     'game' => [
+        'minecraft_help' => 'Java a Bedrock. Vyberte, aký Minecraft server chcete.',
         'required' => 'Vyber hru.',
         'other' => 'Ďalšie hry',
         'search' => 'Hľadať v :count hrách',
@@ -32,6 +35,7 @@ return [
         'locked_variable' => 'Toto nastavenie sa nedá zmeniť.',
     ],
     'minecraft' => [
+        'type' => 'Typ servera',
         'types' => [
             'vanilla' => [
                 'label' => 'Vanilla',
@@ -110,6 +114,14 @@ return [
         'subdomain_help' => 'Hráči sa môžu pripojiť pomocou tohto názvu. Nechaj prázdne pre žiadnu subdoménu.',
     ],
     'resources' => [
+        'custom_hint' => 'Vlastná voľba',
+        'storage' => ':amount GB úložiska',
+        'ram_hint' => [
+            'small' => 'Malé svety',
+            'everyday' => 'Bežné hranie',
+            'headroom' => 'Viac priestoru',
+            'modpacks' => 'Väčšie modpacky',
+        ],
         'help_type' => 'Počiatočné hodnoty zodpovedajú tomuto typu servera. Pokojne vyber viac alebo menej.',
         'help_game' => 'Vyber, čo hra potrebuje. Neskôr to môžeš zmeniť.',
         'ram' => 'RAM',
@@ -136,10 +148,15 @@ return [
     ],
     'draft' => [
         'restored' => 'Pokračuješ tam, kde si skončil.',
-        'start_over' => 'Začať odznova',
-        'start_over_help' => 'Tvoje doterajšie odpovede sa vymažú.',
+        'label' => 'Koncept',
+        'saved' => 'Koncept uložený',
+        'discard' => 'Zahodiť',
+        'keep' => 'Ponechať koncept',
+        'delete' => 'Zmazať koncept',
     ],
     'review' => [
+        'overview' => 'Prehľad servera',
+        'overview_help' => 'Všetko je pripravené. Skontrolujte to a potom vytvorte server.',
         'name' => 'Názov',
         'game' => 'Hra',
         'java' => 'Java',

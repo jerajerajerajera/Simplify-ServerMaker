@@ -10,6 +10,8 @@ return [
     'next' => 'Næste',
     'back' => 'Tilbage',
     'steps' => [
+        'label' => 'Trin',
+        'step_of' => 'Trin :step af :total',
         'game' => 'Spil',
         'minecraft' => 'Minecraft',
         'settings' => 'Spilindstillinger',
@@ -18,6 +20,7 @@ return [
         'review' => 'Gennemse',
     ],
     'game' => [
+        'minecraft_help' => 'Java og Bedrock. Vælg hvilken slags Minecraft-server du vil have.',
         'required' => 'Vælg et spil.',
         'other' => 'Andre spil',
         'search' => 'Søg blandt :count spil',
@@ -32,6 +35,7 @@ return [
         'locked_variable' => 'Denne indstilling kan ikke ændres.',
     ],
     'minecraft' => [
+        'type' => 'Servertype',
         'types' => [
             'vanilla' => [
                 'label' => 'Vanilla',
@@ -110,6 +114,14 @@ return [
         'subdomain_help' => 'Spillere kan forbinde med dette navn. Lad feltet være tomt for intet underdomæne.',
     ],
     'resources' => [
+        'custom_hint' => 'Vælg selv',
+        'storage' => ':amount GB lagerplads',
+        'ram_hint' => [
+            'small' => 'Små verdener',
+            'everyday' => 'Hverdagsspil',
+            'headroom' => 'Mere plads',
+            'modpacks' => 'Større modpacks',
+        ],
         'help_type' => 'Startværdierne passer til denne servertype. Vælg mere eller mindre, hvis du vil.',
         'help_game' => 'Vælg det, spillet har brug for. Du kan ændre det senere.',
         'ram' => 'RAM',
@@ -136,10 +148,15 @@ return [
     ],
     'draft' => [
         'restored' => 'Du fortsætter, hvor du slap.',
-        'start_over' => 'Start forfra',
-        'start_over_help' => 'Dine svar indtil nu fjernes.',
+        'label' => 'Kladde',
+        'saved' => 'Kladde gemt',
+        'discard' => 'Kassér',
+        'keep' => 'Behold kladde',
+        'delete' => 'Slet kladde',
     ],
     'review' => [
+        'overview' => 'Serveroversigt',
+        'overview_help' => 'Alt er klar. Tjek det, og opret så serveren.',
         'name' => 'Navn',
         'game' => 'Spil',
         'java' => 'Java',
