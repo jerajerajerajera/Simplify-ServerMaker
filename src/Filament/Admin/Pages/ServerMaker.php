@@ -461,6 +461,8 @@ class ServerMaker extends Page implements HasForms
             ->body(__('simplify-servermaker::maker.review.created_body'))
             ->success()
             ->send();
-        $this->redirect(Console::getUrl(panel: 'server', tenant: $server));
+        // Opened from Simplify, the Server Maker runs in its frame: the new server opens as the whole page, not inside it.
+        $this->js('(u => { const top = window.frameElement?.dataset.psFrame !== undefined ? window.top : window; top.location.href = u; })('
+            .json_encode(Console::getUrl(panel: 'server', tenant: $server), JSON_UNESCAPED_SLASHES).')');
     }
 }

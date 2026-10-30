@@ -4,6 +4,8 @@
 
 - Create server got stuck on the Review step. The Minecraft EULA box is optional now: tick it and the server starts
   straight away after installing, or leave it and the server installs anyway and asks for the EULA when you start it.
+- Opened from Simplify's Create server, the Server Maker sends you to the new server as a whole page, not inside
+  Simplify's window.
 
 ## 1.3.2
 
