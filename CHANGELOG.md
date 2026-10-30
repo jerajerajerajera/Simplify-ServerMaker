@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.2
+
+- The Server Maker is one box that fits the window: the steps stay on top and Back and Next at the bottom, and only the
+  step in between scrolls. Before, the whole page scrolled, with announcements and the title moving out of view.
+
 ## 1.1.1
 
 - Installing Server Maker from Admin → Plugins or the Hub now also removes the old copy right away. Those installs run in the
