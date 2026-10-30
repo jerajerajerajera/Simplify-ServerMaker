@@ -179,6 +179,10 @@ return [
         'icon_help' => 'PNG, 64 × 64 piksler, opptil 100 KB. Lastes opp som server-icon.png etter installasjonen.',
         'icon_invalid' => 'Ikonet må være en PNG på 64 × 64, opptil 100 KB.',
         'number_between' => 'Skriv inn et tall mellom :min og :max.',
+        'eula' => 'Jeg godtar Minecrafts lisensavtale for sluttbrukere (EULA)',
+        'eula_help' => 'Påkrevd: en Minecraft-server starter først når EULA-en er godtatt. Avkrysningen skriver eula=true for deg.',
+        'eula_read' => 'Les Minecrafts EULA',
+        'eula_required' => 'Godta Minecrafts EULA for å opprette denne serveren.',
     ],
     'review' => [
         'edit_settings' => 'Rediger innstillinger',

@@ -179,6 +179,10 @@ return [
         'icon_help' => 'PNG, 64 × 64 pikseliä, enintään 100 kt. Lähetetään asennuksen jälkeen nimellä server-icon.png.',
         'icon_invalid' => 'Kuvakkeen on oltava 64 × 64 PNG, enintään 100 kt.',
         'number_between' => 'Anna luku väliltä :min–:max.',
+        'eula' => 'Hyväksyn Minecraftin käyttöoikeussopimuksen (EULA)',
+        'eula_help' => 'Pakollinen: Minecraft-palvelin käynnistyy vasta, kun EULA on hyväksytty. Valinta kirjoittaa eula=true puolestasi.',
+        'eula_read' => 'Lue Minecraftin EULA',
+        'eula_required' => 'Hyväksy Minecraftin EULA luodaksesi tämän palvelimen.',
     ],
     'review' => [
         'edit_settings' => 'Muokkaa asetuksia',

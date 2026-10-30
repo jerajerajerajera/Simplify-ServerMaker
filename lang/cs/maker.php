@@ -179,6 +179,10 @@ return [
         'icon_help' => 'PNG, 64 × 64 pixelů, do 100 KB. Nahraje se jako server-icon.png po instalaci.',
         'icon_invalid' => 'Ikona musí být PNG 64 × 64, do 100 KB.',
         'number_between' => 'Zadejte číslo mezi :min a :max.',
+        'eula' => 'Souhlasím s licenční smlouvou s koncovým uživatelem Minecraftu (EULA)',
+        'eula_help' => 'Povinné: server Minecraft se spustí až po přijetí EULA. Zaškrtnutím se za vás zapíše eula=true.',
+        'eula_read' => 'Přečíst EULA Minecraftu',
+        'eula_required' => 'Pro vytvoření tohoto serveru přijměte EULA Minecraftu.',
     ],
     'review' => [
         'edit_settings' => 'Upravit nastavení',

@@ -179,6 +179,10 @@ return [
         'icon_help' => 'PNG, 64 × 64 пиксела, до 100 KB. Качва се като server-icon.png след инсталирането.',
         'icon_invalid' => 'Иконата трябва да е PNG 64 × 64, до 100 KB.',
         'number_between' => 'Въведете число между :min и :max.',
+        'eula' => 'Приемам лицензионното споразумение с краен потребител на Minecraft (EULA)',
+        'eula_help' => 'Задължително: сървърът на Minecraft стартира само след приемане на EULA. Тази отметка записва eula=true вместо вас.',
+        'eula_read' => 'Прочетете EULA на Minecraft',
+        'eula_required' => 'Приемете EULA на Minecraft, за да създадете този сървър.',
     ],
     'review' => [
         'edit_settings' => 'Редактирай настройките',

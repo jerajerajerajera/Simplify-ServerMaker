@@ -179,6 +179,10 @@ return [
         'icon_help' => 'PNG, 64 × 64 pikseliai, iki 100 KB. Po diegimo įkeliama kaip server-icon.png.',
         'icon_invalid' => 'Piktograma turi būti 64 × 64 PNG, iki 100 KB.',
         'number_between' => 'Įveskite skaičių nuo :min iki :max.',
+        'eula' => 'Sutinku su Minecraft galutinio naudotojo licencijos sutartimi (EULA)',
+        'eula_help' => 'Privaloma: Minecraft serveris pasileidžia tik priėmus EULA. Pažymėjus šį langelį, už jus įrašoma eula=true.',
+        'eula_read' => 'Skaityti Minecraft EULA',
+        'eula_required' => 'Kad sukurtumėte šį serverį, priimkite Minecraft EULA.',
     ],
     'review' => [
         'edit_settings' => 'Redaguoti nustatymus',

@@ -44,6 +44,7 @@
     .smk .smk-picker { display: grid; gap: 18px; }
     .smk .smk-minecraft { display: grid; gap: 14px; padding: 18px; border: 1px solid var(--smk-line); border-radius: var(--smk-radius-xl); background: linear-gradient(120deg, color-mix(in srgb, #3f9b4b 14%, var(--smk-surface)), var(--smk-surface) 60%); }
     .smk .smk-minecraft.is-picked { border-color: var(--smk-accent); }
+    .smk a.smk-link { color: var(--smk-accent); text-decoration: underline; }
     .smk .smk-minecraft-head { display: flex; align-items: center; gap: 14px; }
     .smk .smk-minecraft-head h3 { margin: 0; font-size: 20px; font-weight: 700; }
     .smk .smk-minecraft-head p { margin: 2px 0 0; color: var(--smk-muted); font-size: 13px; }

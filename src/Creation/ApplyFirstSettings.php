@@ -14,7 +14,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Throwable;
 
 /**
- * Writes the first settings of a new server (server.properties values and server-icon.png) once Pelican has
+ * Writes the first settings of a new server (server.properties values, server-icon.png and the EULA the user accepted) once Pelican has
  * installed it. Waits for the installation by trying again every 30 seconds, for up to two hours. The settings
  * travel with the job itself, so nothing else has to exist on the panel.
  */
@@ -26,7 +26,7 @@ final class ApplyFirstSettings implements ShouldQueue
 
     public int $timeout = 60;
 
-    /** @param  array{properties?: array<string, string>, icon?: string}  $settings */
+    /** @param  array{properties?: array<string, string>, icon?: string, eula?: bool}  $settings */
     public function __construct(public int $serverId, public array $settings) {}
 
     /**
@@ -34,7 +34,7 @@ final class ApplyFirstSettings implements ShouldQueue
      * queue($queue, $job) method when it has one. Never throws: the server is already there, so a
      * problem here is reported and the Server Maker carries on to the server page.
      *
-     * @param  array{properties?: array<string, string>, icon?: string}  $settings
+     * @param  array{properties?: array<string, string>, icon?: string, eula?: bool}  $settings
      */
     public static function afterInstall(Server $server, array $settings): void
     {
@@ -72,6 +72,9 @@ final class ApplyFirstSettings implements ShouldQueue
         }
         if (filled($this->settings['icon'] ?? null)) {
             $files->putContent('server-icon.png', (string) base64_decode((string) $this->settings['icon'], true))->throw();
+        }
+        if (($this->settings['eula'] ?? false) === true) {
+            $files->putContent('eula.txt', "# Accepted in the Simplify Server Maker (https://www.minecraft.net/eula).\neula=true\n")->throw();
         }
     }
 

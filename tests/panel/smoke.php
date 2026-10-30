@@ -132,7 +132,14 @@ step('a Minecraft server goes through every step and imports its egg', function 
     $test->set('data.name', 'smoke-oak')->set('data.node_id', $node->id)
         ->set('data.allocation_id', Ports::first($node->id))
         ->assertSet('data.max_players', 20)
+        ->assertSet('data.eula', false)
         ->assertSee('Game mode');
+    // The EULA is never accepted for the user: without the tick nothing is made.
+    $test->call('create');
+    if (! array_key_exists('data.eula', $test->errors()->toArray()) || Server::query()->where('name', 'smoke-oak')->exists()) {
+        throw new RuntimeException('a server was made without accepting the EULA');
+    }
+    $test->set('data.eula', true);
     // Players, game mode and difficulty are checked before the server is made.
     $test->set('data.max_players', 5000)->call('create');
     if (! array_key_exists('data.max_players', $test->errors()->toArray()) || Server::query()->where('name', 'smoke-oak')->exists()) {
@@ -326,6 +333,7 @@ step('a user makes a server within their allowance, in the normal panel', functi
         ->set('data.name', 'smoke-user')
         ->set('data.node_id', $node->id)
         ->set('data.allocation_id', Ports::first($node->id))
+        ->set('data.eula', true)
         ->set('data.ram', 'custom')
         ->set('data.ram_custom', 16)
         ->call('create')
@@ -345,6 +353,7 @@ step('a user without servers left is stopped', function () use ($user, $node) {
         ->set('data.node_id', $node->id)
         ->set('data.allocation_id', Ports::first($node->id))
         ->set('data.ram', '4')
+        ->set('data.eula', true)
         ->call('create')
         ->assertHasErrors(['data.name']);
 });
@@ -402,6 +411,7 @@ step('with Simplify Subdomains a server gets a subdomain on a forwarded port', f
         ->assertSet('data.subdomain', 'oak-survival')
         ->set('data.subdomain', 'taken')
         ->set('data.node_id', $node->id)
+        ->set('data.eula', true)
         ->call('create')
         ->assertHasErrors(['data.subdomain']);
 });

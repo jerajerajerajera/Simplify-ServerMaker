@@ -179,6 +179,10 @@ return [
         'icon_help' => 'PNG, 64 × 64 piksel, en fazla 100 KB. Kurulumdan sonra server-icon.png olarak yüklenir.',
         'icon_invalid' => 'Simge 64 × 64 bir PNG olmalı, en fazla 100 KB.',
         'number_between' => ':min ile :max arasında bir sayı gir.',
+        'eula' => 'Minecraft Son Kullanıcı Lisans Sözleşmesi\'ni (EULA) kabul ediyorum',
+        'eula_help' => 'Zorunlu: Minecraft sunucusu ancak EULA kabul edildikten sonra başlar. Bu kutu işaretlenince eula=true sizin için yazılır.',
+        'eula_read' => 'Minecraft EULA\'sını oku',
+        'eula_required' => 'Bu sunucuyu oluşturmak için Minecraft EULA\'sını kabul edin.',
     ],
     'review' => [
         'edit_settings' => 'Ayarları düzenle',

@@ -179,6 +179,10 @@ return [
         'icon_help' => 'PNG, 64 × 64 пікселі, до 100 КБ. Завантажується як server-icon.png після встановлення.',
         'icon_invalid' => 'Іконка має бути PNG 64 × 64, до 100 КБ.',
         'number_between' => 'Введіть число від :min до :max.',
+        'eula' => 'Я приймаю ліцензійну угоду з кінцевим користувачем Minecraft (EULA)',
+        'eula_help' => 'Обов\'язково: сервер Minecraft запуститься лише після прийняття EULA. Ця позначка запише eula=true за вас.',
+        'eula_read' => 'Прочитати EULA Minecraft',
+        'eula_required' => 'Прийміть EULA Minecraft, щоб створити цей сервер.',
     ],
     'review' => [
         'edit_settings' => 'Змінити налаштування',

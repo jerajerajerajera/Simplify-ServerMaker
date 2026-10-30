@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.2
+
+- Minecraft Java servers ask for the Minecraft EULA on the Review step: a box you tick yourself, with a link to the
+  official EULA (minecraft.net/eula). It is required, so Create server waits for it, and eula.txt is written as soon
+  as the installation is done, so the server starts right away.
+
 ## 1.3.1
 
 - Create server showed "Error while loading page" after the server was made, and the first settings (players, game

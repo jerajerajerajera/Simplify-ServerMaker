@@ -179,6 +179,10 @@ return [
         'icon_help' => 'PNG，64 × 64 像素，最大 100 KB。安装后以 server-icon.png 上传。',
         'icon_invalid' => '图标必须是 64 × 64 的 PNG，最大 100 KB。',
         'number_between' => '请输入 :min 到 :max 之间的数字。',
+        'eula' => '我接受 Minecraft 最终用户许可协议（EULA）',
+        'eula_help' => '必填：Minecraft 服务器只有在接受 EULA 后才能启动。勾选后会自动写入 eula=true。',
+        'eula_read' => '阅读 Minecraft EULA',
+        'eula_required' => '请接受 Minecraft EULA 以创建此服务器。',
     ],
     'review' => [
         'edit_settings' => '编辑设置',

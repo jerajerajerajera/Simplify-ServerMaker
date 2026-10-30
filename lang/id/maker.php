@@ -179,6 +179,10 @@ return [
         'icon_help' => 'PNG, 64 × 64 piksel, hingga 100 KB. Diunggah sebagai server-icon.png setelah instalasi.',
         'icon_invalid' => 'Ikon harus berupa PNG 64 × 64, hingga 100 KB.',
         'number_between' => 'Masukkan angka antara :min dan :max.',
+        'eula' => 'Saya menerima Perjanjian Lisensi Pengguna Akhir Minecraft (EULA)',
+        'eula_help' => 'Wajib: server Minecraft baru bisa berjalan setelah EULA diterima. Mencentang kotak ini menuliskan eula=true untuk Anda.',
+        'eula_read' => 'Baca EULA Minecraft',
+        'eula_required' => 'Terima EULA Minecraft untuk membuat server ini.',
     ],
     'review' => [
         'edit_settings' => 'Ubah pengaturan',

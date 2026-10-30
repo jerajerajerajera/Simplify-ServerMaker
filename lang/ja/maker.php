@@ -179,6 +179,10 @@ return [
         'icon_help' => 'PNG、64 × 64 ピクセル、100 KB まで。インストール後に server-icon.png としてアップロードされます。',
         'icon_invalid' => 'アイコンは 100 KB 以下の 64 × 64 PNG にしてください。',
         'number_between' => ':min から :max の数値を入力してください。',
+        'eula' => 'Minecraft エンドユーザー使用許諾契約（EULA）に同意します',
+        'eula_help' => '必須：Minecraft サーバーは EULA に同意するまで起動しません。チェックすると eula=true が自動で書き込まれます。',
+        'eula_read' => 'Minecraft の EULA を読む',
+        'eula_required' => 'このサーバーを作成するには Minecraft の EULA に同意してください。',
     ],
     'review' => [
         'edit_settings' => '設定を編集',
