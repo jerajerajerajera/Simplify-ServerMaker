@@ -114,14 +114,6 @@ return [
         'subdomain_help' => 'Spelers kunnen met deze naam joinen. Laat leeg voor geen subdomein.',
     ],
     'resources' => [
-        'custom_hint' => 'Kies zelf',
-        'storage' => ':amount GB opslag',
-        'ram_hint' => [
-            'small' => 'Kleine werelden',
-            'everyday' => 'Gewoon spelen',
-            'headroom' => 'Meer ruimte',
-            'modpacks' => 'Grotere modpacks',
-        ],
         'help_type' => 'De beginwaarden passen bij dit servertype. Kies gerust meer of minder.',
         'help_game' => 'Kies wat de game nodig heeft. Je kunt dit later wijzigen.',
         'ram' => 'RAM',
@@ -155,6 +147,12 @@ return [
         'delete' => 'Concept verwijderen',
     ],
     'review' => [
+        'edit_settings' => 'Instellingen bewerken',
+        'done_editing' => 'Klaar met bewerken',
+        'java_version' => 'Java-versie',
+        'java_auto' => 'Automatisch (aanbevolen)',
+        'java_help' => 'Wordt automatisch gekozen op basis van Minecraft / de gekozen modpack. Pas aan voor packs met speciale eisen.',
+        'egg_help' => 'Wordt automatisch gekozen en geïmporteerd als hij ontbreekt. Bestaande eggs blijven behouden. Pas dit alleen aan als je weet wat je doet.',
         'overview' => 'Serveroverzicht',
         'overview_help' => 'Alles staat klaar. Controleer het en maak dan de server.',
         'name' => 'Naam',

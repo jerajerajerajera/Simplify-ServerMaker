@@ -114,14 +114,6 @@ return [
         'subdomain_help' => '玩家可以透過此名稱加入。留空則不使用子網域。',
     ],
     'resources' => [
-        'custom_hint' => '自訂',
-        'storage' => ':amount GB 儲存空間',
-        'ram_hint' => [
-            'small' => '小型世界',
-            'everyday' => '日常遊玩',
-            'headroom' => '更多餘裕',
-            'modpacks' => '大型模組包',
-        ],
         'help_type' => '初始值適合此伺服器類型。你可以依需要增加或減少。',
         'help_game' => '選擇遊戲所需的資源。之後可以變更。',
         'ram' => 'RAM',
@@ -155,6 +147,12 @@ return [
         'delete' => '刪除草稿',
     ],
     'review' => [
+        'edit_settings' => '編輯設定',
+        'done_editing' => '完成編輯',
+        'java_version' => 'Java 版本',
+        'java_auto' => '自動（建議）',
+        'java_help' => '根據 Minecraft / 所選模組包自動選擇。對有特殊要求的模組包可手動覆蓋。',
+        'egg_help' => '自動選擇，缺失時自動匯入。已有的 egg 會保留。除非你清楚自己在做什麼，否則不要變更。',
         'overview' => '伺服器總覽',
         'overview_help' => '一切就緒。檢查後即可建立伺服器。',
         'name' => '名稱',

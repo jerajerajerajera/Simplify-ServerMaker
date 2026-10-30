@@ -114,14 +114,6 @@ return [
         'subdomain_help' => 'Người chơi có thể tham gia bằng tên này. Để trống nếu không dùng tên miền phụ.',
     ],
     'resources' => [
-        'custom_hint' => 'Tự chọn',
-        'storage' => ':amount GB lưu trữ',
-        'ram_hint' => [
-            'small' => 'Thế giới nhỏ',
-            'everyday' => 'Chơi hằng ngày',
-            'headroom' => 'Dư dả hơn',
-            'modpacks' => 'Modpack lớn hơn',
-        ],
         'help_type' => 'Giá trị ban đầu phù hợp với loại máy chủ này. Chọn nhiều hơn hoặc ít hơn nếu muốn.',
         'help_game' => 'Chọn những gì trò chơi cần. Bạn có thể đổi sau.',
         'ram' => 'RAM',
@@ -155,6 +147,12 @@ return [
         'delete' => 'Xoá bản nháp',
     ],
     'review' => [
+        'edit_settings' => 'Sửa cài đặt',
+        'done_editing' => 'Xong',
+        'java_version' => 'Phiên bản Java',
+        'java_auto' => 'Tự động (khuyên dùng)',
+        'java_help' => 'Được chọn tự động theo Minecraft / modpack đã chọn. Ghi đè cho pack có yêu cầu đặc biệt.',
+        'egg_help' => 'Được chọn tự động và nhập nếu thiếu. Egg hiện có được giữ nguyên. Chỉ thay đổi nếu bạn biết mình đang làm gì.',
         'overview' => 'Tổng quan máy chủ',
         'overview_help' => 'Mọi thứ đã sẵn sàng. Kiểm tra rồi tạo máy chủ.',
         'name' => 'Tên',

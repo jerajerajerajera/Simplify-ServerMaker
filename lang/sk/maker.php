@@ -114,14 +114,6 @@ return [
         'subdomain_help' => 'Hráči sa môžu pripojiť pomocou tohto názvu. Nechaj prázdne pre žiadnu subdoménu.',
     ],
     'resources' => [
-        'custom_hint' => 'Vlastná voľba',
-        'storage' => ':amount GB úložiska',
-        'ram_hint' => [
-            'small' => 'Malé svety',
-            'everyday' => 'Bežné hranie',
-            'headroom' => 'Viac priestoru',
-            'modpacks' => 'Väčšie modpacky',
-        ],
         'help_type' => 'Počiatočné hodnoty zodpovedajú tomuto typu servera. Pokojne vyber viac alebo menej.',
         'help_game' => 'Vyber, čo hra potrebuje. Neskôr to môžeš zmeniť.',
         'ram' => 'RAM',
@@ -155,6 +147,12 @@ return [
         'delete' => 'Zmazať koncept',
     ],
     'review' => [
+        'edit_settings' => 'Upraviť nastavenia',
+        'done_editing' => 'Hotovo',
+        'java_version' => 'Verzia Javy',
+        'java_auto' => 'Automaticky (odporúčané)',
+        'java_help' => 'Vyberá sa automaticky podľa Minecraftu / vybraného modpacku. Prepíšte pre balíky so zvláštnymi požiadavkami.',
+        'egg_help' => 'Vyberá sa automaticky a importuje, ak chýba. Existujúce eggy zostanú. Meňte len, ak viete, čo robíte.',
         'overview' => 'Prehľad servera',
         'overview_help' => 'Všetko je pripravené. Skontrolujte to a potom vytvorte server.',
         'name' => 'Názov',

@@ -114,14 +114,6 @@ return [
         'subdomain_help' => '플레이어가 이 이름으로 접속할 수 있습니다. 하위 도메인을 사용하지 않으려면 비워 두세요.',
     ],
     'resources' => [
-        'custom_hint' => '직접 선택',
-        'storage' => ':amount GB 저장 공간',
-        'ram_hint' => [
-            'small' => '작은 월드',
-            'everyday' => '일상 플레이',
-            'headroom' => '더 넉넉하게',
-            'modpacks' => '큰 모드팩',
-        ],
         'help_type' => '시작 값은 이 서버 유형에 맞춰져 있습니다. 원하면 더 많이 또는 적게 선택하세요.',
         'help_game' => '게임에 필요한 만큼 선택하세요. 나중에 변경할 수 있습니다.',
         'ram' => 'RAM',
@@ -155,6 +147,12 @@ return [
         'delete' => '초안 삭제',
     ],
     'review' => [
+        'edit_settings' => '설정 편집',
+        'done_editing' => '편집 완료',
+        'java_version' => 'Java 버전',
+        'java_auto' => '자동(권장)',
+        'java_help' => 'Minecraft / 선택한 모드팩에 따라 자동으로 정해집니다. 특별한 요구가 있는 팩에서만 재정의하세요.',
+        'egg_help' => '자동으로 선택되며 없으면 가져옵니다. 기존 egg는 유지됩니다. 잘 아는 경우에만 바꾸세요.',
         'overview' => '서버 개요',
         'overview_help' => '모든 준비가 끝났습니다. 확인한 다음 서버를 만드세요.',
         'name' => '이름',

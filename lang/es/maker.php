@@ -114,14 +114,6 @@ return [
         'subdomain_help' => 'Los jugadores pueden unirse con este nombre. Déjalo vacío para no usar subdominio.',
     ],
     'resources' => [
-        'custom_hint' => 'Elige tú',
-        'storage' => ':amount GB de almacenamiento',
-        'ram_hint' => [
-            'small' => 'Mundos pequeños',
-            'everyday' => 'Juego diario',
-            'headroom' => 'Más margen',
-            'modpacks' => 'Modpacks más grandes',
-        ],
         'help_type' => 'Los valores iniciales se ajustan a este tipo de servidor. Elige más o menos si quieres.',
         'help_game' => 'Elige lo que necesita el juego. Puedes cambiarlo después.',
         'ram' => 'RAM',
@@ -155,6 +147,12 @@ return [
         'delete' => 'Eliminar borrador',
     ],
     'review' => [
+        'edit_settings' => 'Editar ajustes',
+        'done_editing' => 'Terminar edición',
+        'java_version' => 'Versión de Java',
+        'java_auto' => 'Automático (recomendado)',
+        'java_help' => 'Se elige automáticamente según Minecraft / el modpack elegido. Cámbialo para packs con requisitos especiales.',
+        'egg_help' => 'Se elige automáticamente y se importa si falta. Los eggs existentes se conservan. Cámbialo solo si sabes lo que haces.',
         'overview' => 'Resumen del servidor',
         'overview_help' => 'Todo está preparado. Revísalo y luego crea el servidor.',
         'name' => 'Nombre',

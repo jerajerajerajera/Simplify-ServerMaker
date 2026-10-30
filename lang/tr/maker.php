@@ -114,14 +114,6 @@ return [
         'subdomain_help' => 'Oyuncular bu adla bağlanabilir. Alt alan adı istemiyorsanız boş bırakın.',
     ],
     'resources' => [
-        'custom_hint' => 'Kendiniz seçin',
-        'storage' => ':amount GB depolama',
-        'ram_hint' => [
-            'small' => 'Küçük dünyalar',
-            'everyday' => 'Günlük oyun',
-            'headroom' => 'Daha fazla pay',
-            'modpacks' => 'Daha büyük mod paketleri',
-        ],
         'help_type' => 'Başlangıç değerleri bu sunucu türüne uygundur. İsterseniz daha fazla veya daha az seçin.',
         'help_game' => 'Oyunun ihtiyacını seçin. Daha sonra değiştirebilirsiniz.',
         'ram' => 'RAM',
@@ -155,6 +147,12 @@ return [
         'delete' => 'Taslağı sil',
     ],
     'review' => [
+        'edit_settings' => 'Ayarları düzenle',
+        'done_editing' => 'Düzenleme bitti',
+        'java_version' => 'Java sürümü',
+        'java_auto' => 'Otomatik (önerilen)',
+        'java_help' => 'Minecraft\'a / seçilen mod paketine göre otomatik seçilir. Özel gereksinimleri olan paketler için geçersiz kıl.',
+        'egg_help' => 'Otomatik seçilir ve eksikse içe aktarılır. Mevcut egg\'ler korunur. Yalnızca ne yaptığını biliyorsan değiştir.',
         'overview' => 'Sunucu özeti',
         'overview_help' => 'Her şey hazır. Kontrol edin, sonra sunucuyu oluşturun.',
         'name' => 'Ad',

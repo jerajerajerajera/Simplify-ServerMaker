@@ -114,14 +114,6 @@ return [
         'subdomain_help' => 'Jucătorii se pot conecta folosind acest nume. Lasă gol pentru niciun subdomeniu.',
     ],
     'resources' => [
-        'custom_hint' => 'Alege singur',
-        'storage' => ':amount GB spațiu',
-        'ram_hint' => [
-            'small' => 'Lumi mici',
-            'everyday' => 'Joc zilnic',
-            'headroom' => 'Mai multă rezervă',
-            'modpacks' => 'Modpack-uri mai mari',
-        ],
         'help_type' => 'Valorile de pornire se potrivesc acestui tip de server. Alege mai mult sau mai puțin, dacă vrei.',
         'help_game' => 'Alege de ce are nevoie jocul. Poți schimba mai târziu.',
         'ram' => 'RAM',
@@ -155,6 +147,12 @@ return [
         'delete' => 'Șterge ciorna',
     ],
     'review' => [
+        'edit_settings' => 'Editați setările',
+        'done_editing' => 'Gata cu editarea',
+        'java_version' => 'Versiunea Java',
+        'java_auto' => 'Automat (recomandat)',
+        'java_help' => 'Ales automat după Minecraft / modpackul selectat. Suprascrieți pentru pachete cu cerințe speciale.',
+        'egg_help' => 'Ales automat și importat dacă lipsește. Egg-urile existente se păstrează. Modificați doar dacă știți ce faceți.',
         'overview' => 'Prezentare server',
         'overview_help' => 'Totul este pregătit. Verifică, apoi creează serverul.',
         'name' => 'Nume',

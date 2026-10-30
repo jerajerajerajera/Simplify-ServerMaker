@@ -114,14 +114,6 @@ return [
         'subdomain_help' => 'Players can join with this name. Leave empty for no subdomain.',
     ],
     'resources' => [
-        'custom_hint' => 'Choose your own',
-        'storage' => ':amount GB storage',
-        'ram_hint' => [
-            'small' => 'Small worlds',
-            'everyday' => 'Everyday play',
-            'headroom' => 'More headroom',
-            'modpacks' => 'Larger modpacks',
-        ],
         'help_type' => 'The starting values suit this server type. Pick more or less if you like.',
         'help_game' => 'Pick what the game needs. You can change it later.',
         'ram' => 'RAM',
@@ -155,6 +147,12 @@ return [
         'delete' => 'Delete draft',
     ],
     'review' => [
+        'edit_settings' => 'Edit settings',
+        'done_editing' => 'Done editing',
+        'java_version' => 'Java version',
+        'java_auto' => 'Automatic (recommended)',
+        'java_help' => 'Chosen automatically from Minecraft / the selected modpack. Override for packs with special requirements.',
+        'egg_help' => 'Automatically chosen and imported if missing. Existing eggs are kept. Only change if you know what you are doing.',
         'overview' => 'Server overview',
         'overview_help' => 'Everything is prepared. Check it, then create the server.',
         'name' => 'Name',

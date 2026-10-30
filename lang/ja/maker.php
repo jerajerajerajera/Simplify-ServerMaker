@@ -114,14 +114,6 @@ return [
         'subdomain_help' => 'プレイヤーはこの名前で参加できます。サブドメインを使わない場合は空欄のままにしてください。',
     ],
     'resources' => [
-        'custom_hint' => '自分で決める',
-        'storage' => ':amount GB ストレージ',
-        'ram_hint' => [
-            'small' => '小さなワールド',
-            'everyday' => '普段のプレイ',
-            'headroom' => '余裕を持たせる',
-            'modpacks' => '大きめの Modpack',
-        ],
         'help_type' => '初期値はこのサーバータイプに合わせてあります。必要に応じて増減してください。',
         'help_game' => 'ゲームに必要な分を選んでください。後で変更できます。',
         'ram' => 'RAM',
@@ -155,6 +147,12 @@ return [
         'delete' => '下書きを削除',
     ],
     'review' => [
+        'edit_settings' => '設定を編集',
+        'done_editing' => '編集完了',
+        'java_version' => 'Java のバージョン',
+        'java_auto' => '自動(推奨)',
+        'java_help' => 'Minecraft / 選択した Modpack から自動で選ばれます。特別な要件のあるパックでは上書きしてください。',
+        'egg_help' => '自動で選ばれ、なければインポートされます。既存の egg は保持されます。よく分かっている場合だけ変更してください。',
         'overview' => 'サーバーの概要',
         'overview_help' => '準備ができました。確認してからサーバーを作成してください。',
         'name' => '名前',

@@ -1,4 +1,4 @@
-{{-- RAM, CPU or disk as a row of cards: an icon, the amount and what it is good for. --}}
+{{-- RAM, CPU or disk as a grid of cards of one size: a small icon next to the amount. --}}
 @php
     $icon = ['ram' => 'tabler-device-sd-card', 'cpu' => 'tabler-cpu', 'disk' => 'tabler-database'][$resource] ?? 'tabler-cube';
 @endphp
@@ -8,11 +8,8 @@
             <label @class(['smk-amount', 'is-picked' => (string) $getState() === (string) $value]) wire:key="{{ $getStatePath() }}-{{ $value }}">
                 <input type="radio" class="smk-sr-only" name="{{ $getStatePath() }}" value="{{ $value }}"
                     {{ $applyStateBindingModifiers('wire:model') }}="{{ $getStatePath() }}" />
-                <span class="smk-tile" aria-hidden="true"><x-dynamic-component :component="$icon" /></span>
-                <span class="smk-amount-text">
-                    <strong>{{ $label }}</strong>
-                    <small>{{ $field->getDescription($value) }}</small>
-                </span>
+                <x-dynamic-component :component="$value === 'custom' ? 'tabler-adjustments' : $icon" class="smk-amount-icon" aria-hidden="true" />
+                <strong>{{ $label }}</strong>
             </label>
         @endforeach
     </div>

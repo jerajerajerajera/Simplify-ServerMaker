@@ -114,14 +114,6 @@ return [
         'subdomain_help' => 'Pemain bisa bergabung dengan nama ini. Biarkan kosong jika tidak ingin memakai subdomain.',
     ],
     'resources' => [
-        'custom_hint' => 'Pilih sendiri',
-        'storage' => ':amount GB penyimpanan',
-        'ram_hint' => [
-            'small' => 'Dunia kecil',
-            'everyday' => 'Main sehari-hari',
-            'headroom' => 'Ruang lebih',
-            'modpacks' => 'Modpack lebih besar',
-        ],
         'help_type' => 'Nilai awal cocok untuk jenis server ini. Pilih lebih banyak atau sedikit jika mau.',
         'help_game' => 'Pilih yang dibutuhkan game. Kamu bisa mengubahnya nanti.',
         'ram' => 'RAM',
@@ -155,6 +147,12 @@ return [
         'delete' => 'Hapus draf',
     ],
     'review' => [
+        'edit_settings' => 'Ubah pengaturan',
+        'done_editing' => 'Selesai mengubah',
+        'java_version' => 'Versi Java',
+        'java_auto' => 'Otomatis (disarankan)',
+        'java_help' => 'Dipilih otomatis dari Minecraft / modpack yang dipilih. Timpa untuk pack dengan kebutuhan khusus.',
+        'egg_help' => 'Dipilih otomatis dan diimpor jika belum ada. Egg yang sudah ada dipertahankan. Ubah hanya jika Anda tahu apa yang Anda lakukan.',
         'overview' => 'Ringkasan server',
         'overview_help' => 'Semua sudah siap. Periksa, lalu buat servernya.',
         'name' => 'Nama',

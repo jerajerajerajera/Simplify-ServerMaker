@@ -114,14 +114,6 @@ return [
         'subdomain_help' => 'A játékosok ezzel a névvel csatlakozhatnak. Hagyd üresen, ha nem kérsz aldomaint.',
     ],
     'resources' => [
-        'custom_hint' => 'Saját érték',
-        'storage' => ':amount GB tárhely',
-        'ram_hint' => [
-            'small' => 'Kis világok',
-            'everyday' => 'Mindennapi játék',
-            'headroom' => 'Több tartalék',
-            'modpacks' => 'Nagyobb modpackok',
-        ],
         'help_type' => 'A kezdőértékek illenek ehhez a szervertípushoz. Ha szeretnéd, válassz többet vagy kevesebbet.',
         'help_game' => 'Válaszd ki, amire a játéknak szüksége van. Később módosíthatod.',
         'ram' => 'RAM',
@@ -155,6 +147,12 @@ return [
         'delete' => 'Piszkozat törlése',
     ],
     'review' => [
+        'edit_settings' => 'Beállítások szerkesztése',
+        'done_editing' => 'Szerkesztés kész',
+        'java_version' => 'Java-verzió',
+        'java_auto' => 'Automatikus (ajánlott)',
+        'java_help' => 'Automatikusan választva a Minecraft / a kiválasztott modcsomag alapján. Különleges igényű csomagoknál felülírható.',
+        'egg_help' => 'Automatikusan kiválasztva és importálva, ha hiányzik. A meglévő eggek megmaradnak. Csak akkor módosítsd, ha tudod, mit csinálsz.',
         'overview' => 'Szerver áttekintése',
         'overview_help' => 'Minden elő van készítve. Ellenőrizd, majd hozd létre a szervert.',
         'name' => 'Név',

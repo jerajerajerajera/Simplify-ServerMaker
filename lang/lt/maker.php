@@ -114,14 +114,6 @@ return [
         'subdomain_help' => 'Žaidėjai galės prisijungti naudodami šį pavadinimą. Palikite tuščią, jei nenorite subdomeno.',
     ],
     'resources' => [
-        'custom_hint' => 'Pasirinkite patys',
-        'storage' => ':amount GB vietos',
-        'ram_hint' => [
-            'small' => 'Maži pasauliai',
-            'everyday' => 'Kasdienis žaidimas',
-            'headroom' => 'Daugiau atsargos',
-            'modpacks' => 'Didesni modpackai',
-        ],
         'help_type' => 'Pradinės reikšmės tinka šiam serverio tipui. Jei norite, pasirinkite daugiau ar mažiau.',
         'help_game' => 'Pasirinkite, ko reikia žaidimui. Vėliau galėsite pakeisti.',
         'ram' => 'RAM',
@@ -155,6 +147,12 @@ return [
         'delete' => 'Ištrinti juodraštį',
     ],
     'review' => [
+        'edit_settings' => 'Redaguoti nustatymus',
+        'done_editing' => 'Baigti redaguoti',
+        'java_version' => 'Java versija',
+        'java_auto' => 'Automatiškai (rekomenduojama)',
+        'java_help' => 'Pasirenkama automatiškai pagal Minecraft / pasirinktą modpacką. Pakeiskite paketams su ypatingais reikalavimais.',
+        'egg_help' => 'Pasirenkamas automatiškai ir importuojamas, jei trūksta. Esami egg išsaugomi. Keiskite tik jei žinote, ką darote.',
         'overview' => 'Serverio apžvalga',
         'overview_help' => 'Viskas paruošta. Patikrinkite ir sukurkite serverį.',
         'name' => 'Pavadinimas',

@@ -114,14 +114,6 @@ return [
         'subdomain_help' => 'Pelaajat voivat liittyä tällä nimellä. Jätä tyhjäksi, jos et halua aliverkkotunnusta.',
     ],
     'resources' => [
-        'custom_hint' => 'Valitse itse',
-        'storage' => ':amount Gt tallennustilaa',
-        'ram_hint' => [
-            'small' => 'Pienet maailmat',
-            'everyday' => 'Arkipelaaminen',
-            'headroom' => 'Enemmän tilaa',
-            'modpacks' => 'Isommat modipaketit',
-        ],
         'help_type' => 'Alkuarvot sopivat tälle palvelintyypille. Valitse halutessasi enemmän tai vähemmän.',
         'help_game' => 'Valitse, mitä peli tarvitsee. Voit muuttaa sitä myöhemmin.',
         'ram' => 'RAM',
@@ -155,6 +147,12 @@ return [
         'delete' => 'Poista luonnos',
     ],
     'review' => [
+        'edit_settings' => 'Muokkaa asetuksia',
+        'done_editing' => 'Muokkaus valmis',
+        'java_version' => 'Java-versio',
+        'java_auto' => 'Automaattinen (suositus)',
+        'java_help' => 'Valitaan automaattisesti Minecraftin tai valitun modipaketin mukaan. Ohita, jos paketilla on erityisvaatimuksia.',
+        'egg_help' => 'Valitaan automaattisesti ja tuodaan, jos puuttuu. Olemassa olevat eggit säilyvät. Muuta vain, jos tiedät mitä teet.',
         'overview' => 'Palvelimen yhteenveto',
         'overview_help' => 'Kaikki on valmiina. Tarkista ja luo sitten palvelin.',
         'name' => 'Nimi',

@@ -114,14 +114,6 @@ return [
         'subdomain_help' => '玩家可以通过此名称加入。留空则不使用子域名。',
     ],
     'resources' => [
-        'custom_hint' => '自定义',
-        'storage' => ':amount GB 存储',
-        'ram_hint' => [
-            'small' => '小型世界',
-            'everyday' => '日常游玩',
-            'headroom' => '更多余量',
-            'modpacks' => '大型整合包',
-        ],
         'help_type' => '初始值适合此服务器类型。你可以按需增加或减少。',
         'help_game' => '选择游戏所需的资源。之后可以更改。',
         'ram' => 'RAM',
@@ -155,6 +147,12 @@ return [
         'delete' => '删除草稿',
     ],
     'review' => [
+        'edit_settings' => '编辑设置',
+        'done_editing' => '完成编辑',
+        'java_version' => 'Java 版本',
+        'java_auto' => '自动（推荐）',
+        'java_help' => '根据 Minecraft / 所选整合包自动选择。对有特殊要求的整合包可手动覆盖。',
+        'egg_help' => '自动选择，缺失时自动导入。已有的 egg 会保留。除非你清楚自己在做什么，否则不要更改。',
         'overview' => '服务器概览',
         'overview_help' => '一切就绪。检查后即可创建服务器。',
         'name' => '名称',

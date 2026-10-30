@@ -114,14 +114,6 @@ return [
         'subdomain_help' => 'Spelare kan ansluta med det här namnet. Lämna tomt för ingen underdomän.',
     ],
     'resources' => [
-        'custom_hint' => 'Välj själv',
-        'storage' => ':amount GB lagring',
-        'ram_hint' => [
-            'small' => 'Små världar',
-            'everyday' => 'Vardagsspel',
-            'headroom' => 'Mer utrymme',
-            'modpacks' => 'Större modpaket',
-        ],
         'help_type' => 'Startvärdena passar den här servertypen. Välj mer eller mindre om du vill.',
         'help_game' => 'Välj det spelet behöver. Du kan ändra det senare.',
         'ram' => 'RAM',
@@ -155,6 +147,12 @@ return [
         'delete' => 'Ta bort utkast',
     ],
     'review' => [
+        'edit_settings' => 'Redigera inställningar',
+        'done_editing' => 'Klar med redigeringen',
+        'java_version' => 'Java-version',
+        'java_auto' => 'Automatiskt (rekommenderas)',
+        'java_help' => 'Väljs automatiskt utifrån Minecraft / det valda modpacket. Åsidosätt för paket med särskilda krav.',
+        'egg_help' => 'Väljs automatiskt och importeras om det saknas. Befintliga eggs behålls. Ändra bara om du vet vad du gör.',
         'overview' => 'Serveröversikt',
         'overview_help' => 'Allt är förberett. Kontrollera och skapa sedan servern.',
         'name' => 'Namn',

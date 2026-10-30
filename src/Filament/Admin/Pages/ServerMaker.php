@@ -63,6 +63,9 @@ class ServerMaker extends Page implements HasForms
     #[Locked]
     public bool $restored = false;
 
+    /** Review: the advanced settings are open (Edit settings), as in 0.7.0. */
+    public bool $editingAdvanced = false;
+
     /** Whether there is a saved draft, shown in the bar at the bottom with Discard. */
     public bool $hasDraft = false;
 
@@ -111,6 +114,7 @@ class ServerMaker extends Page implements HasForms
             'subdomain' => '',
             'backups' => 2,
             'skip_scripts' => false,
+            'java' => 'auto',
             'image' => '',
             'startup' => '',
             'environment' => [],
@@ -161,6 +165,12 @@ class ServerMaker extends Page implements HasForms
             ['data' => Draft::clean($this->data ?? []), 'step' => min(5, $step + 1)],
         );
         $this->hasDraft = true;
+    }
+
+    public function toggleAdvanced(): void
+    {
+        abort_unless($this->isAdmin(), 403);
+        $this->editingAdvanced = ! $this->editingAdvanced;
     }
 
     /** Discard in the bar at the bottom: the answers so far are removed and the Server Maker starts empty. */
@@ -320,6 +330,11 @@ class ServerMaker extends Page implements HasForms
         $type = (string) ($this->data['type'] ?? '');
         if (($this->data['game'] ?? null) !== 'minecraft' || ! Minecraft::isJava($type)) {
             return null;
+        }
+        // Review → Edit settings: an administrator may pick the Java version for packs with special needs.
+        $chosen = (int) ($this->data['java'] ?? 0);
+        if ($this->isAdmin() && in_array($chosen, Java::MAJORS, true)) {
+            return $chosen;
         }
         if ($type === 'proxy') {
             return 21;

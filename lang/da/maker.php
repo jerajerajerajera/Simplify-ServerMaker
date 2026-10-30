@@ -114,14 +114,6 @@ return [
         'subdomain_help' => 'Spillere kan forbinde med dette navn. Lad feltet være tomt for intet underdomæne.',
     ],
     'resources' => [
-        'custom_hint' => 'Vælg selv',
-        'storage' => ':amount GB lagerplads',
-        'ram_hint' => [
-            'small' => 'Små verdener',
-            'everyday' => 'Hverdagsspil',
-            'headroom' => 'Mere plads',
-            'modpacks' => 'Større modpacks',
-        ],
         'help_type' => 'Startværdierne passer til denne servertype. Vælg mere eller mindre, hvis du vil.',
         'help_game' => 'Vælg det, spillet har brug for. Du kan ændre det senere.',
         'ram' => 'RAM',
@@ -155,6 +147,12 @@ return [
         'delete' => 'Slet kladde',
     ],
     'review' => [
+        'edit_settings' => 'Rediger indstillinger',
+        'done_editing' => 'Færdig med at redigere',
+        'java_version' => 'Java-version',
+        'java_auto' => 'Automatisk (anbefalet)',
+        'java_help' => 'Vælges automatisk ud fra Minecraft / den valgte modpack. Tilsidesæt for pakker med særlige krav.',
+        'egg_help' => 'Vælges automatisk og importeres, hvis det mangler. Eksisterende eggs bevares. Ret kun, hvis du ved, hvad du gør.',
         'overview' => 'Serveroversigt',
         'overview_help' => 'Alt er klar. Tjek det, og opret så serveren.',
         'name' => 'Navn',
