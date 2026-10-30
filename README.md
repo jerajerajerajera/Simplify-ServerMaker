@@ -5,8 +5,8 @@ give it a name, choose the resources and press Create. The Server Maker picks th
 
 For Minecraft you pick the server type (Vanilla, Paper, Purpur, Fabric, Forge, NeoForge, Quilt, a modpack, Bedrock or
 a proxy) and the version, and set the first settings: maximum players, game mode, difficulty and, for Java, a server icon. Tick
-the Minecraft EULA on the last step and the server starts right after installing; leave it and it asks for the EULA
-at its first start. Administrators can also pick any game from the official Pelican egg index. A draft is kept, so
+the Minecraft EULA on the last step and you can start the server as soon as it is installed; leave it and it asks for
+the EULA at its first start. Administrators can also pick any game from the official Pelican egg index. A draft is kept, so
 you can carry on later.
 
 It works on its own. With [Simplify](https://github.com/jerajerajerajera/Simplify) installed you also get:
