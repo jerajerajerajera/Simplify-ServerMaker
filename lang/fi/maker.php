@@ -181,6 +181,8 @@ return [
         'number_between' => 'Anna luku väliltä :min–:max.',
     ],
     'review' => [
+        'start_eula' => 'Käsin · hyväksy Minecraftin EULA palvelimen sivulla',
+        'read_eula' => 'Lue Minecraftin EULA',
         'edit_settings' => 'Muokkaa asetuksia',
         'done_editing' => 'Muokkaus valmis',
         'java_version' => 'Java-versio',

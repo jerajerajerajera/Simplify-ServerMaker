@@ -181,6 +181,8 @@ return [
         'number_between' => 'Adj meg egy számot :min és :max között.',
     ],
     'review' => [
+        'start_eula' => 'Kézi · fogadd el a Minecraft EULA-t a szerver oldalán',
+        'read_eula' => 'A Minecraft EULA elolvasása',
         'edit_settings' => 'Beállítások szerkesztése',
         'done_editing' => 'Szerkesztés kész',
         'java_version' => 'Java-verzió',

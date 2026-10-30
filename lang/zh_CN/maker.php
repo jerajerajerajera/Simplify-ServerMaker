@@ -181,6 +181,8 @@ return [
         'number_between' => '请输入 :min 到 :max 之间的数字。',
     ],
     'review' => [
+        'start_eula' => '手动 · 在服务器页面接受 Minecraft EULA',
+        'read_eula' => '阅读 Minecraft EULA',
         'edit_settings' => '编辑设置',
         'done_editing' => '完成编辑',
         'java_version' => 'Java 版本',

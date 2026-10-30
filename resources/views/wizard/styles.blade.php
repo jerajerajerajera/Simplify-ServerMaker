@@ -154,6 +154,7 @@
     .smk .smk-advanced { margin-top: 4px; }
     .smk .smk-advanced[hidden] { display: none !important; }
     .smk .smk-review dd { margin: 4px 0 0; font-size: 15px; font-weight: 500; overflow-wrap: anywhere; }
+    .smk .smk-review dd a { color: var(--smk-accent); text-decoration: underline; }
 
     /* The bar at the bottom: Back and Next are the wizard's own footer; the steps and the draft lie on top of it. */
     .smk .fi-sc-wizard-footer { position: sticky; bottom: 0; z-index: 10; display: flex; flex-wrap: nowrap; align-items: center; gap: var(--smk-gap); height: var(--smk-bar); margin: 0 !important; padding: 0 16px !important; border-top: 1px solid var(--smk-line); background: var(--smk-surface); }

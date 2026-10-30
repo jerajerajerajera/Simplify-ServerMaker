@@ -181,6 +181,8 @@ return [
         'number_between' => 'Indtast et tal mellem :min og :max.',
     ],
     'review' => [
+        'start_eula' => 'Manuel · acceptér Minecraft-EULA\'en på serversiden',
+        'read_eula' => 'Læs Minecraft-EULA\'en',
         'edit_settings' => 'Rediger indstillinger',
         'done_editing' => 'Færdig med at redigere',
         'java_version' => 'Java-version',

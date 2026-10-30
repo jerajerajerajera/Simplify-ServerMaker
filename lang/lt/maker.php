@@ -181,6 +181,8 @@ return [
         'number_between' => 'Įveskite skaičių nuo :min iki :max.',
     ],
     'review' => [
+        'start_eula' => 'Rankiniu būdu · priimkite Minecraft EULA serverio puslapyje',
+        'read_eula' => 'Skaityti Minecraft EULA',
         'edit_settings' => 'Redaguoti nustatymus',
         'done_editing' => 'Baigti redaguoti',
         'java_version' => 'Java versija',

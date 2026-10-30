@@ -181,6 +181,8 @@ return [
         'number_between' => 'Zadajte číslo medzi :min a :max.',
     ],
     'review' => [
+        'start_eula' => 'Ručne · prijmite EULA Minecraft na stránke servera',
+        'read_eula' => 'Prečítať EULA Minecraftu',
         'edit_settings' => 'Upraviť nastavenia',
         'done_editing' => 'Hotovo',
         'java_version' => 'Verzia Javy',

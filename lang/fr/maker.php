@@ -181,6 +181,8 @@ return [
         'number_between' => 'Saisissez un nombre entre :min et :max.',
     ],
     'review' => [
+        'start_eula' => 'Manuel · acceptez l’EULA Minecraft sur la page du serveur',
+        'read_eula' => 'Lire l’EULA de Minecraft',
         'edit_settings' => 'Modifier les paramètres',
         'done_editing' => 'Modification terminée',
         'java_version' => 'Version de Java',

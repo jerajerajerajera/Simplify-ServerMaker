@@ -181,6 +181,8 @@ return [
         'number_between' => ':min ile :max arasında bir sayı gir.',
     ],
     'review' => [
+        'start_eula' => 'Elle · Minecraft EULA\'sını sunucu sayfasında kabul et',
+        'read_eula' => 'Minecraft EULA\'sını oku',
         'edit_settings' => 'Ayarları düzenle',
         'done_editing' => 'Düzenleme bitti',
         'java_version' => 'Java sürümü',

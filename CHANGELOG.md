@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.2
+
+- The Review step says again, as in Simplify 0.7.0, that a Minecraft Java server needs the Minecraft EULA accepted
+  before it can start, with a link to the official EULA (minecraft.net/eula). You accept it yourself on the server page.
+
 ## 1.3.1
 
 - Create server showed "Error while loading page" after the server was made, and the first settings (players, game

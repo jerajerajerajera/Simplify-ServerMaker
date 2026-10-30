@@ -181,6 +181,8 @@ return [
         'number_between' => ':min 에서 :max 사이의 숫자를 입력하세요.',
     ],
     'review' => [
+        'start_eula' => '수동 · 서버 페이지에서 Minecraft EULA 동의',
+        'read_eula' => 'Minecraft EULA 읽기',
         'edit_settings' => '설정 편집',
         'done_editing' => '편집 완료',
         'java_version' => 'Java 버전',

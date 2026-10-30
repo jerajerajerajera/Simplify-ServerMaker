@@ -181,6 +181,8 @@ return [
         'number_between' => ':min から :max の数値を入力してください。',
     ],
     'review' => [
+        'start_eula' => '手動 · サーバーページで Minecraft EULA に同意',
+        'read_eula' => 'Minecraft EULA を読む',
         'edit_settings' => '設定を編集',
         'done_editing' => '編集完了',
         'java_version' => 'Java のバージョン',

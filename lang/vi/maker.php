@@ -181,6 +181,8 @@ return [
         'number_between' => 'Nhập số từ :min đến :max.',
     ],
     'review' => [
+        'start_eula' => 'Thủ công · chấp nhận EULA Minecraft trên trang máy chủ',
+        'read_eula' => 'Đọc EULA Minecraft',
         'edit_settings' => 'Sửa cài đặt',
         'done_editing' => 'Xong',
         'java_version' => 'Phiên bản Java',
