@@ -7,7 +7,10 @@ namespace Simplify\ServerMaker\Filament\Wizard;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
+use Closure;
+use Filament\Forms\Components\Field;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
@@ -21,6 +24,7 @@ use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
 use Simplify\ServerMaker\Games\Minecraft;
 use Simplify\ServerMaker\Games\MinecraftVersions;
 use Simplify\ServerMaker\Modpacks\Sources;
+use Simplify\Toolkit\Filament\Components\MotdEditor;
 
 /** Step 2: the software and version for Minecraft, or the game's own settings for every other game. */
 final class SetupStep
@@ -91,6 +95,8 @@ final class SetupStep
                         Text::make($t('minecraft.proxy_help'))
                             ->visible(fn (Get $get) => $get('type') === 'proxy'),
                         // Written to server.properties once the installation is done.
+                        self::motd($t)
+                            ->visible(fn (Get $get) => FirstSettings::hasIcon($get('game'), $get('type'))),
                         Grid::make(['default' => 1, 'md' => 3])
                             ->visible(fn (Get $get) => FirstSettings::hasProperties($get('game'), $get('type')))
                             ->schema([
@@ -113,6 +119,26 @@ final class SetupStep
                                     ->selectablePlaceholder(false)
                                     ->required(fn (Get $get) => FirstSettings::hasProperties($get('game'), $get('type'))),
                             ]),
+                        Grid::make(['default' => 1, 'md' => 2])
+                            ->visible(fn (Get $get) => FirstSettings::hasIcon($get('game'), $get('type')))
+                            ->schema(array_map(
+                                fn (string $field) => TextInput::make($field)
+                                    ->label($t('first.'.$field))
+                                    ->integer()
+                                    ->minValue(FirstSettings::NUMBERS[$field][1])
+                                    ->maxValue(FirstSettings::NUMBERS[$field][2])
+                                    ->required(fn (Get $get) => FirstSettings::hasIcon($get('game'), $get('type'))),
+                                array_keys(FirstSettings::NUMBERS),
+                            )),
+                        Group::make(array_map(
+                            fn (string $field) => Toggle::make($field)
+                                ->label($t('first.'.$field))
+                                ->helperText($t('first.'.$field.'_help'))
+                                ->inline(),
+                            array_keys(FirstSettings::SWITCHES),
+                        ))
+                            ->columns(['default' => 1, 'md' => 3])
+                            ->visible(fn (Get $get) => FirstSettings::hasIcon($get('game'), $get('type'))),
                         FileUpload::make('server_icon')
                             ->label($t('first.icon'))
                             ->helperText($t('first.icon_help'))
@@ -151,5 +177,19 @@ final class SetupStep
                 $page->prepareEgg();
                 $page->stepDone(2);
             });
+    }
+
+    /** The Toolkit's MOTD maker (as on the server page) when it is installed, otherwise a plain text field. */
+    private static function motd(Closure $t): Field
+    {
+        $field = class_exists(MotdEditor::class)
+            ? MotdEditor::make('motd')
+            : TextInput::make('motd')->maxLength(FirstSettings::MOTD_MAX);
+
+        return $field
+            ->label($t('first.motd'))
+            ->helperText($t('first.motd_help'))
+            ->rules(['string', 'max:'.FirstSettings::MOTD_MAX])
+            ->required(fn (Get $get) => FirstSettings::hasIcon($get('game'), $get('type')));
     }
 }

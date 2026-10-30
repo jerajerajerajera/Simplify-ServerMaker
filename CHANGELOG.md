@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Minecraft Java servers get the rest of their first settings on the Minecraft step: MOTD, view distance, spawn
+  protection, PvP, whitelist and allow flight. With Simplify Toolkit installed the MOTD uses its MOTD maker with colours
+  and a preview.
+
 ## 1.3.3
 
 - Create server got stuck on the Review step. The Minecraft EULA box is optional now: tick it and the server starts

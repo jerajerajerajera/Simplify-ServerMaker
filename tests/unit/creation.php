@@ -57,7 +57,14 @@ check('users cannot set a hidden variable', failsOn(fn () => Payload::build([...
 check('admins can set every variable', Payload::build([...$game, 'variables' => ['SRCDS_APPID' => '1']], $valheim, $resources, 3, 1, 9, null, true)['environment']['SRCDS_APPID'] === '1');
 check('a toggle becomes 1 or 0', Payload::gameEnvironment(['SERVER_NAME' => true], $valheim, false)['SERVER_NAME'] === '1');
 $first = FirstSettings::from(['game' => 'minecraft', 'type' => 'plugins', 'version' => '1.21.1', 'max_players' => '12', 'gamemode' => 'creative', 'difficulty' => 'hard', 'eula' => true]);
-check('players, game mode and difficulty go to server.properties', $first === ['properties' => ['max-players' => '12', 'gamemode' => 'creative', 'difficulty' => 'hard'], 'eula' => true]);
+check('players, game mode and difficulty go to server.properties', array_slice($first['properties'], 0, 3) === ['max-players' => '12', 'gamemode' => 'creative', 'difficulty' => 'hard'] && $first['eula'] === true);
+check('Java gets the 0.7.0 defaults', array_slice($first['properties'], 3) === ['motd' => 'A Minecraft Server', 'view-distance' => '10', 'spawn-protection' => '16', 'pvp' => 'true', 'white-list' => 'false', 'allow-flight' => 'false']);
+$java = FirstSettings::from(['game' => 'minecraft', 'type' => 'vanilla', 'motd' => "§aHello\r\nworld", 'view_distance' => '6', 'spawn_protection' => 0, 'pvp' => false, 'white_list' => true, 'allow_flight' => '1'])['properties'];
+check('the chosen Java settings are used', $java['motd'] === "§aHello\nworld" && $java['view-distance'] === '6' && $java['spawn-protection'] === '0' && $java['pvp'] === 'false' && $java['white-list'] === 'true' && $java['allow-flight'] === 'true');
+check('Bedrock gets no Java settings', ! isset(FirstSettings::from(['game' => 'minecraft', 'type' => 'bedrock'])['properties']['motd']));
+check('a long MOTD is refused', failsOn(fn () => FirstSettings::from(['game' => 'minecraft', 'type' => 'vanilla', 'motd' => str_repeat('a', 513)])) === 'data.motd');
+check('a strange view distance is refused', failsOn(fn () => FirstSettings::from(['game' => 'minecraft', 'type' => 'vanilla', 'view_distance' => 99])) === 'data.view_distance');
+check('the MOTD is written as Java reads it', FirstSettings::merge('motd=x', ['motd' => "§aHi\nthere \\o/"]) === "motd=\\u00a7aHi\\nthere \\\\o/\n");
 check('the EULA is optional when the server is made', ! array_key_exists('eula', FirstSettings::from(['game' => 'minecraft', 'type' => 'plugins'])));
 check('Bedrock has no EULA box', ! array_key_exists('eula', FirstSettings::from(['game' => 'minecraft', 'type' => 'bedrock'])));
 check('old releases get numbers', FirstSettings::from(['game' => 'minecraft', 'type' => 'vanilla', 'version' => '1.12.2', 'gamemode' => 'creative', 'difficulty' => 'hard', 'eula' => true])['properties']['gamemode'] === '1');
