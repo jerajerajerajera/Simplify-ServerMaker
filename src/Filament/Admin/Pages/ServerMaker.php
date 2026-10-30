@@ -453,7 +453,7 @@ class ServerMaker extends Page implements HasForms
         }
 
         Subdomain::request($server, (string) ($state['subdomain'] ?? ''));
-        ApplyFirstSettings::queue($server, $first);
+        ApplyFirstSettings::afterInstall($server, $first);
         Draft::query()->where('user_id', user()->id)->delete();
         Notification::make()
             ->title(__('simplify-servermaker::maker.review.created'))

@@ -2,9 +2,10 @@
 
 ## 1.3.1
 
-- Create server showed "Error while loading page" after the server was made. The first settings (players, game mode,
-  difficulty, icon) now travel with the queued job instead of a separate table, and a problem there never stops the
-  Server Maker from opening the new server.
+- Create server showed "Error while loading page" after the server was made, and the first settings (players, game
+  mode, difficulty, icon) were not applied: the job's helper was called queue(), a name Laravel's dispatcher uses
+  itself. It has its own name now, the settings travel with the job instead of a separate table, and a problem there
+  never stops the Server Maker from opening the new server.
 
 ## 1.3.0
 

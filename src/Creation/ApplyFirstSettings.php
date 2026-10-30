@@ -30,12 +30,13 @@ final class ApplyFirstSettings implements ShouldQueue
     public function __construct(public int $serverId, public array $settings) {}
 
     /**
-     * Queues the settings for a server that was just made. Never throws: the server is already there, so a
+     * Queues the settings for a server that was just made. Not named queue(): Laravel's dispatcher calls a job's
+     * queue($queue, $job) method when it has one. Never throws: the server is already there, so a
      * problem here is reported and the Server Maker carries on to the server page.
      *
      * @param  array{properties?: array<string, string>, icon?: string}  $settings
      */
-    public static function queue(Server $server, array $settings): void
+    public static function afterInstall(Server $server, array $settings): void
     {
         // Without a queue worker the job would run right now, before the installation, and do nothing.
         if ($settings === [] || in_array(config('queue.default'), ['sync', 'null'], true)) {
