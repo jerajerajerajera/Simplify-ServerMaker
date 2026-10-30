@@ -127,6 +127,12 @@ return [
         'subdomain_help' => 'Os jogadores podem entrar com este nome. Deixe em branco para não usar subdomínio.',
     ],
     'resources' => [
+        'ram_labels' => [
+            '2' => 'Mundos pequenos',
+            '4' => 'Jogo do dia a dia',
+            '8' => 'Mais folga',
+            '12' => 'Modpacks maiores',
+        ],
         'help_type' => 'Os valores iniciais combinam com este tipo de servidor. Escolha mais ou menos, se quiser.',
         'help_game' => 'Escolha o que o jogo precisa. Você pode alterar depois.',
         'ram' => 'RAM',
@@ -158,6 +164,27 @@ return [
         'discard' => 'Descartar',
         'keep' => 'Manter rascunho',
         'delete' => 'Excluir rascunho',
+    ],
+    'first' => [
+        'max_players' => 'Máximo de jogadores',
+        'gamemode' => 'Modo de jogo',
+        'difficulty' => 'Dificuldade',
+        'gamemodes' => [
+            'survival' => 'Sobrevivência',
+            'creative' => 'Criativo',
+            'adventure' => 'Aventura',
+            'spectator' => 'Espectador',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Pacífico',
+            'easy' => 'Fácil',
+            'normal' => 'Normal',
+            'hard' => 'Difícil',
+        ],
+        'icon' => 'Ícone do servidor (opcional)',
+        'icon_help' => 'PNG, 64 × 64 pixels, até 100 KB. Enviado como server-icon.png após a instalação.',
+        'icon_invalid' => 'O ícone precisa ser um PNG 64 × 64, de até 100 KB.',
+        'number_between' => 'Digite um número entre :min e :max.',
     ],
     'review' => [
         'edit_settings' => 'Editar configurações',

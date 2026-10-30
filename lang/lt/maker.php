@@ -127,6 +127,12 @@ return [
         'subdomain_help' => 'Žaidėjai galės prisijungti naudodami šį pavadinimą. Palikite tuščią, jei nenorite subdomeno.',
     ],
     'resources' => [
+        'ram_labels' => [
+            '2' => 'Maži pasauliai',
+            '4' => 'Kasdienis žaidimas',
+            '8' => 'Su atsarga',
+            '12' => 'Didesni modpackai',
+        ],
         'help_type' => 'Pradinės reikšmės tinka šiam serverio tipui. Jei norite, pasirinkite daugiau ar mažiau.',
         'help_game' => 'Pasirinkite, ko reikia žaidimui. Vėliau galėsite pakeisti.',
         'ram' => 'RAM',
@@ -158,6 +164,27 @@ return [
         'discard' => 'Atmesti',
         'keep' => 'Palikti juodraštį',
         'delete' => 'Ištrinti juodraštį',
+    ],
+    'first' => [
+        'max_players' => 'Daugiausia žaidėjų',
+        'gamemode' => 'Žaidimo režimas',
+        'difficulty' => 'Sunkumas',
+        'gamemodes' => [
+            'survival' => 'Survival',
+            'creative' => 'Kūrybinis',
+            'adventure' => 'Nuotykių',
+            'spectator' => 'Stebėtojo',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Taiki',
+            'easy' => 'Lengva',
+            'normal' => 'Įprasta',
+            'hard' => 'Sunki',
+        ],
+        'icon' => 'Serverio piktograma (neprivaloma)',
+        'icon_help' => 'PNG, 64 × 64 pikseliai, iki 100 KB. Po diegimo įkeliama kaip server-icon.png.',
+        'icon_invalid' => 'Piktograma turi būti 64 × 64 PNG, iki 100 KB.',
+        'number_between' => 'Įveskite skaičių nuo :min iki :max.',
     ],
     'review' => [
         'edit_settings' => 'Redaguoti nustatymus',

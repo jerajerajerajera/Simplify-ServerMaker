@@ -127,6 +127,12 @@ return [
         'subdomain_help' => 'Spelare kan ansluta med det här namnet. Lämna tomt för ingen underdomän.',
     ],
     'resources' => [
+        'ram_labels' => [
+            '2' => 'Små världar',
+            '4' => 'Vardagsspel',
+            '8' => 'Mer marginal',
+            '12' => 'Större modpacks',
+        ],
         'help_type' => 'Startvärdena passar den här servertypen. Välj mer eller mindre om du vill.',
         'help_game' => 'Välj det spelet behöver. Du kan ändra det senare.',
         'ram' => 'RAM',
@@ -158,6 +164,27 @@ return [
         'discard' => 'Kasta',
         'keep' => 'Behåll utkast',
         'delete' => 'Ta bort utkast',
+    ],
+    'first' => [
+        'max_players' => 'Max antal spelare',
+        'gamemode' => 'Spelläge',
+        'difficulty' => 'Svårighetsgrad',
+        'gamemodes' => [
+            'survival' => 'Överlevnad',
+            'creative' => 'Kreativ',
+            'adventure' => 'Äventyr',
+            'spectator' => 'Åskådare',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Fridfull',
+            'easy' => 'Lätt',
+            'normal' => 'Normal',
+            'hard' => 'Svår',
+        ],
+        'icon' => 'Serverikon (valfritt)',
+        'icon_help' => 'PNG, 64 × 64 pixlar, upp till 100 KB. Laddas upp som server-icon.png efter installationen.',
+        'icon_invalid' => 'Ikonen måste vara en PNG på 64 × 64, upp till 100 KB.',
+        'number_between' => 'Ange ett tal mellan :min och :max.',
     ],
     'review' => [
         'edit_settings' => 'Redigera inställningar',

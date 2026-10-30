@@ -127,6 +127,12 @@ return [
         'subdomain_help' => 'Les joueurs peuvent se connecter avec ce nom. Laissez vide pour ne pas utiliser de sous-domaine.',
     ],
     'resources' => [
+        'ram_labels' => [
+            '2' => 'Petits mondes',
+            '4' => 'Jeu quotidien',
+            '8' => 'Plus de marge',
+            '12' => 'Gros modpacks',
+        ],
         'help_type' => 'Les valeurs de départ conviennent à ce type de serveur. Choisissez plus ou moins si vous le souhaitez.',
         'help_game' => 'Choisissez ce dont le jeu a besoin. Vous pourrez le modifier plus tard.',
         'ram' => 'RAM',
@@ -158,6 +164,27 @@ return [
         'discard' => 'Abandonner',
         'keep' => 'Garder le brouillon',
         'delete' => 'Supprimer le brouillon',
+    ],
+    'first' => [
+        'max_players' => 'Joueurs maximum',
+        'gamemode' => 'Mode de jeu',
+        'difficulty' => 'Difficulté',
+        'gamemodes' => [
+            'survival' => 'Survie',
+            'creative' => 'Créatif',
+            'adventure' => 'Aventure',
+            'spectator' => 'Spectateur',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Paisible',
+            'easy' => 'Facile',
+            'normal' => 'Normal',
+            'hard' => 'Difficile',
+        ],
+        'icon' => 'Icône du serveur (facultatif)',
+        'icon_help' => 'PNG, 64 × 64 pixels, jusqu’à 100 Ko. Envoyée comme server-icon.png après l’installation.',
+        'icon_invalid' => 'L’icône doit être un PNG de 64 × 64, jusqu’à 100 Ko.',
+        'number_between' => 'Saisissez un nombre entre :min et :max.',
     ],
     'review' => [
         'edit_settings' => 'Modifier les paramètres',

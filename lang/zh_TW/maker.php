@@ -127,6 +127,12 @@ return [
         'subdomain_help' => '玩家可以透過此名稱加入。留空則不使用子網域。',
     ],
     'resources' => [
+        'ram_labels' => [
+            '2' => '小型世界',
+            '4' => '日常遊玩',
+            '8' => '更多餘量',
+            '12' => '大型模組包',
+        ],
         'help_type' => '初始值適合此伺服器類型。你可以依需要增加或減少。',
         'help_game' => '選擇遊戲所需的資源。之後可以變更。',
         'ram' => 'RAM',
@@ -158,6 +164,27 @@ return [
         'discard' => '捨棄',
         'keep' => '保留草稿',
         'delete' => '刪除草稿',
+    ],
+    'first' => [
+        'max_players' => '最大玩家數',
+        'gamemode' => '遊戲模式',
+        'difficulty' => '難度',
+        'gamemodes' => [
+            'survival' => '生存',
+            'creative' => '創造',
+            'adventure' => '冒險',
+            'spectator' => '旁觀',
+        ],
+        'difficulties' => [
+            'peaceful' => '和平',
+            'easy' => '簡單',
+            'normal' => '普通',
+            'hard' => '困難',
+        ],
+        'icon' => '伺服器圖示（可選）',
+        'icon_help' => 'PNG，64 × 64 像素，最大 100 KB。安裝後以 server-icon.png 上傳。',
+        'icon_invalid' => '圖示必須是 64 × 64 的 PNG，最大 100 KB。',
+        'number_between' => '請輸入 :min 到 :max 之間的數字。',
     ],
     'review' => [
         'edit_settings' => '編輯設定',

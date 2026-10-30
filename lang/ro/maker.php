@@ -127,6 +127,12 @@ return [
         'subdomain_help' => 'Jucătorii se pot conecta folosind acest nume. Lasă gol pentru niciun subdomeniu.',
     ],
     'resources' => [
+        'ram_labels' => [
+            '2' => 'Lumi mici',
+            '4' => 'Joc zilnic',
+            '8' => 'Mai mult spațiu',
+            '12' => 'Modpackuri mai mari',
+        ],
         'help_type' => 'Valorile de pornire se potrivesc acestui tip de server. Alege mai mult sau mai puțin, dacă vrei.',
         'help_game' => 'Alege de ce are nevoie jocul. Poți schimba mai târziu.',
         'ram' => 'RAM',
@@ -158,6 +164,27 @@ return [
         'discard' => 'Renunță',
         'keep' => 'Păstrează ciorna',
         'delete' => 'Șterge ciorna',
+    ],
+    'first' => [
+        'max_players' => 'Număr maxim de jucători',
+        'gamemode' => 'Mod de joc',
+        'difficulty' => 'Dificultate',
+        'gamemodes' => [
+            'survival' => 'Supraviețuire',
+            'creative' => 'Creativ',
+            'adventure' => 'Aventură',
+            'spectator' => 'Spectator',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Pașnic',
+            'easy' => 'Ușor',
+            'normal' => 'Normal',
+            'hard' => 'Greu',
+        ],
+        'icon' => 'Pictograma serverului (opțional)',
+        'icon_help' => 'PNG, 64 × 64 pixeli, până la 100 KB. Încărcat ca server-icon.png după instalare.',
+        'icon_invalid' => 'Pictograma trebuie să fie un PNG de 64 × 64, până la 100 KB.',
+        'number_between' => 'Introduceți un număr între :min și :max.',
     ],
     'review' => [
         'edit_settings' => 'Editați setările',

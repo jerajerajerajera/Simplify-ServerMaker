@@ -127,6 +127,12 @@ return [
         'subdomain_help' => 'Spillere kan koble til med dette navnet. La feltet stå tomt for ingen underdomene.',
     ],
     'resources' => [
+        'ram_labels' => [
+            '2' => 'Små verdener',
+            '4' => 'Daglig spilling',
+            '8' => 'Mer slingringsmonn',
+            '12' => 'Større modpacks',
+        ],
         'help_type' => 'Startverdiene passer denne servertypen. Velg mer eller mindre om du vil.',
         'help_game' => 'Velg det spillet trenger. Du kan endre det senere.',
         'ram' => 'RAM',
@@ -158,6 +164,27 @@ return [
         'discard' => 'Forkast',
         'keep' => 'Behold utkast',
         'delete' => 'Slett utkast',
+    ],
+    'first' => [
+        'max_players' => 'Maks antall spillere',
+        'gamemode' => 'Spillmodus',
+        'difficulty' => 'Vanskelighetsgrad',
+        'gamemodes' => [
+            'survival' => 'Overlevelse',
+            'creative' => 'Kreativ',
+            'adventure' => 'Eventyr',
+            'spectator' => 'Tilskuer',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Fredelig',
+            'easy' => 'Lett',
+            'normal' => 'Normal',
+            'hard' => 'Vanskelig',
+        ],
+        'icon' => 'Serverikon (valgfritt)',
+        'icon_help' => 'PNG, 64 × 64 piksler, opptil 100 KB. Lastes opp som server-icon.png etter installasjonen.',
+        'icon_invalid' => 'Ikonet må være en PNG på 64 × 64, opptil 100 KB.',
+        'number_between' => 'Skriv inn et tall mellom :min og :max.',
     ],
     'review' => [
         'edit_settings' => 'Rediger innstillinger',

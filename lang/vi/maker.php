@@ -127,6 +127,12 @@ return [
         'subdomain_help' => 'Người chơi có thể tham gia bằng tên này. Để trống nếu không dùng tên miền phụ.',
     ],
     'resources' => [
+        'ram_labels' => [
+            '2' => 'Thế giới nhỏ',
+            '4' => 'Chơi hằng ngày',
+            '8' => 'Dư dả hơn',
+            '12' => 'Modpack lớn hơn',
+        ],
         'help_type' => 'Giá trị ban đầu phù hợp với loại máy chủ này. Chọn nhiều hơn hoặc ít hơn nếu muốn.',
         'help_game' => 'Chọn những gì trò chơi cần. Bạn có thể đổi sau.',
         'ram' => 'RAM',
@@ -158,6 +164,27 @@ return [
         'discard' => 'Bỏ',
         'keep' => 'Giữ bản nháp',
         'delete' => 'Xoá bản nháp',
+    ],
+    'first' => [
+        'max_players' => 'Số người chơi tối đa',
+        'gamemode' => 'Chế độ chơi',
+        'difficulty' => 'Độ khó',
+        'gamemodes' => [
+            'survival' => 'Sinh tồn',
+            'creative' => 'Sáng tạo',
+            'adventure' => 'Phiêu lưu',
+            'spectator' => 'Khán giả',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Hòa bình',
+            'easy' => 'Dễ',
+            'normal' => 'Thường',
+            'hard' => 'Khó',
+        ],
+        'icon' => 'Biểu tượng máy chủ (tùy chọn)',
+        'icon_help' => 'PNG, 64 × 64 điểm ảnh, tối đa 100 KB. Được tải lên thành server-icon.png sau khi cài.',
+        'icon_invalid' => 'Biểu tượng phải là PNG 64 × 64, tối đa 100 KB.',
+        'number_between' => 'Nhập số từ :min đến :max.',
     ],
     'review' => [
         'edit_settings' => 'Sửa cài đặt',

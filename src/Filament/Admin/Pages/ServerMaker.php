@@ -18,8 +18,10 @@ use Illuminate\Support\HtmlString;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Locked;
 use Simplify\ServerMaker\Access;
+use Simplify\ServerMaker\Creation\ApplyFirstSettings;
 use Simplify\ServerMaker\Creation\Creator;
 use Simplify\ServerMaker\Creation\EggData;
+use Simplify\ServerMaker\Creation\FirstSettings;
 use Simplify\ServerMaker\Creation\Payload;
 use Simplify\ServerMaker\Creation\Ports;
 use Simplify\ServerMaker\Creation\Resources;
@@ -110,6 +112,8 @@ class ServerMaker extends Page implements HasForms
             'variables' => [],
             'modpack' => null,
             'modpack_version' => null,
+            ...FirstSettings::DEFAULTS,
+            'server_icon' => null,
             'name' => '',
             'node_id' => $node,
             'allocation_id' => Ports::preferred($node),
@@ -416,6 +420,7 @@ class ServerMaker extends Page implements HasForms
         if (! $admin) {
             $state['backups'] = min(2, Access::limits()['max_backups']);
         }
+        $first = FirstSettings::from([...$this->data, ...$state]);
         $payload = Payload::build(
             $state,
             EggData::from($egg),
@@ -448,6 +453,7 @@ class ServerMaker extends Page implements HasForms
         }
 
         Subdomain::request($server, (string) ($state['subdomain'] ?? ''));
+        ApplyFirstSettings::queue($server, $first);
         Draft::query()->where('user_id', user()->id)->delete();
         Notification::make()
             ->title(__('simplify-servermaker::maker.review.created'))

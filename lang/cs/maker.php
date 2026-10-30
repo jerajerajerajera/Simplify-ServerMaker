@@ -127,6 +127,12 @@ return [
         'subdomain_help' => 'Hráči se mohou připojit pomocí tohoto názvu. Nech prázdné pro žádnou subdoménu.',
     ],
     'resources' => [
+        'ram_labels' => [
+            '2' => 'Malé světy',
+            '4' => 'Běžné hraní',
+            '8' => 'S rezervou',
+            '12' => 'Větší modpacky',
+        ],
         'help_type' => 'Výchozí hodnoty odpovídají tomuto typu serveru. Klidně vyber víc nebo méně.',
         'help_game' => 'Vyber, co hra potřebuje. Později to můžeš změnit.',
         'ram' => 'RAM',
@@ -158,6 +164,27 @@ return [
         'discard' => 'Zahodit',
         'keep' => 'Ponechat koncept',
         'delete' => 'Smazat koncept',
+    ],
+    'first' => [
+        'max_players' => 'Maximum hráčů',
+        'gamemode' => 'Herní režim',
+        'difficulty' => 'Obtížnost',
+        'gamemodes' => [
+            'survival' => 'Survival',
+            'creative' => 'Kreativní',
+            'adventure' => 'Dobrodružný',
+            'spectator' => 'Divák',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Mírumilovná',
+            'easy' => 'Lehká',
+            'normal' => 'Normální',
+            'hard' => 'Těžká',
+        ],
+        'icon' => 'Ikona serveru (volitelné)',
+        'icon_help' => 'PNG, 64 × 64 pixelů, do 100 KB. Nahraje se jako server-icon.png po instalaci.',
+        'icon_invalid' => 'Ikona musí být PNG 64 × 64, do 100 KB.',
+        'number_between' => 'Zadejte číslo mezi :min a :max.',
     ],
     'review' => [
         'edit_settings' => 'Upravit nastavení',

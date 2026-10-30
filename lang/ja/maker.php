@@ -127,6 +127,12 @@ return [
         'subdomain_help' => 'プレイヤーはこの名前で参加できます。サブドメインを使わない場合は空欄のままにしてください。',
     ],
     'resources' => [
+        'ram_labels' => [
+            '2' => '小さなワールド',
+            '4' => '普段のプレイ',
+            '8' => '余裕を持たせる',
+            '12' => '大きな Modpack',
+        ],
         'help_type' => '初期値はこのサーバータイプに合わせてあります。必要に応じて増減してください。',
         'help_game' => 'ゲームに必要な分を選んでください。後で変更できます。',
         'ram' => 'RAM',
@@ -158,6 +164,27 @@ return [
         'discard' => '破棄',
         'keep' => '下書きを残す',
         'delete' => '下書きを削除',
+    ],
+    'first' => [
+        'max_players' => '最大プレイヤー数',
+        'gamemode' => 'ゲームモード',
+        'difficulty' => '難易度',
+        'gamemodes' => [
+            'survival' => 'サバイバル',
+            'creative' => 'クリエイティブ',
+            'adventure' => 'アドベンチャー',
+            'spectator' => 'スペクテイター',
+        ],
+        'difficulties' => [
+            'peaceful' => 'ピースフル',
+            'easy' => 'イージー',
+            'normal' => 'ノーマル',
+            'hard' => 'ハード',
+        ],
+        'icon' => 'サーバーアイコン(任意)',
+        'icon_help' => 'PNG、64 × 64 ピクセル、100 KB まで。インストール後に server-icon.png としてアップロードされます。',
+        'icon_invalid' => 'アイコンは 100 KB 以下の 64 × 64 PNG にしてください。',
+        'number_between' => ':min から :max の数値を入力してください。',
     ],
     'review' => [
         'edit_settings' => '設定を編集',

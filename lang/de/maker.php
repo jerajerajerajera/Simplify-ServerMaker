@@ -127,6 +127,12 @@ return [
         'subdomain_help' => 'Spieler können über diesen Namen beitreten. Leer lassen für keine Subdomain.',
     ],
     'resources' => [
+        'ram_labels' => [
+            '2' => 'Kleine Welten',
+            '4' => 'Alltägliches Spielen',
+            '8' => 'Mehr Spielraum',
+            '12' => 'Größere Modpacks',
+        ],
         'help_type' => 'Die Startwerte passen zu diesem Servertyp. Wähle mehr oder weniger, wenn du willst.',
         'help_game' => 'Wähle, was das Spiel braucht. Du kannst es später ändern.',
         'ram' => 'RAM',
@@ -158,6 +164,27 @@ return [
         'discard' => 'Verwerfen',
         'keep' => 'Entwurf behalten',
         'delete' => 'Entwurf löschen',
+    ],
+    'first' => [
+        'max_players' => 'Maximale Spielerzahl',
+        'gamemode' => 'Spielmodus',
+        'difficulty' => 'Schwierigkeit',
+        'gamemodes' => [
+            'survival' => 'Überleben',
+            'creative' => 'Kreativ',
+            'adventure' => 'Abenteuer',
+            'spectator' => 'Zuschauer',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Friedlich',
+            'easy' => 'Einfach',
+            'normal' => 'Normal',
+            'hard' => 'Schwer',
+        ],
+        'icon' => 'Server-Icon (optional)',
+        'icon_help' => 'PNG, 64 × 64 Pixel, bis 100 KB. Wird nach der Installation als server-icon.png hochgeladen.',
+        'icon_invalid' => 'Das Icon muss ein PNG mit 64 × 64 sein, bis 100 KB.',
+        'number_between' => 'Gib eine Zahl zwischen :min und :max ein.',
     ],
     'review' => [
         'edit_settings' => 'Einstellungen bearbeiten',

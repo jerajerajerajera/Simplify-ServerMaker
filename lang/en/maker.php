@@ -127,6 +127,12 @@ return [
         'subdomain_help' => 'Players can join with this name. Leave empty for no subdomain.',
     ],
     'resources' => [
+        'ram_labels' => [
+            '2' => 'Small worlds',
+            '4' => 'Everyday play',
+            '8' => 'More headroom',
+            '12' => 'Larger modpacks',
+        ],
         'help_type' => 'The starting values suit this server type. Pick more or less if you like.',
         'help_game' => 'Pick what the game needs. You can change it later.',
         'ram' => 'RAM',
@@ -158,6 +164,27 @@ return [
         'discard' => 'Discard',
         'keep' => 'Keep draft',
         'delete' => 'Delete draft',
+    ],
+    'first' => [
+        'max_players' => 'Maximum players',
+        'gamemode' => 'Game mode',
+        'difficulty' => 'Difficulty',
+        'gamemodes' => [
+            'survival' => 'Survival',
+            'creative' => 'Creative',
+            'adventure' => 'Adventure',
+            'spectator' => 'Spectator',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Peaceful',
+            'easy' => 'Easy',
+            'normal' => 'Normal',
+            'hard' => 'Hard',
+        ],
+        'icon' => 'Server icon (optional)',
+        'icon_help' => 'PNG, 64 × 64 pixels, up to 100 KB. Uploaded as server-icon.png after installation.',
+        'icon_invalid' => 'The icon must be a 64 × 64 PNG, up to 100 KB.',
+        'number_between' => 'Enter a number between :min and :max.',
     ],
     'review' => [
         'edit_settings' => 'Edit settings',

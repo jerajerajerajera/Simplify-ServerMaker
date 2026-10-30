@@ -127,6 +127,12 @@ return [
         'subdomain_help' => '玩家可以通过此名称加入。留空则不使用子域名。',
     ],
     'resources' => [
+        'ram_labels' => [
+            '2' => '小型世界',
+            '4' => '日常游玩',
+            '8' => '更多余量',
+            '12' => '大型整合包',
+        ],
         'help_type' => '初始值适合此服务器类型。你可以按需增加或减少。',
         'help_game' => '选择游戏所需的资源。之后可以更改。',
         'ram' => 'RAM',
@@ -158,6 +164,27 @@ return [
         'discard' => '丢弃',
         'keep' => '保留草稿',
         'delete' => '删除草稿',
+    ],
+    'first' => [
+        'max_players' => '最大玩家数',
+        'gamemode' => '游戏模式',
+        'difficulty' => '难度',
+        'gamemodes' => [
+            'survival' => '生存',
+            'creative' => '创造',
+            'adventure' => '冒险',
+            'spectator' => '旁观',
+        ],
+        'difficulties' => [
+            'peaceful' => '和平',
+            'easy' => '简单',
+            'normal' => '普通',
+            'hard' => '困难',
+        ],
+        'icon' => '服务器图标（可选）',
+        'icon_help' => 'PNG，64 × 64 像素，最大 100 KB。安装后以 server-icon.png 上传。',
+        'icon_invalid' => '图标必须是 64 × 64 的 PNG，最大 100 KB。',
+        'number_between' => '请输入 :min 到 :max 之间的数字。',
     ],
     'review' => [
         'edit_settings' => '编辑设置',

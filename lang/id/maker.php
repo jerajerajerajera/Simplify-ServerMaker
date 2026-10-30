@@ -127,6 +127,12 @@ return [
         'subdomain_help' => 'Pemain bisa bergabung dengan nama ini. Biarkan kosong jika tidak ingin memakai subdomain.',
     ],
     'resources' => [
+        'ram_labels' => [
+            '2' => 'Dunia kecil',
+            '4' => 'Main sehari-hari',
+            '8' => 'Lebih longgar',
+            '12' => 'Modpack lebih besar',
+        ],
         'help_type' => 'Nilai awal cocok untuk jenis server ini. Pilih lebih banyak atau sedikit jika mau.',
         'help_game' => 'Pilih yang dibutuhkan game. Kamu bisa mengubahnya nanti.',
         'ram' => 'RAM',
@@ -158,6 +164,27 @@ return [
         'discard' => 'Buang',
         'keep' => 'Simpan draf',
         'delete' => 'Hapus draf',
+    ],
+    'first' => [
+        'max_players' => 'Pemain maksimum',
+        'gamemode' => 'Mode permainan',
+        'difficulty' => 'Tingkat kesulitan',
+        'gamemodes' => [
+            'survival' => 'Bertahan hidup',
+            'creative' => 'Kreatif',
+            'adventure' => 'Petualangan',
+            'spectator' => 'Penonton',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Damai',
+            'easy' => 'Mudah',
+            'normal' => 'Normal',
+            'hard' => 'Sulit',
+        ],
+        'icon' => 'Ikon server (opsional)',
+        'icon_help' => 'PNG, 64 × 64 piksel, hingga 100 KB. Diunggah sebagai server-icon.png setelah instalasi.',
+        'icon_invalid' => 'Ikon harus berupa PNG 64 × 64, hingga 100 KB.',
+        'number_between' => 'Masukkan angka antara :min dan :max.',
     ],
     'review' => [
         'edit_settings' => 'Ubah pengaturan',

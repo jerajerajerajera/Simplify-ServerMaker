@@ -127,6 +127,12 @@ return [
         'subdomain_help' => 'Spelers kunnen met deze naam joinen. Laat leeg voor geen subdomein.',
     ],
     'resources' => [
+        'ram_labels' => [
+            '2' => 'Kleine werelden',
+            '4' => 'Dagelijks spelen',
+            '8' => 'Meer ruimte',
+            '12' => 'Grotere modpacks',
+        ],
         'help_type' => 'De beginwaarden passen bij dit servertype. Kies gerust meer of minder.',
         'help_game' => 'Kies wat de game nodig heeft. Je kunt dit later wijzigen.',
         'ram' => 'RAM',
@@ -158,6 +164,27 @@ return [
         'discard' => 'Weggooien',
         'keep' => 'Concept houden',
         'delete' => 'Concept verwijderen',
+    ],
+    'first' => [
+        'max_players' => 'Maximaal aantal spelers',
+        'gamemode' => 'Spelmodus',
+        'difficulty' => 'Moeilijkheid',
+        'gamemodes' => [
+            'survival' => 'Survival',
+            'creative' => 'Creative',
+            'adventure' => 'Adventure',
+            'spectator' => 'Spectator',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Vreedzaam',
+            'easy' => 'Makkelijk',
+            'normal' => 'Normaal',
+            'hard' => 'Moeilijk',
+        ],
+        'icon' => 'Servericoon (optioneel)',
+        'icon_help' => 'PNG, 64 × 64 pixels, tot 100 KB. Wordt na de installatie geüpload als server-icon.png.',
+        'icon_invalid' => 'Het icoon moet een PNG van 64 × 64 zijn, tot 100 KB.',
+        'number_between' => 'Vul een getal tussen :min en :max in.',
     ],
     'review' => [
         'edit_settings' => 'Instellingen bewerken',

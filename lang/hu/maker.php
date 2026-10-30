@@ -127,6 +127,12 @@ return [
         'subdomain_help' => 'A játékosok ezzel a névvel csatlakozhatnak. Hagyd üresen, ha nem kérsz aldomaint.',
     ],
     'resources' => [
+        'ram_labels' => [
+            '2' => 'Kis világok',
+            '4' => 'Mindennapi játék',
+            '8' => 'Több tartalék',
+            '12' => 'Nagyobb modcsomagok',
+        ],
         'help_type' => 'A kezdőértékek illenek ehhez a szervertípushoz. Ha szeretnéd, válassz többet vagy kevesebbet.',
         'help_game' => 'Válaszd ki, amire a játéknak szüksége van. Később módosíthatod.',
         'ram' => 'RAM',
@@ -158,6 +164,27 @@ return [
         'discard' => 'Elvetés',
         'keep' => 'Piszkozat megtartása',
         'delete' => 'Piszkozat törlése',
+    ],
+    'first' => [
+        'max_players' => 'Játékosok maximális száma',
+        'gamemode' => 'Játékmód',
+        'difficulty' => 'Nehézség',
+        'gamemodes' => [
+            'survival' => 'Túlélő',
+            'creative' => 'Kreatív',
+            'adventure' => 'Kaland',
+            'spectator' => 'Szemlélő',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Békés',
+            'easy' => 'Könnyű',
+            'normal' => 'Normál',
+            'hard' => 'Nehéz',
+        ],
+        'icon' => 'Szerverikon (opcionális)',
+        'icon_help' => 'PNG, 64 × 64 pixel, legfeljebb 100 KB. Telepítés után server-icon.png néven töltődik fel.',
+        'icon_invalid' => 'Az ikonnak 64 × 64-es PNG-nek kell lennie, legfeljebb 100 KB.',
+        'number_between' => 'Adj meg egy számot :min és :max között.',
     ],
     'review' => [
         'edit_settings' => 'Beállítások szerkesztése',

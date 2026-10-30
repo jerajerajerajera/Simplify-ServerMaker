@@ -127,6 +127,12 @@ return [
         'subdomain_help' => 'Gracze mogą dołączyć, używając tej nazwy. Zostaw puste, aby nie używać subdomeny.',
     ],
     'resources' => [
+        'ram_labels' => [
+            '2' => 'Małe światy',
+            '4' => 'Codzienna gra',
+            '8' => 'Więcej zapasu',
+            '12' => 'Większe modpacki',
+        ],
         'help_type' => 'Wartości początkowe pasują do tego typu serwera. Jeśli chcesz, wybierz więcej lub mniej.',
         'help_game' => 'Wybierz, czego potrzebuje gra. Możesz to później zmienić.',
         'ram' => 'RAM',
@@ -158,6 +164,27 @@ return [
         'discard' => 'Odrzuć',
         'keep' => 'Zachowaj szkic',
         'delete' => 'Usuń szkic',
+    ],
+    'first' => [
+        'max_players' => 'Maksymalna liczba graczy',
+        'gamemode' => 'Tryb gry',
+        'difficulty' => 'Poziom trudności',
+        'gamemodes' => [
+            'survival' => 'Przetrwanie',
+            'creative' => 'Kreatywny',
+            'adventure' => 'Przygoda',
+            'spectator' => 'Obserwator',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Pokojowy',
+            'easy' => 'Łatwy',
+            'normal' => 'Normalny',
+            'hard' => 'Trudny',
+        ],
+        'icon' => 'Ikona serwera (opcjonalnie)',
+        'icon_help' => 'PNG, 64 × 64 piksele, do 100 KB. Przesyłana jako server-icon.png po instalacji.',
+        'icon_invalid' => 'Ikona musi być plikiem PNG 64 × 64, do 100 KB.',
+        'number_between' => 'Wpisz liczbę od :min do :max.',
     ],
     'review' => [
         'edit_settings' => 'Edytuj ustawienia',

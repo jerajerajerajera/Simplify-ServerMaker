@@ -127,6 +127,12 @@ return [
         'subdomain_help' => 'Spillere kan forbinde med dette navn. Lad feltet være tomt for intet underdomæne.',
     ],
     'resources' => [
+        'ram_labels' => [
+            '2' => 'Små verdener',
+            '4' => 'Daglig brug',
+            '8' => 'Mere luft',
+            '12' => 'Større modpacks',
+        ],
         'help_type' => 'Startværdierne passer til denne servertype. Vælg mere eller mindre, hvis du vil.',
         'help_game' => 'Vælg det, spillet har brug for. Du kan ændre det senere.',
         'ram' => 'RAM',
@@ -158,6 +164,27 @@ return [
         'discard' => 'Kassér',
         'keep' => 'Behold kladde',
         'delete' => 'Slet kladde',
+    ],
+    'first' => [
+        'max_players' => 'Maksimalt antal spillere',
+        'gamemode' => 'Spiltilstand',
+        'difficulty' => 'Sværhedsgrad',
+        'gamemodes' => [
+            'survival' => 'Overlevelse',
+            'creative' => 'Kreativ',
+            'adventure' => 'Eventyr',
+            'spectator' => 'Tilskuer',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Fredelig',
+            'easy' => 'Let',
+            'normal' => 'Normal',
+            'hard' => 'Svær',
+        ],
+        'icon' => 'Serverikon (valgfrit)',
+        'icon_help' => 'PNG, 64 × 64 pixels, op til 100 KB. Uploades som server-icon.png efter installationen.',
+        'icon_invalid' => 'Ikonet skal være en 64 × 64 PNG på op til 100 KB.',
+        'number_between' => 'Indtast et tal mellem :min og :max.',
     ],
     'review' => [
         'edit_settings' => 'Rediger indstillinger',
