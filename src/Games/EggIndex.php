@@ -120,6 +120,16 @@ final class EggIndex
         }
     }
 
+    /**
+     * Whether a download is exactly the egg the index was built from.
+     *
+     * @param  array<string, mixed>  $game
+     */
+    public static function matches(array $game, string $content): bool
+    {
+        return filled($game['sha256'] ?? null) && hash_equals((string) $game['sha256'], hash('sha256', $content));
+    }
+
     /** @param  array<string, mixed>  $game */
     private static function import(array $game): Egg
     {
@@ -132,7 +142,7 @@ final class EggIndex
             throw new RuntimeException('Unknown egg source.');
         }
         $content = Http::timeout(20)->connectTimeout(5)->get((string) $game['url'])->throw()->body();
-        if (! hash_equals((string) $game['sha256'], hash('sha256', $content))) {
+        if (! self::matches($game, $content)) {
             throw new RuntimeException('The download does not match the egg index checksum.');
         }
 
