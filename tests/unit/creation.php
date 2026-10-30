@@ -56,9 +56,11 @@ check('another game uses its own image', $payload['image'] === 'ghcr.io/parkervc
 check('users cannot set a hidden variable', failsOn(fn () => Payload::build([...$game, 'variables' => ['SRCDS_APPID' => '1']], $valheim, $resources, 3, 1, 9, null, false)) === 'data.variables');
 check('admins can set every variable', Payload::build([...$game, 'variables' => ['SRCDS_APPID' => '1']], $valheim, $resources, 3, 1, 9, null, true)['environment']['SRCDS_APPID'] === '1');
 check('a toggle becomes 1 or 0', Payload::gameEnvironment(['SERVER_NAME' => true], $valheim, false)['SERVER_NAME'] === '1');
-$first = FirstSettings::from(['game' => 'minecraft', 'type' => 'plugins', 'version' => '1.21.1', 'max_players' => '12', 'gamemode' => 'creative', 'difficulty' => 'hard']);
-check('players, game mode and difficulty go to server.properties', $first === ['properties' => ['max-players' => '12', 'gamemode' => 'creative', 'difficulty' => 'hard']]);
-check('old releases get numbers', FirstSettings::from(['game' => 'minecraft', 'type' => 'vanilla', 'version' => '1.12.2', 'gamemode' => 'creative', 'difficulty' => 'hard'])['properties']['gamemode'] === '1');
+$first = FirstSettings::from(['game' => 'minecraft', 'type' => 'plugins', 'version' => '1.21.1', 'max_players' => '12', 'gamemode' => 'creative', 'difficulty' => 'hard', 'eula' => true]);
+check('players, game mode and difficulty go to server.properties', $first === ['properties' => ['max-players' => '12', 'gamemode' => 'creative', 'difficulty' => 'hard'], 'eula' => true]);
+check('Java needs the EULA ticked', failsOn(fn () => FirstSettings::from(['game' => 'minecraft', 'type' => 'plugins'])) === 'data.eula');
+check('Bedrock has no EULA box', ! array_key_exists('eula', FirstSettings::from(['game' => 'minecraft', 'type' => 'bedrock'])));
+check('old releases get numbers', FirstSettings::from(['game' => 'minecraft', 'type' => 'vanilla', 'version' => '1.12.2', 'gamemode' => 'creative', 'difficulty' => 'hard', 'eula' => true])['properties']['gamemode'] === '1');
 check('a proxy and other games get nothing', FirstSettings::from(['game' => 'minecraft', 'type' => 'proxy']) === [] && FirstSettings::from(['game' => 'other']) === []);
 check('too many players is refused', failsOn(fn () => FirstSettings::from(['game' => 'minecraft', 'type' => 'vanilla', 'max_players' => 5000])) === 'data.max_players');
 check('a strange game mode is refused', failsOn(fn () => FirstSettings::from(['game' => 'minecraft', 'type' => 'vanilla', 'gamemode' => 'god'])) === 'data.gamemode');

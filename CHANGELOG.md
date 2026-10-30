@@ -2,8 +2,9 @@
 
 ## 1.3.2
 
-- The Review step says again, as in Simplify 0.7.0, that a Minecraft Java server needs the Minecraft EULA accepted
-  before it can start, with a link to the official EULA (minecraft.net/eula). You accept it yourself on the server page.
+- Minecraft Java servers ask for the Minecraft EULA on the Review step: a box you tick yourself, with a link to the
+  official EULA (minecraft.net/eula). It is required, so Create server waits for it, and eula.txt is written as soon
+  as the installation is done, so the server starts right away.
 
 ## 1.3.1
 

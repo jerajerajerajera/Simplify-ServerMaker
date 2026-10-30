@@ -114,6 +114,7 @@ class ServerMaker extends Page implements HasForms
             'modpack_version' => null,
             ...FirstSettings::DEFAULTS,
             'server_icon' => null,
+            'eula' => false,
             'name' => '',
             'node_id' => $node,
             'allocation_id' => Ports::preferred($node),
@@ -183,7 +184,7 @@ class ServerMaker extends Page implements HasForms
         abort_unless(static::canAccess(), 403);
         Draft::query()->updateOrCreate(
             ['user_id' => (int) user()->id],
-            ['data' => Draft::clean($this->data ?? []), 'step' => min(5, $step + 1)],
+            ['data' => [...Draft::clean($this->data ?? []), 'eula' => false], 'step' => min(5, $step + 1)],
         );
         $this->hasDraft = true;
     }

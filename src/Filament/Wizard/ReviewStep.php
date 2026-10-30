@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Simplify\ServerMaker\Filament\Wizard;
 
 use App\Models\Egg;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -13,6 +14,8 @@ use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\View;
 use Filament\Schemas\Components\Wizard\Step;
+use Illuminate\Support\HtmlString;
+use Simplify\ServerMaker\Creation\FirstSettings;
 use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
 use Simplify\ServerMaker\Games\Java;
 
@@ -28,6 +31,13 @@ final class ReviewStep
             ->schema([
                 View::make('simplify-servermaker::wizard.review')
                     ->viewData(fn () => ['rows' => Summary::rows($page)]),
+                // Required and never ticked for the user: accepting the EULA is their own choice.
+                Checkbox::make('eula')
+                    ->label($t('first.eula'))
+                    ->helperText(new HtmlString(e($t('first.eula_help')).' <a href="https://www.minecraft.net/eula" target="_blank" rel="noopener noreferrer" class="smk-link">'.e($t('first.eula_read')).'</a>'))
+                    ->accepted()
+                    ->validationMessages(['accepted' => $t('first.eula_required')])
+                    ->visible(fn () => FirstSettings::needsEula($page->data['game'] ?? null, $page->data['type'] ?? null)),
                 // Hidden with CSS, not removed, so the fields keep their values while closed.
                 View::make('simplify-servermaker::wizard.advanced')
                     ->visible(fn () => $page->isAdmin())

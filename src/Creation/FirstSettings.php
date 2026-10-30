@@ -10,7 +10,7 @@ use Simplify\ServerMaker\Games\Minecraft;
 
 /**
  * What a new Minecraft server gets once it is installed (as in Simplify 0.7.0): players, game mode and difficulty in
- * server.properties, and a server icon for Java. Pure, apart from reading the uploaded icon.
+ * server.properties, and for Java a server icon and the accepted EULA. Pure, apart from reading the uploaded icon.
  */
 final class FirstSettings
 {
@@ -32,11 +32,17 @@ final class FirstSettings
         return self::hasProperties($game, $type) && $type !== 'bedrock';
     }
 
+    /** Minecraft Java only starts once its EULA is accepted; the user ticks that box on the Review step. */
+    public static function needsEula(?string $game, ?string $type): bool
+    {
+        return self::hasIcon($game, $type);
+    }
+
     /**
      * The settings to apply after the installation, or [] when there is nothing to apply.
      *
      * @param  array<string, mixed>  $state
-     * @return array{properties?: array<string, string>, icon?: string}
+     * @return array{properties?: array<string, string>, icon?: string, eula?: bool}
      */
     public static function from(array $state): array
     {
@@ -60,9 +66,15 @@ final class FirstSettings
             $gamemode = (string) array_search($gamemode, self::GAMEMODES, true);
             $difficulty = (string) array_search($difficulty, self::DIFFICULTIES, true);
         }
+        if (self::needsEula($game, $type) && ! filter_var($state['eula'] ?? false, FILTER_VALIDATE_BOOL)) {
+            self::fail('eula', __('simplify-servermaker::maker.first.eula_required'));
+        }
         $settings = ['properties' => ['max-players' => (string) $players, 'gamemode' => $gamemode, 'difficulty' => $difficulty]];
         if (self::hasIcon($game, $type) && ($icon = self::icon($state['server_icon'] ?? null)) !== null) {
             $settings['icon'] = $icon;
+        }
+        if (self::needsEula($game, $type)) {
+            $settings['eula'] = true;
         }
 
         return $settings;

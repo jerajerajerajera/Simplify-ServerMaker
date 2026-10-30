@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Simplify\ServerMaker\Filament\Wizard;
 
 use App\Models\Allocation;
-use Illuminate\Support\HtmlString;
 use Simplify\ServerMaker\Creation\EggData;
 use Simplify\ServerMaker\Creation\FirstSettings;
 use Simplify\ServerMaker\Creation\Resources;
@@ -18,7 +17,7 @@ use Simplify\ServerMaker\Modpacks\Sources;
 /** The rows of the Review step. */
 final class Summary
 {
-    /** @return array<string, string|HtmlString> label => value */
+    /** @return array<string, string> label => value */
     public static function rows(ServerMaker $page): array
     {
         $t = fn (string $key, array $replace = []) => __('simplify-servermaker::maker.'.$key, $replace);
@@ -60,10 +59,7 @@ final class Summary
         $rows[$t('resources.cpu')] = Resources::amount($data, 'cpu').'%';
         $rows[$t('resources.disk')] = $t('resources.gb', ['amount' => Resources::gb(Resources::amount($data, 'disk'))]);
         $rows[$t('review.egg')] = (string) ($egg?->name ?? '—');
-        // Minecraft Java needs its EULA accepted once; that happens with Accept and start on the server page.
-        $rows[$t('review.start')] = $minecraft && FirstSettings::hasIcon('minecraft', $type)
-            ? new HtmlString(e($t('review.start_eula')).' · <a href="https://www.minecraft.net/eula" target="_blank" rel="noopener noreferrer">'.e($t('review.read_eula')).'</a>')
-            : $t('review.start_manual');
+        $rows[$t('review.start')] = $t('review.start_manual');
 
         return $rows;
     }
