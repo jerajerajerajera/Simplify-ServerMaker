@@ -333,6 +333,7 @@ step('a user makes a server within their allowance, in the normal panel', functi
         ->set('data.name', 'smoke-user')
         ->set('data.node_id', $node->id)
         ->set('data.allocation_id', Ports::first($node->id))
+        ->set('data.eula', true)
         ->set('data.ram', 'custom')
         ->set('data.ram_custom', 16)
         ->call('create')
@@ -352,6 +353,7 @@ step('a user without servers left is stopped', function () use ($user, $node) {
         ->set('data.node_id', $node->id)
         ->set('data.allocation_id', Ports::first($node->id))
         ->set('data.ram', '4')
+        ->set('data.eula', true)
         ->call('create')
         ->assertHasErrors(['data.name']);
 });
@@ -409,6 +411,7 @@ step('with Simplify Subdomains a server gets a subdomain on a forwarded port', f
         ->assertSet('data.subdomain', 'oak-survival')
         ->set('data.subdomain', 'taken')
         ->set('data.node_id', $node->id)
+        ->set('data.eula', true)
         ->call('create')
         ->assertHasErrors(['data.subdomain']);
 });
