@@ -58,7 +58,7 @@ check('admins can set every variable', Payload::build([...$game, 'variables' => 
 check('a toggle becomes 1 or 0', Payload::gameEnvironment(['SERVER_NAME' => true], $valheim, false)['SERVER_NAME'] === '1');
 $first = FirstSettings::from(['game' => 'minecraft', 'type' => 'plugins', 'version' => '1.21.1', 'max_players' => '12', 'gamemode' => 'creative', 'difficulty' => 'hard', 'eula' => true]);
 check('players, game mode and difficulty go to server.properties', $first === ['properties' => ['max-players' => '12', 'gamemode' => 'creative', 'difficulty' => 'hard'], 'eula' => true]);
-check('Java needs the EULA ticked', failsOn(fn () => FirstSettings::from(['game' => 'minecraft', 'type' => 'plugins'])) === 'data.eula');
+check('the EULA is optional when the server is made', ! array_key_exists('eula', FirstSettings::from(['game' => 'minecraft', 'type' => 'plugins'])));
 check('Bedrock has no EULA box', ! array_key_exists('eula', FirstSettings::from(['game' => 'minecraft', 'type' => 'bedrock'])));
 check('old releases get numbers', FirstSettings::from(['game' => 'minecraft', 'type' => 'vanilla', 'version' => '1.12.2', 'gamemode' => 'creative', 'difficulty' => 'hard', 'eula' => true])['properties']['gamemode'] === '1');
 check('a proxy and other games get nothing', FirstSettings::from(['game' => 'minecraft', 'type' => 'proxy']) === [] && FirstSettings::from(['game' => 'other']) === []);

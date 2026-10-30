@@ -180,9 +180,8 @@ return [
         'icon_invalid' => 'Kuvakkeen on oltava 64 × 64 PNG, enintään 100 kt.',
         'number_between' => 'Anna luku väliltä :min–:max.',
         'eula' => 'Hyväksyn Minecraftin käyttöoikeussopimuksen (EULA)',
-        'eula_help' => 'Pakollinen: Minecraft-palvelin käynnistyy vasta, kun EULA on hyväksytty. Valinta kirjoittaa eula=true puolestasi.',
+        'eula_help' => 'Minecraft-palvelin käynnistyy vasta, kun EULA on hyväksytty. Valitse nyt, niin se käynnistyy heti, tai jätä tyhjäksi: palvelin asennetaan ja kysyy EULAa käynnistettäessä.',
         'eula_read' => 'Lue Minecraftin EULA',
-        'eula_required' => 'Hyväksy Minecraftin EULA luodaksesi tämän palvelimen.',
     ],
     'review' => [
         'edit_settings' => 'Muokkaa asetuksia',

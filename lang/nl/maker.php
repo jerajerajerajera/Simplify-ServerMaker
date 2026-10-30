@@ -180,9 +180,8 @@ return [
         'icon_invalid' => 'Het icoon moet een PNG van 64 × 64 zijn, tot 100 KB.',
         'number_between' => 'Vul een getal tussen :min en :max in.',
         'eula' => 'Ik ga akkoord met de Minecraft-eindgebruikersovereenkomst (EULA)',
-        'eula_help' => 'Verplicht: een Minecraft-server start pas als de EULA is geaccepteerd. Met dit vinkje wordt eula=true voor je ingesteld.',
+        'eula_help' => 'Een Minecraft-server start pas als de EULA is geaccepteerd. Vink het nu aan en hij start meteen, of laat het leeg: de server installeert alvast en vraagt om de EULA als je hem start.',
         'eula_read' => 'Lees de Minecraft-EULA',
-        'eula_required' => 'Accepteer de Minecraft-EULA om deze server te maken.',
     ],
     'review' => [
         'edit_settings' => 'Instellingen bewerken',

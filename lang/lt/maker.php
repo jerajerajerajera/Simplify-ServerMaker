@@ -180,9 +180,8 @@ return [
         'icon_invalid' => 'Piktograma turi būti 64 × 64 PNG, iki 100 KB.',
         'number_between' => 'Įveskite skaičių nuo :min iki :max.',
         'eula' => 'Sutinku su Minecraft galutinio naudotojo licencijos sutartimi (EULA)',
-        'eula_help' => 'Privaloma: Minecraft serveris pasileidžia tik priėmus EULA. Pažymėjus šį langelį, už jus įrašoma eula=true.',
+        'eula_help' => 'Minecraft serveris pasileidžia tik priėmus EULA. Pažymėkite dabar ir jis pasileis iškart, arba palikite tuščią: serveris įsidiegs ir paprašys EULA paleidžiant.',
         'eula_read' => 'Skaityti Minecraft EULA',
-        'eula_required' => 'Kad sukurtumėte šį serverį, priimkite Minecraft EULA.',
     ],
     'review' => [
         'edit_settings' => 'Redaguoti nustatymus',

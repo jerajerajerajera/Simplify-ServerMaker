@@ -180,9 +180,8 @@ return [
         'icon_invalid' => 'Ikonet skal være en 64 × 64 PNG på op til 100 KB.',
         'number_between' => 'Indtast et tal mellem :min og :max.',
         'eula' => 'Jeg accepterer Minecrafts slutbrugerlicensaftale (EULA)',
-        'eula_help' => 'Påkrævet: en Minecraft-server starter først, når EULA\'en er accepteret. Afkrydsningen skriver eula=true for dig.',
+        'eula_help' => 'En Minecraft-server starter først, når EULA\'en er accepteret. Sæt kryds nu, så starter den med det samme, eller lad være: serveren installeres og beder om EULA\'en, når du starter den.',
         'eula_read' => 'Læs Minecrafts EULA',
-        'eula_required' => 'Accepter Minecrafts EULA for at oprette denne server.',
     ],
     'review' => [
         'edit_settings' => 'Rediger indstillinger',

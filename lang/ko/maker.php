@@ -180,9 +180,8 @@ return [
         'icon_invalid' => '아이콘은 100 KB 이하의 64 × 64 PNG여야 합니다.',
         'number_between' => ':min 에서 :max 사이의 숫자를 입력하세요.',
         'eula' => 'Minecraft 최종 사용자 사용권 계약(EULA)에 동의합니다',
-        'eula_help' => '필수: Minecraft 서버는 EULA에 동의해야 시작됩니다. 체크하면 eula=true가 자동으로 기록됩니다.',
+        'eula_help' => 'Minecraft 서버는 EULA에 동의해야 시작됩니다. 지금 체크하면 바로 시작되고, 비워 두면 서버가 설치된 뒤 시작할 때 EULA를 묻습니다.',
         'eula_read' => 'Minecraft EULA 읽기',
-        'eula_required' => '이 서버를 만들려면 Minecraft EULA에 동의하세요.',
     ],
     'review' => [
         'edit_settings' => '설정 편집',

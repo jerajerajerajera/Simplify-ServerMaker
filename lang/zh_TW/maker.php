@@ -180,9 +180,8 @@ return [
         'icon_invalid' => '圖示必須是 64 × 64 的 PNG，最大 100 KB。',
         'number_between' => '請輸入 :min 到 :max 之間的數字。',
         'eula' => '我接受 Minecraft 終端使用者授權合約（EULA）',
-        'eula_help' => '必填：Minecraft 伺服器只有在接受 EULA 後才能啟動。勾選後會自動寫入 eula=true。',
+        'eula_help' => 'Minecraft 伺服器只有在接受 EULA 後才能啟動。現在勾選即可直接啟動；不勾選也會先安裝伺服器，啟動時再詢問 EULA。',
         'eula_read' => '閱讀 Minecraft EULA',
-        'eula_required' => '請接受 Minecraft EULA 以建立此伺服器。',
     ],
     'review' => [
         'edit_settings' => '編輯設定',

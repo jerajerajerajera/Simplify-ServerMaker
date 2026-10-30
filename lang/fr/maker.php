@@ -180,9 +180,8 @@ return [
         'icon_invalid' => 'L’icône doit être un PNG de 64 × 64, jusqu’à 100 Ko.',
         'number_between' => 'Saisissez un nombre entre :min et :max.',
         'eula' => 'J’accepte le contrat de licence utilisateur final de Minecraft (EULA)',
-        'eula_help' => 'Obligatoire : un serveur Minecraft ne démarre qu’une fois l’EULA acceptée. Cocher cette case écrit eula=true pour vous.',
+        'eula_help' => 'Un serveur Minecraft ne démarre qu’une fois l’EULA acceptée. Cochez maintenant et il démarre tout de suite, ou laissez vide : le serveur s’installe et demandera l’EULA au démarrage.',
         'eula_read' => 'Lire l’EULA de Minecraft',
-        'eula_required' => 'Acceptez l’EULA de Minecraft pour créer ce serveur.',
     ],
     'review' => [
         'edit_settings' => 'Modifier les paramètres',

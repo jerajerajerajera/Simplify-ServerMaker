@@ -32,7 +32,7 @@ final class FirstSettings
         return self::hasProperties($game, $type) && $type !== 'bedrock';
     }
 
-    /** Minecraft Java only starts once its EULA is accepted; the user ticks that box on the Review step. */
+    /** Minecraft Java only starts once its EULA is accepted; the user may tick that box on the Review step already. */
     public static function needsEula(?string $game, ?string $type): bool
     {
         return self::hasIcon($game, $type);
@@ -66,14 +66,12 @@ final class FirstSettings
             $gamemode = (string) array_search($gamemode, self::GAMEMODES, true);
             $difficulty = (string) array_search($difficulty, self::DIFFICULTIES, true);
         }
-        if (self::needsEula($game, $type) && ! filter_var($state['eula'] ?? false, FILTER_VALIDATE_BOOL)) {
-            self::fail('eula', __('simplify-servermaker::maker.first.eula_required'));
-        }
         $settings = ['properties' => ['max-players' => (string) $players, 'gamemode' => $gamemode, 'difficulty' => $difficulty]];
         if (self::hasIcon($game, $type) && ($icon = self::icon($state['server_icon'] ?? null)) !== null) {
             $settings['icon'] = $icon;
         }
-        if (self::needsEula($game, $type)) {
+        // Optional: without the tick the server is made and installed, and asks for the EULA when it is started.
+        if (self::needsEula($game, $type) && filter_var($state['eula'] ?? false, FILTER_VALIDATE_BOOL)) {
             $settings['eula'] = true;
         }
 
