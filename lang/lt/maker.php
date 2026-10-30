@@ -127,12 +127,6 @@ return [
         'subdomain_help' => 'Žaidėjai galės prisijungti naudodami šį pavadinimą. Palikite tuščią, jei nenorite subdomeno.',
     ],
     'resources' => [
-        'ram_labels' => [
-            '2' => 'Maži pasauliai',
-            '4' => 'Kasdienis žaidimas',
-            '8' => 'Su atsarga',
-            '12' => 'Didesni modpackai',
-        ],
         'help_type' => 'Pradinės reikšmės tinka šiam serverio tipui. Jei norite, pasirinkite daugiau ar mažiau.',
         'help_game' => 'Pasirinkite, ko reikia žaidimui. Vėliau galėsite pakeisti.',
         'ram' => 'RAM',

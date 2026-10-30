@@ -127,12 +127,6 @@ return [
         'subdomain_help' => 'Spillere kan koble til med dette navnet. La feltet stå tomt for ingen underdomene.',
     ],
     'resources' => [
-        'ram_labels' => [
-            '2' => 'Små verdener',
-            '4' => 'Daglig spilling',
-            '8' => 'Mer slingringsmonn',
-            '12' => 'Større modpacks',
-        ],
         'help_type' => 'Startverdiene passer denne servertypen. Velg mer eller mindre om du vil.',
         'help_game' => 'Velg det spillet trenger. Du kan endre det senere.',
         'ram' => 'RAM',

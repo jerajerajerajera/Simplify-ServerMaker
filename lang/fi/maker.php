@@ -127,12 +127,6 @@ return [
         'subdomain_help' => 'Pelaajat voivat liittyä tällä nimellä. Jätä tyhjäksi, jos et halua aliverkkotunnusta.',
     ],
     'resources' => [
-        'ram_labels' => [
-            '2' => 'Pienet maailmat',
-            '4' => 'Arkipelaaminen',
-            '8' => 'Enemmän varaa',
-            '12' => 'Isommat modipaketit',
-        ],
         'help_type' => 'Alkuarvot sopivat tälle palvelintyypille. Valitse halutessasi enemmän tai vähemmän.',
         'help_game' => 'Valitse, mitä peli tarvitsee. Voit muuttaa sitä myöhemmin.',
         'ram' => 'RAM',

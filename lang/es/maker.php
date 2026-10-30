@@ -127,12 +127,6 @@ return [
         'subdomain_help' => 'Los jugadores pueden unirse con este nombre. Déjalo vacío para no usar subdominio.',
     ],
     'resources' => [
-        'ram_labels' => [
-            '2' => 'Mundos pequeños',
-            '4' => 'Juego diario',
-            '8' => 'Más margen',
-            '12' => 'Modpacks grandes',
-        ],
         'help_type' => 'Los valores iniciales se ajustan a este tipo de servidor. Elige más o menos si quieres.',
         'help_game' => 'Elige lo que necesita el juego. Puedes cambiarlo después.',
         'ram' => 'RAM',

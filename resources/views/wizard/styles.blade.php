@@ -124,10 +124,6 @@
     .smk .smk-amounts { display: grid; grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); gap: 8px; }
     .smk .smk-amount { position: relative; gap: 8px; height: 44px; padding: 0 12px; border-radius: var(--smk-radius); }
     .smk .smk-amount strong { overflow: hidden; font-size: 14px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; font-variant-numeric: tabular-nums; }
-    .smk .smk-amount-text { display: grid; gap: 1px; min-width: 0; }
-    .smk .smk-amount-text small { overflow: hidden; color: var(--smk-muted); font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
-    .smk .smk-amounts:has(small) { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
-    .smk .smk-amounts:has(small) .smk-amount { height: 56px; }
     .smk .smk-amount-icon { flex: none; width: 16px; height: 16px; color: var(--smk-muted); }
     .smk .smk-amount.is-picked .smk-amount-icon, .smk .smk-amount:has(input:checked) .smk-amount-icon { color: var(--smk-accent); }
 
@@ -211,7 +207,6 @@
         .smk .smk-minecraft-type { min-height: 0; }
         .smk .smk-types, .smk .smk-cards, .smk .smk-review { grid-template-columns: minmax(0, 1fr); }
         .smk .smk-amounts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-        .smk .smk-amounts:has(small) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .smk .smk-steps { flex: 1 1 auto; padding: 0; overflow: visible; }
         .smk .smk-steps > .smk-step { display: none; }
         .smk .smk-steps-phone { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; width: 100%; height: 100%; min-width: 0; padding: 0 4px; border-radius: var(--smk-radius); }

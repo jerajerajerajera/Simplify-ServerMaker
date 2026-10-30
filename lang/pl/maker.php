@@ -127,12 +127,6 @@ return [
         'subdomain_help' => 'Gracze mogą dołączyć, używając tej nazwy. Zostaw puste, aby nie używać subdomeny.',
     ],
     'resources' => [
-        'ram_labels' => [
-            '2' => 'Małe światy',
-            '4' => 'Codzienna gra',
-            '8' => 'Więcej zapasu',
-            '12' => 'Większe modpacki',
-        ],
         'help_type' => 'Wartości początkowe pasują do tego typu serwera. Jeśli chcesz, wybierz więcej lub mniej.',
         'help_game' => 'Wybierz, czego potrzebuje gra. Możesz to później zmienić.',
         'ram' => 'RAM',

@@ -30,7 +30,7 @@ final class ResourcesStep
             $fields[] = Radio::make($resource)
                 ->label($t('resources.'.$resource))
                 ->view('simplify-servermaker::wizard.resources')
-                ->viewData(['resource' => $resource, 'hints' => $resource === 'ram' ? __('simplify-servermaker::maker.resources.ram_labels') : []])
+                ->viewData(['resource' => $resource])
                 ->options(function (Get $get) use ($resource, $start, $t): array {
                     $limit = Access::resourceLimits()[$resource] ?? null;
                     $options = [];

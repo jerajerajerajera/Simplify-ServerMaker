@@ -127,12 +127,6 @@ return [
         'subdomain_help' => 'Spelare kan ansluta med det här namnet. Lämna tomt för ingen underdomän.',
     ],
     'resources' => [
-        'ram_labels' => [
-            '2' => 'Små världar',
-            '4' => 'Vardagsspel',
-            '8' => 'Mer marginal',
-            '12' => 'Större modpacks',
-        ],
         'help_type' => 'Startvärdena passar den här servertypen. Välj mer eller mindre om du vill.',
         'help_game' => 'Välj det spelet behöver. Du kan ändra det senare.',
         'ram' => 'RAM',

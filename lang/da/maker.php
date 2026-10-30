@@ -127,12 +127,6 @@ return [
         'subdomain_help' => 'Spillere kan forbinde med dette navn. Lad feltet være tomt for intet underdomæne.',
     ],
     'resources' => [
-        'ram_labels' => [
-            '2' => 'Små verdener',
-            '4' => 'Daglig brug',
-            '8' => 'Mere luft',
-            '12' => 'Større modpacks',
-        ],
         'help_type' => 'Startværdierne passer til denne servertype. Vælg mere eller mindre, hvis du vil.',
         'help_game' => 'Vælg det, spillet har brug for. Du kan ændre det senere.',
         'ram' => 'RAM',

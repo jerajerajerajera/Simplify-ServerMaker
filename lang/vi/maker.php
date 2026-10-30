@@ -127,12 +127,6 @@ return [
         'subdomain_help' => 'Người chơi có thể tham gia bằng tên này. Để trống nếu không dùng tên miền phụ.',
     ],
     'resources' => [
-        'ram_labels' => [
-            '2' => 'Thế giới nhỏ',
-            '4' => 'Chơi hằng ngày',
-            '8' => 'Dư dả hơn',
-            '12' => 'Modpack lớn hơn',
-        ],
         'help_type' => 'Giá trị ban đầu phù hợp với loại máy chủ này. Chọn nhiều hơn hoặc ít hơn nếu muốn.',
         'help_game' => 'Chọn những gì trò chơi cần. Bạn có thể đổi sau.',
         'ram' => 'RAM',

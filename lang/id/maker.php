@@ -127,12 +127,6 @@ return [
         'subdomain_help' => 'Pemain bisa bergabung dengan nama ini. Biarkan kosong jika tidak ingin memakai subdomain.',
     ],
     'resources' => [
-        'ram_labels' => [
-            '2' => 'Dunia kecil',
-            '4' => 'Main sehari-hari',
-            '8' => 'Lebih longgar',
-            '12' => 'Modpack lebih besar',
-        ],
         'help_type' => 'Nilai awal cocok untuk jenis server ini. Pilih lebih banyak atau sedikit jika mau.',
         'help_game' => 'Pilih yang dibutuhkan game. Kamu bisa mengubahnya nanti.',
         'ram' => 'RAM',

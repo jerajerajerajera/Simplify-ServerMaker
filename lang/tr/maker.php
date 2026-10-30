@@ -127,12 +127,6 @@ return [
         'subdomain_help' => 'Oyuncular bu adla bağlanabilir. Alt alan adı istemiyorsanız boş bırakın.',
     ],
     'resources' => [
-        'ram_labels' => [
-            '2' => 'Küçük dünyalar',
-            '4' => 'Günlük oyun',
-            '8' => 'Daha fazla pay',
-            '12' => 'Daha büyük mod paketleri',
-        ],
         'help_type' => 'Başlangıç değerleri bu sunucu türüne uygundur. İsterseniz daha fazla veya daha az seçin.',
         'help_game' => 'Oyunun ihtiyacını seçin. Daha sonra değiştirebilirsiniz.',
         'ram' => 'RAM',

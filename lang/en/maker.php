@@ -127,12 +127,6 @@ return [
         'subdomain_help' => 'Players can join with this name. Leave empty for no subdomain.',
     ],
     'resources' => [
-        'ram_labels' => [
-            '2' => 'Small worlds',
-            '4' => 'Everyday play',
-            '8' => 'More headroom',
-            '12' => 'Larger modpacks',
-        ],
         'help_type' => 'The starting values suit this server type. Pick more or less if you like.',
         'help_game' => 'Pick what the game needs. You can change it later.',
         'ram' => 'RAM',

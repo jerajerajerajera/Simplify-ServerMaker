@@ -127,12 +127,6 @@ return [
         'subdomain_help' => 'A játékosok ezzel a névvel csatlakozhatnak. Hagyd üresen, ha nem kérsz aldomaint.',
     ],
     'resources' => [
-        'ram_labels' => [
-            '2' => 'Kis világok',
-            '4' => 'Mindennapi játék',
-            '8' => 'Több tartalék',
-            '12' => 'Nagyobb modcsomagok',
-        ],
         'help_type' => 'A kezdőértékek illenek ehhez a szervertípushoz. Ha szeretnéd, válassz többet vagy kevesebbet.',
         'help_game' => 'Válaszd ki, amire a játéknak szüksége van. Később módosíthatod.',
         'ram' => 'RAM',

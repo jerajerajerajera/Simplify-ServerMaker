@@ -127,12 +127,6 @@ return [
         'subdomain_help' => 'Spelers kunnen met deze naam joinen. Laat leeg voor geen subdomein.',
     ],
     'resources' => [
-        'ram_labels' => [
-            '2' => 'Kleine werelden',
-            '4' => 'Dagelijks spelen',
-            '8' => 'Meer ruimte',
-            '12' => 'Grotere modpacks',
-        ],
         'help_type' => 'De beginwaarden passen bij dit servertype. Kies gerust meer of minder.',
         'help_game' => 'Kies wat de game nodig heeft. Je kunt dit later wijzigen.',
         'ram' => 'RAM',

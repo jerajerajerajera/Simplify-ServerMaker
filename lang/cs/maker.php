@@ -127,12 +127,6 @@ return [
         'subdomain_help' => 'Hráči se mohou připojit pomocí tohoto názvu. Nech prázdné pro žádnou subdoménu.',
     ],
     'resources' => [
-        'ram_labels' => [
-            '2' => 'Malé světy',
-            '4' => 'Běžné hraní',
-            '8' => 'S rezervou',
-            '12' => 'Větší modpacky',
-        ],
         'help_type' => 'Výchozí hodnoty odpovídají tomuto typu serveru. Klidně vyber víc nebo méně.',
         'help_game' => 'Vyber, co hra potřebuje. Později to můžeš změnit.',
         'ram' => 'RAM',

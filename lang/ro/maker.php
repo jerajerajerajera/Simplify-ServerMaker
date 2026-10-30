@@ -127,12 +127,6 @@ return [
         'subdomain_help' => 'Jucătorii se pot conecta folosind acest nume. Lasă gol pentru niciun subdomeniu.',
     ],
     'resources' => [
-        'ram_labels' => [
-            '2' => 'Lumi mici',
-            '4' => 'Joc zilnic',
-            '8' => 'Mai mult spațiu',
-            '12' => 'Modpackuri mai mari',
-        ],
         'help_type' => 'Valorile de pornire se potrivesc acestui tip de server. Alege mai mult sau mai puțin, dacă vrei.',
         'help_game' => 'Alege de ce are nevoie jocul. Poți schimba mai târziu.',
         'ram' => 'RAM',
