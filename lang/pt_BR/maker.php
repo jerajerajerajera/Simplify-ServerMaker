@@ -159,6 +159,27 @@ return [
         'keep' => 'Manter rascunho',
         'delete' => 'Excluir rascunho',
     ],
+    'first' => [
+        'max_players' => 'Máximo de jogadores',
+        'gamemode' => 'Modo de jogo',
+        'difficulty' => 'Dificuldade',
+        'gamemodes' => [
+            'survival' => 'Sobrevivência',
+            'creative' => 'Criativo',
+            'adventure' => 'Aventura',
+            'spectator' => 'Espectador',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Pacífico',
+            'easy' => 'Fácil',
+            'normal' => 'Normal',
+            'hard' => 'Difícil',
+        ],
+        'icon' => 'Ícone do servidor (opcional)',
+        'icon_help' => 'PNG, 64 × 64 pixels, até 100 KB. Enviado como server-icon.png após a instalação.',
+        'icon_invalid' => 'O ícone precisa ser um PNG 64 × 64, de até 100 KB.',
+        'number_between' => 'Digite um número entre :min e :max.',
+    ],
     'review' => [
         'edit_settings' => 'Editar configurações',
         'done_editing' => 'Concluir edição',

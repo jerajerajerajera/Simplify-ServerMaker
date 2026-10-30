@@ -159,6 +159,27 @@ return [
         'keep' => 'Garder le brouillon',
         'delete' => 'Supprimer le brouillon',
     ],
+    'first' => [
+        'max_players' => 'Joueurs maximum',
+        'gamemode' => 'Mode de jeu',
+        'difficulty' => 'Difficulté',
+        'gamemodes' => [
+            'survival' => 'Survie',
+            'creative' => 'Créatif',
+            'adventure' => 'Aventure',
+            'spectator' => 'Spectateur',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Paisible',
+            'easy' => 'Facile',
+            'normal' => 'Normal',
+            'hard' => 'Difficile',
+        ],
+        'icon' => 'Icône du serveur (facultatif)',
+        'icon_help' => 'PNG, 64 × 64 pixels, jusqu’à 100 Ko. Envoyée comme server-icon.png après l’installation.',
+        'icon_invalid' => 'L’icône doit être un PNG de 64 × 64, jusqu’à 100 Ko.',
+        'number_between' => 'Saisissez un nombre entre :min et :max.',
+    ],
     'review' => [
         'edit_settings' => 'Modifier les paramètres',
         'done_editing' => 'Modification terminée',

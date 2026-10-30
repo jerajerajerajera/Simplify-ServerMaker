@@ -159,6 +159,27 @@ return [
         'keep' => 'Ponechať koncept',
         'delete' => 'Zmazať koncept',
     ],
+    'first' => [
+        'max_players' => 'Maximum hráčov',
+        'gamemode' => 'Herný režim',
+        'difficulty' => 'Obtiažnosť',
+        'gamemodes' => [
+            'survival' => 'Survival',
+            'creative' => 'Kreatívny',
+            'adventure' => 'Dobrodružný',
+            'spectator' => 'Divák',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Mierumilovná',
+            'easy' => 'Ľahká',
+            'normal' => 'Normálna',
+            'hard' => 'Ťažká',
+        ],
+        'icon' => 'Ikona servera (voliteľné)',
+        'icon_help' => 'PNG, 64 × 64 pixelov, do 100 KB. Nahrá sa ako server-icon.png po inštalácii.',
+        'icon_invalid' => 'Ikona musí byť PNG 64 × 64, do 100 KB.',
+        'number_between' => 'Zadajte číslo medzi :min a :max.',
+    ],
     'review' => [
         'edit_settings' => 'Upraviť nastavenia',
         'done_editing' => 'Hotovo',

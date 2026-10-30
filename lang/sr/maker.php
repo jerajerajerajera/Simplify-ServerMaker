@@ -159,6 +159,27 @@ return [
         'keep' => 'Задржи нацрт',
         'delete' => 'Обриши нацрт',
     ],
+    'first' => [
+        'max_players' => 'Највише играча',
+        'gamemode' => 'Режим игре',
+        'difficulty' => 'Тежина',
+        'gamemodes' => [
+            'survival' => 'Преживљавање',
+            'creative' => 'Креативни',
+            'adventure' => 'Авантура',
+            'spectator' => 'Посматрач',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Мирно',
+            'easy' => 'Лако',
+            'normal' => 'Нормално',
+            'hard' => 'Тешко',
+        ],
+        'icon' => 'Икона сервера (опционо)',
+        'icon_help' => 'PNG, 64 × 64 пиксела, до 100 KB. Отпрема се као server-icon.png после инсталације.',
+        'icon_invalid' => 'Икона мора бити PNG 64 × 64, до 100 KB.',
+        'number_between' => 'Унесите број између :min и :max.',
+    ],
     'review' => [
         'edit_settings' => 'Измени подешавања',
         'done_editing' => 'Готово',

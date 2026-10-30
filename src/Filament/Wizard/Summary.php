@@ -6,6 +6,7 @@ namespace Simplify\ServerMaker\Filament\Wizard;
 
 use App\Models\Allocation;
 use Simplify\ServerMaker\Creation\EggData;
+use Simplify\ServerMaker\Creation\FirstSettings;
 use Simplify\ServerMaker\Creation\Resources;
 use Simplify\ServerMaker\Creation\Subdomain;
 use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
@@ -39,6 +40,11 @@ final class Summary
             }
             if (($java = $page->java()) !== null) {
                 $rows[$t('review.java')] = 'Java '.$java;
+            }
+            if (FirstSettings::hasProperties('minecraft', $type)) {
+                $rows[$t('first.max_players')] = (string) ($data['max_players'] ?? FirstSettings::DEFAULTS['max_players']);
+                $rows[$t('first.gamemode')] = $t('first.gamemodes.'.($data['gamemode'] ?? FirstSettings::DEFAULTS['gamemode']));
+                $rows[$t('first.difficulty')] = $t('first.difficulties.'.($data['difficulty'] ?? FirstSettings::DEFAULTS['difficulty']));
             }
         } else {
             $rows[$t('review.game')] = (string) ($egg?->name ?? '—');

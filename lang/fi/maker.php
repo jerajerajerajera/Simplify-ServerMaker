@@ -159,6 +159,27 @@ return [
         'keep' => 'Säilytä luonnos',
         'delete' => 'Poista luonnos',
     ],
+    'first' => [
+        'max_players' => 'Pelaajia enintään',
+        'gamemode' => 'Pelitila',
+        'difficulty' => 'Vaikeustaso',
+        'gamemodes' => [
+            'survival' => 'Selviytyminen',
+            'creative' => 'Luova',
+            'adventure' => 'Seikkailu',
+            'spectator' => 'Katsoja',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Rauhallinen',
+            'easy' => 'Helppo',
+            'normal' => 'Normaali',
+            'hard' => 'Vaikea',
+        ],
+        'icon' => 'Palvelinkuvake (valinnainen)',
+        'icon_help' => 'PNG, 64 × 64 pikseliä, enintään 100 kt. Lähetetään asennuksen jälkeen nimellä server-icon.png.',
+        'icon_invalid' => 'Kuvakkeen on oltava 64 × 64 PNG, enintään 100 kt.',
+        'number_between' => 'Anna luku väliltä :min–:max.',
+    ],
     'review' => [
         'edit_settings' => 'Muokkaa asetuksia',
         'done_editing' => 'Muokkaus valmis',

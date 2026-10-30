@@ -159,6 +159,27 @@ return [
         'keep' => '초안 유지',
         'delete' => '초안 삭제',
     ],
+    'first' => [
+        'max_players' => '최대 플레이어 수',
+        'gamemode' => '게임 모드',
+        'difficulty' => '난이도',
+        'gamemodes' => [
+            'survival' => '서바이벌',
+            'creative' => '크리에이티브',
+            'adventure' => '모험',
+            'spectator' => '관전',
+        ],
+        'difficulties' => [
+            'peaceful' => '평화로움',
+            'easy' => '쉬움',
+            'normal' => '보통',
+            'hard' => '어려움',
+        ],
+        'icon' => '서버 아이콘(선택)',
+        'icon_help' => 'PNG, 64 × 64 픽셀, 최대 100 KB. 설치 후 server-icon.png로 업로드됩니다.',
+        'icon_invalid' => '아이콘은 100 KB 이하의 64 × 64 PNG여야 합니다.',
+        'number_between' => ':min 에서 :max 사이의 숫자를 입력하세요.',
+    ],
     'review' => [
         'edit_settings' => '설정 편집',
         'done_editing' => '편집 완료',

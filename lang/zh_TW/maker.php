@@ -159,6 +159,27 @@ return [
         'keep' => '保留草稿',
         'delete' => '刪除草稿',
     ],
+    'first' => [
+        'max_players' => '最大玩家數',
+        'gamemode' => '遊戲模式',
+        'difficulty' => '難度',
+        'gamemodes' => [
+            'survival' => '生存',
+            'creative' => '創造',
+            'adventure' => '冒險',
+            'spectator' => '旁觀',
+        ],
+        'difficulties' => [
+            'peaceful' => '和平',
+            'easy' => '簡單',
+            'normal' => '普通',
+            'hard' => '困難',
+        ],
+        'icon' => '伺服器圖示（可選）',
+        'icon_help' => 'PNG，64 × 64 像素，最大 100 KB。安裝後以 server-icon.png 上傳。',
+        'icon_invalid' => '圖示必須是 64 × 64 的 PNG，最大 100 KB。',
+        'number_between' => '請輸入 :min 到 :max 之間的數字。',
+    ],
     'review' => [
         'edit_settings' => '編輯設定',
         'done_editing' => '完成編輯',

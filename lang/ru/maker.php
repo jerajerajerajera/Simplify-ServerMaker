@@ -159,6 +159,27 @@ return [
         'keep' => 'Оставить черновик',
         'delete' => 'Удалить черновик',
     ],
+    'first' => [
+        'max_players' => 'Максимум игроков',
+        'gamemode' => 'Режим игры',
+        'difficulty' => 'Сложность',
+        'gamemodes' => [
+            'survival' => 'Выживание',
+            'creative' => 'Творческий',
+            'adventure' => 'Приключение',
+            'spectator' => 'Наблюдатель',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Мирная',
+            'easy' => 'Лёгкая',
+            'normal' => 'Нормальная',
+            'hard' => 'Сложная',
+        ],
+        'icon' => 'Иконка сервера (необязательно)',
+        'icon_help' => 'PNG, 64 × 64 пикселя, до 100 КБ. Загружается как server-icon.png после установки.',
+        'icon_invalid' => 'Иконка должна быть PNG 64 × 64, до 100 КБ.',
+        'number_between' => 'Введите число от :min до :max.',
+    ],
     'review' => [
         'edit_settings' => 'Изменить настройки',
         'done_editing' => 'Готово',

@@ -159,6 +159,27 @@ return [
         'keep' => '下書きを残す',
         'delete' => '下書きを削除',
     ],
+    'first' => [
+        'max_players' => '最大プレイヤー数',
+        'gamemode' => 'ゲームモード',
+        'difficulty' => '難易度',
+        'gamemodes' => [
+            'survival' => 'サバイバル',
+            'creative' => 'クリエイティブ',
+            'adventure' => 'アドベンチャー',
+            'spectator' => 'スペクテイター',
+        ],
+        'difficulties' => [
+            'peaceful' => 'ピースフル',
+            'easy' => 'イージー',
+            'normal' => 'ノーマル',
+            'hard' => 'ハード',
+        ],
+        'icon' => 'サーバーアイコン(任意)',
+        'icon_help' => 'PNG、64 × 64 ピクセル、100 KB まで。インストール後に server-icon.png としてアップロードされます。',
+        'icon_invalid' => 'アイコンは 100 KB 以下の 64 × 64 PNG にしてください。',
+        'number_between' => ':min から :max の数値を入力してください。',
+    ],
     'review' => [
         'edit_settings' => '設定を編集',
         'done_editing' => '編集完了',

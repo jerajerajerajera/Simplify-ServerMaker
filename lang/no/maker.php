@@ -159,6 +159,27 @@ return [
         'keep' => 'Behold utkast',
         'delete' => 'Slett utkast',
     ],
+    'first' => [
+        'max_players' => 'Maks antall spillere',
+        'gamemode' => 'Spillmodus',
+        'difficulty' => 'Vanskelighetsgrad',
+        'gamemodes' => [
+            'survival' => 'Overlevelse',
+            'creative' => 'Kreativ',
+            'adventure' => 'Eventyr',
+            'spectator' => 'Tilskuer',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Fredelig',
+            'easy' => 'Lett',
+            'normal' => 'Normal',
+            'hard' => 'Vanskelig',
+        ],
+        'icon' => 'Serverikon (valgfritt)',
+        'icon_help' => 'PNG, 64 × 64 piksler, opptil 100 KB. Lastes opp som server-icon.png etter installasjonen.',
+        'icon_invalid' => 'Ikonet må være en PNG på 64 × 64, opptil 100 KB.',
+        'number_between' => 'Skriv inn et tall mellom :min og :max.',
+    ],
     'review' => [
         'edit_settings' => 'Rediger innstillinger',
         'done_editing' => 'Ferdig med å redigere',

@@ -7,6 +7,7 @@ declare(strict_types=1);
 require __DIR__.'/../bootstrap.php';
 
 use Simplify\ServerMaker\Creation\EggData;
+use Simplify\ServerMaker\Creation\FirstSettings;
 use Simplify\ServerMaker\Creation\Payload;
 use Simplify\ServerMaker\Creation\Resources;
 
@@ -55,4 +56,13 @@ check('another game uses its own image', $payload['image'] === 'ghcr.io/parkervc
 check('users cannot set a hidden variable', failsOn(fn () => Payload::build([...$game, 'variables' => ['SRCDS_APPID' => '1']], $valheim, $resources, 3, 1, 9, null, false)) === 'data.variables');
 check('admins can set every variable', Payload::build([...$game, 'variables' => ['SRCDS_APPID' => '1']], $valheim, $resources, 3, 1, 9, null, true)['environment']['SRCDS_APPID'] === '1');
 check('a toggle becomes 1 or 0', Payload::gameEnvironment(['SERVER_NAME' => true], $valheim, false)['SERVER_NAME'] === '1');
+$first = FirstSettings::from(['game' => 'minecraft', 'type' => 'plugins', 'version' => '1.21.1', 'max_players' => '12', 'gamemode' => 'creative', 'difficulty' => 'hard']);
+check('players, game mode and difficulty go to server.properties', $first === ['properties' => ['max-players' => '12', 'gamemode' => 'creative', 'difficulty' => 'hard']]);
+check('old releases get numbers', FirstSettings::from(['game' => 'minecraft', 'type' => 'vanilla', 'version' => '1.12.2', 'gamemode' => 'creative', 'difficulty' => 'hard'])['properties']['gamemode'] === '1');
+check('a proxy and other games get nothing', FirstSettings::from(['game' => 'minecraft', 'type' => 'proxy']) === [] && FirstSettings::from(['game' => 'other']) === []);
+check('too many players is refused', failsOn(fn () => FirstSettings::from(['game' => 'minecraft', 'type' => 'vanilla', 'max_players' => 5000])) === 'data.max_players');
+check('a strange game mode is refused', failsOn(fn () => FirstSettings::from(['game' => 'minecraft', 'type' => 'vanilla', 'gamemode' => 'god'])) === 'data.gamemode');
+$properties = "#Minecraft server properties\nmotd=Hello\nmax-players=20\ngamemode=survival\n";
+check('only the chosen keys change', FirstSettings::merge($properties, ['max-players' => '8', 'difficulty' => 'hard']) === "#Minecraft server properties\nmotd=Hello\nmax-players=8\ngamemode=survival\ndifficulty=hard\n");
+check('an empty file gets the keys', FirstSettings::merge('', ['max-players' => '8']) === "max-players=8\n");
 echo "PASS creation\n";

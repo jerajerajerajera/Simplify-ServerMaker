@@ -159,6 +159,27 @@ return [
         'keep' => 'الاحتفاظ بالمسودة',
         'delete' => 'حذف المسودة',
     ],
+    'first' => [
+        'max_players' => 'الحد الأقصى للاعبين',
+        'gamemode' => 'وضع اللعب',
+        'difficulty' => 'الصعوبة',
+        'gamemodes' => [
+            'survival' => 'البقاء',
+            'creative' => 'الإبداع',
+            'adventure' => 'المغامرة',
+            'spectator' => 'المشاهدة',
+        ],
+        'difficulties' => [
+            'peaceful' => 'سلمي',
+            'easy' => 'سهل',
+            'normal' => 'عادي',
+            'hard' => 'صعب',
+        ],
+        'icon' => 'أيقونة الخادم (اختياري)',
+        'icon_help' => 'PNG، ‏64 × 64 بكسل، حتى 100 KB. تُرفع باسم server-icon.png بعد التثبيت.',
+        'icon_invalid' => 'يجب أن تكون الأيقونة PNG بحجم 64 × 64، حتى 100 KB.',
+        'number_between' => 'أدخل رقمًا بين :min و:max.',
+    ],
     'review' => [
         'edit_settings' => 'تعديل الإعدادات',
         'done_editing' => 'انتهيت من التعديل',

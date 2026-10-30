@@ -159,6 +159,27 @@ return [
         'keep' => 'Пакінуць чарнавік',
         'delete' => 'Выдаліць чарнавік',
     ],
+    'first' => [
+        'max_players' => 'Максімум гульцоў',
+        'gamemode' => 'Рэжым гульні',
+        'difficulty' => 'Складанасць',
+        'gamemodes' => [
+            'survival' => 'Выжыванне',
+            'creative' => 'Творчы',
+            'adventure' => 'Прыгоды',
+            'spectator' => 'Назіральнік',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Мірная',
+            'easy' => 'Лёгкая',
+            'normal' => 'Звычайная',
+            'hard' => 'Складаная',
+        ],
+        'icon' => 'Значок сервера (неабавязкова)',
+        'icon_help' => 'PNG, 64 × 64 пікселі, да 100 КБ. Загружаецца як server-icon.png пасля ўсталявання.',
+        'icon_invalid' => 'Значок павінен быць PNG 64 × 64, да 100 КБ.',
+        'number_between' => 'Увядзіце лік ад :min да :max.',
+    ],
     'review' => [
         'edit_settings' => 'Змяніць налады',
         'done_editing' => 'Гатова',

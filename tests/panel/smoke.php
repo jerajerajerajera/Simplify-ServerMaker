@@ -130,7 +130,14 @@ step('a Minecraft server goes through every step and imports its egg', function 
     }
     $test->set('data.name', 'smoke-oak')->set('data.node_id', $node->id)
         ->set('data.allocation_id', Ports::first($node->id))
-        ->call('create');
+        ->assertSet('data.max_players', 20)
+        ->assertSee('Game mode');
+    // Players, game mode and difficulty are checked before the server is made.
+    $test->set('data.max_players', 5000)->call('create');
+    if (! array_key_exists('data.max_players', $test->errors()->toArray()) || Server::query()->where('name', 'smoke-oak')->exists()) {
+        throw new RuntimeException('too many players was accepted');
+    }
+    $test->set('data.max_players', 12)->set('data.gamemode', 'creative')->call('create');
     $server = Server::query()->where('name', 'smoke-oak')->first();
     // Without Wings Pelican removes the server again after the daemon call fails; reaching that call is enough.
     $errors = $test->errors()->toArray();

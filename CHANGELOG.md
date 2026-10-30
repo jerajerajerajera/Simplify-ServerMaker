@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.0
+
+- Minecraft servers get their first settings in the Server Maker again, as in Simplify 0.7.0: maximum players, game
+  mode and difficulty, and for Java a server icon (a 64 × 64 PNG). They are written to server.properties and
+  server-icon.png as soon as the installation is done, and shown on the Review step.
+
 ## 1.2.0
 
 - The Server Maker looks and works like it did in Simplify 0.7.0 again:

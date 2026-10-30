@@ -159,6 +159,27 @@ return [
         'keep' => 'Залишити чернетку',
         'delete' => 'Видалити чернетку',
     ],
+    'first' => [
+        'max_players' => 'Максимум гравців',
+        'gamemode' => 'Режим гри',
+        'difficulty' => 'Складність',
+        'gamemodes' => [
+            'survival' => 'Виживання',
+            'creative' => 'Творчий',
+            'adventure' => 'Пригоди',
+            'spectator' => 'Спостерігач',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Мирна',
+            'easy' => 'Легка',
+            'normal' => 'Нормальна',
+            'hard' => 'Складна',
+        ],
+        'icon' => 'Іконка сервера (необов\'язково)',
+        'icon_help' => 'PNG, 64 × 64 пікселі, до 100 КБ. Завантажується як server-icon.png після встановлення.',
+        'icon_invalid' => 'Іконка має бути PNG 64 × 64, до 100 КБ.',
+        'number_between' => 'Введіть число від :min до :max.',
+    ],
     'review' => [
         'edit_settings' => 'Змінити налаштування',
         'done_editing' => 'Готово',

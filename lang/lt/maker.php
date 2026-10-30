@@ -159,6 +159,27 @@ return [
         'keep' => 'Palikti juodraštį',
         'delete' => 'Ištrinti juodraštį',
     ],
+    'first' => [
+        'max_players' => 'Daugiausia žaidėjų',
+        'gamemode' => 'Žaidimo režimas',
+        'difficulty' => 'Sunkumas',
+        'gamemodes' => [
+            'survival' => 'Survival',
+            'creative' => 'Kūrybinis',
+            'adventure' => 'Nuotykių',
+            'spectator' => 'Stebėtojo',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Taiki',
+            'easy' => 'Lengva',
+            'normal' => 'Įprasta',
+            'hard' => 'Sunki',
+        ],
+        'icon' => 'Serverio piktograma (neprivaloma)',
+        'icon_help' => 'PNG, 64 × 64 pikseliai, iki 100 KB. Po diegimo įkeliama kaip server-icon.png.',
+        'icon_invalid' => 'Piktograma turi būti 64 × 64 PNG, iki 100 KB.',
+        'number_between' => 'Įveskite skaičių nuo :min iki :max.',
+    ],
     'review' => [
         'edit_settings' => 'Redaguoti nustatymus',
         'done_editing' => 'Baigti redaguoti',

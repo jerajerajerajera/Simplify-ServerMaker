@@ -159,6 +159,27 @@ return [
         'keep' => 'Behold kladde',
         'delete' => 'Slet kladde',
     ],
+    'first' => [
+        'max_players' => 'Maksimalt antal spillere',
+        'gamemode' => 'Spiltilstand',
+        'difficulty' => 'Sværhedsgrad',
+        'gamemodes' => [
+            'survival' => 'Overlevelse',
+            'creative' => 'Kreativ',
+            'adventure' => 'Eventyr',
+            'spectator' => 'Tilskuer',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Fredelig',
+            'easy' => 'Let',
+            'normal' => 'Normal',
+            'hard' => 'Svær',
+        ],
+        'icon' => 'Serverikon (valgfrit)',
+        'icon_help' => 'PNG, 64 × 64 pixels, op til 100 KB. Uploades som server-icon.png efter installationen.',
+        'icon_invalid' => 'Ikonet skal være en 64 × 64 PNG på op til 100 KB.',
+        'number_between' => 'Indtast et tal mellem :min og :max.',
+    ],
     'review' => [
         'edit_settings' => 'Rediger indstillinger',
         'done_editing' => 'Færdig med at redigere',

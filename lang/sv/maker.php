@@ -159,6 +159,27 @@ return [
         'keep' => 'Behåll utkast',
         'delete' => 'Ta bort utkast',
     ],
+    'first' => [
+        'max_players' => 'Max antal spelare',
+        'gamemode' => 'Spelläge',
+        'difficulty' => 'Svårighetsgrad',
+        'gamemodes' => [
+            'survival' => 'Överlevnad',
+            'creative' => 'Kreativ',
+            'adventure' => 'Äventyr',
+            'spectator' => 'Åskådare',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Fridfull',
+            'easy' => 'Lätt',
+            'normal' => 'Normal',
+            'hard' => 'Svår',
+        ],
+        'icon' => 'Serverikon (valfritt)',
+        'icon_help' => 'PNG, 64 × 64 pixlar, upp till 100 KB. Laddas upp som server-icon.png efter installationen.',
+        'icon_invalid' => 'Ikonen måste vara en PNG på 64 × 64, upp till 100 KB.',
+        'number_between' => 'Ange ett tal mellan :min och :max.',
+    ],
     'review' => [
         'edit_settings' => 'Redigera inställningar',
         'done_editing' => 'Klar med redigeringen',

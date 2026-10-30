@@ -159,6 +159,27 @@ return [
         'keep' => 'Simpan draf',
         'delete' => 'Hapus draf',
     ],
+    'first' => [
+        'max_players' => 'Pemain maksimum',
+        'gamemode' => 'Mode permainan',
+        'difficulty' => 'Tingkat kesulitan',
+        'gamemodes' => [
+            'survival' => 'Bertahan hidup',
+            'creative' => 'Kreatif',
+            'adventure' => 'Petualangan',
+            'spectator' => 'Penonton',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Damai',
+            'easy' => 'Mudah',
+            'normal' => 'Normal',
+            'hard' => 'Sulit',
+        ],
+        'icon' => 'Ikon server (opsional)',
+        'icon_help' => 'PNG, 64 × 64 piksel, hingga 100 KB. Diunggah sebagai server-icon.png setelah instalasi.',
+        'icon_invalid' => 'Ikon harus berupa PNG 64 × 64, hingga 100 KB.',
+        'number_between' => 'Masukkan angka antara :min dan :max.',
+    ],
     'review' => [
         'edit_settings' => 'Ubah pengaturan',
         'done_editing' => 'Selesai mengubah',

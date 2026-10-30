@@ -159,6 +159,27 @@ return [
         'keep' => 'Giữ bản nháp',
         'delete' => 'Xoá bản nháp',
     ],
+    'first' => [
+        'max_players' => 'Số người chơi tối đa',
+        'gamemode' => 'Chế độ chơi',
+        'difficulty' => 'Độ khó',
+        'gamemodes' => [
+            'survival' => 'Sinh tồn',
+            'creative' => 'Sáng tạo',
+            'adventure' => 'Phiêu lưu',
+            'spectator' => 'Khán giả',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Hòa bình',
+            'easy' => 'Dễ',
+            'normal' => 'Thường',
+            'hard' => 'Khó',
+        ],
+        'icon' => 'Biểu tượng máy chủ (tùy chọn)',
+        'icon_help' => 'PNG, 64 × 64 điểm ảnh, tối đa 100 KB. Được tải lên thành server-icon.png sau khi cài.',
+        'icon_invalid' => 'Biểu tượng phải là PNG 64 × 64, tối đa 100 KB.',
+        'number_between' => 'Nhập số từ :min đến :max.',
+    ],
     'review' => [
         'edit_settings' => 'Sửa cài đặt',
         'done_editing' => 'Xong',

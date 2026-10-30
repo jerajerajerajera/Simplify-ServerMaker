@@ -159,6 +159,27 @@ return [
         'keep' => 'Păstrează ciorna',
         'delete' => 'Șterge ciorna',
     ],
+    'first' => [
+        'max_players' => 'Număr maxim de jucători',
+        'gamemode' => 'Mod de joc',
+        'difficulty' => 'Dificultate',
+        'gamemodes' => [
+            'survival' => 'Supraviețuire',
+            'creative' => 'Creativ',
+            'adventure' => 'Aventură',
+            'spectator' => 'Spectator',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Pașnic',
+            'easy' => 'Ușor',
+            'normal' => 'Normal',
+            'hard' => 'Greu',
+        ],
+        'icon' => 'Pictograma serverului (opțional)',
+        'icon_help' => 'PNG, 64 × 64 pixeli, până la 100 KB. Încărcat ca server-icon.png după instalare.',
+        'icon_invalid' => 'Pictograma trebuie să fie un PNG de 64 × 64, până la 100 KB.',
+        'number_between' => 'Introduceți un număr între :min și :max.',
+    ],
     'review' => [
         'edit_settings' => 'Editați setările',
         'done_editing' => 'Gata cu editarea',

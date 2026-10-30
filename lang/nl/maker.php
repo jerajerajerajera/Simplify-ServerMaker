@@ -159,6 +159,27 @@ return [
         'keep' => 'Concept houden',
         'delete' => 'Concept verwijderen',
     ],
+    'first' => [
+        'max_players' => 'Maximaal aantal spelers',
+        'gamemode' => 'Spelmodus',
+        'difficulty' => 'Moeilijkheid',
+        'gamemodes' => [
+            'survival' => 'Survival',
+            'creative' => 'Creative',
+            'adventure' => 'Adventure',
+            'spectator' => 'Spectator',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Vreedzaam',
+            'easy' => 'Makkelijk',
+            'normal' => 'Normaal',
+            'hard' => 'Moeilijk',
+        ],
+        'icon' => 'Servericoon (optioneel)',
+        'icon_help' => 'PNG, 64 × 64 pixels, tot 100 KB. Wordt na de installatie geüpload als server-icon.png.',
+        'icon_invalid' => 'Het icoon moet een PNG van 64 × 64 zijn, tot 100 KB.',
+        'number_between' => 'Vul een getal tussen :min en :max in.',
+    ],
     'review' => [
         'edit_settings' => 'Instellingen bewerken',
         'done_editing' => 'Klaar met bewerken',

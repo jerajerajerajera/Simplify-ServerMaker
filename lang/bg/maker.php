@@ -159,6 +159,27 @@ return [
         'keep' => 'Запази черновата',
         'delete' => 'Изтрий черновата',
     ],
+    'first' => [
+        'max_players' => 'Максимум играчи',
+        'gamemode' => 'Режим на игра',
+        'difficulty' => 'Трудност',
+        'gamemodes' => [
+            'survival' => 'Оцеляване',
+            'creative' => 'Творчески',
+            'adventure' => 'Приключение',
+            'spectator' => 'Наблюдател',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Мирно',
+            'easy' => 'Лесно',
+            'normal' => 'Нормално',
+            'hard' => 'Трудно',
+        ],
+        'icon' => 'Икона на сървъра (по избор)',
+        'icon_help' => 'PNG, 64 × 64 пиксела, до 100 KB. Качва се като server-icon.png след инсталирането.',
+        'icon_invalid' => 'Иконата трябва да е PNG 64 × 64, до 100 KB.',
+        'number_between' => 'Въведете число между :min и :max.',
+    ],
     'review' => [
         'edit_settings' => 'Редактирай настройките',
         'done_editing' => 'Готово',

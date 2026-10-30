@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Simplify\ServerMaker\Filament\Wizard;
 
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -15,6 +16,7 @@ use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Components\View;
 use Filament\Schemas\Components\Wizard\Step;
+use Simplify\ServerMaker\Creation\FirstSettings;
 use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
 use Simplify\ServerMaker\Games\Minecraft;
 use Simplify\ServerMaker\Games\MinecraftVersions;
@@ -88,6 +90,40 @@ final class SetupStep
                             ->visible(fn (Get $get) => $get('type') === 'bedrock'),
                         Text::make($t('minecraft.proxy_help'))
                             ->visible(fn (Get $get) => $get('type') === 'proxy'),
+                        // Written to server.properties once the installation is done.
+                        Grid::make(['default' => 1, 'md' => 3])
+                            ->visible(fn (Get $get) => FirstSettings::hasProperties($get('game'), $get('type')))
+                            ->schema([
+                                TextInput::make('max_players')
+                                    ->label($t('first.max_players'))
+                                    ->integer()
+                                    ->minValue(1)
+                                    ->maxValue(1000)
+                                    ->required(fn (Get $get) => FirstSettings::hasProperties($get('game'), $get('type'))),
+                                Select::make('gamemode')
+                                    ->label($t('first.gamemode'))
+                                    ->options(array_combine(FirstSettings::GAMEMODES, array_map(fn ($mode) => $t('first.gamemodes.'.$mode), FirstSettings::GAMEMODES)))
+                                    ->native(false)
+                                    ->selectablePlaceholder(false)
+                                    ->required(fn (Get $get) => FirstSettings::hasProperties($get('game'), $get('type'))),
+                                Select::make('difficulty')
+                                    ->label($t('first.difficulty'))
+                                    ->options(array_combine(FirstSettings::DIFFICULTIES, array_map(fn ($level) => $t('first.difficulties.'.$level), FirstSettings::DIFFICULTIES)))
+                                    ->native(false)
+                                    ->selectablePlaceholder(false)
+                                    ->required(fn (Get $get) => FirstSettings::hasProperties($get('game'), $get('type'))),
+                            ]),
+                        FileUpload::make('server_icon')
+                            ->label($t('first.icon'))
+                            ->helperText($t('first.icon_help'))
+                            ->visible(fn (Get $get) => FirstSettings::hasIcon($get('game'), $get('type')))
+                            ->image()
+                            ->acceptedFileTypes(['image/png'])
+                            ->maxSize(100)
+                            ->imageResizeMode('cover')
+                            ->imageResizeTargetWidth('64')
+                            ->imageResizeTargetHeight('64')
+                            ->storeFiles(false),
                     ]),
                 Section::make($t('steps.settings'))
                     ->description(fn () => $page->egg()?->description ?: null)

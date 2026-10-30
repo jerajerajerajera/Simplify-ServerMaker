@@ -159,6 +159,27 @@ return [
         'keep' => 'Taslağı koru',
         'delete' => 'Taslağı sil',
     ],
+    'first' => [
+        'max_players' => 'Maksimum oyuncu',
+        'gamemode' => 'Oyun modu',
+        'difficulty' => 'Zorluk',
+        'gamemodes' => [
+            'survival' => 'Hayatta kalma',
+            'creative' => 'Yaratıcı',
+            'adventure' => 'Macera',
+            'spectator' => 'İzleyici',
+        ],
+        'difficulties' => [
+            'peaceful' => 'Barışçıl',
+            'easy' => 'Kolay',
+            'normal' => 'Normal',
+            'hard' => 'Zor',
+        ],
+        'icon' => 'Sunucu simgesi (isteğe bağlı)',
+        'icon_help' => 'PNG, 64 × 64 piksel, en fazla 100 KB. Kurulumdan sonra server-icon.png olarak yüklenir.',
+        'icon_invalid' => 'Simge 64 × 64 bir PNG olmalı, en fazla 100 KB.',
+        'number_between' => ':min ile :max arasında bir sayı gir.',
+    ],
     'review' => [
         'edit_settings' => 'Ayarları düzenle',
         'done_editing' => 'Düzenleme bitti',
