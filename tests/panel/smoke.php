@@ -24,6 +24,7 @@ use Simplify\ServerMaker\Filament\Admin\Pages\MakerSettings;
 use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
 use Simplify\ServerMaker\Filament\App\Pages\ServerMaker as AppServerMaker;
 use Simplify\ServerMaker\Games\BundledEggs;
+use Simplify\ServerMaker\Games\EggIndex;
 use Simplify\ServerMaker\Games\OtherGames;
 use Simplify\ServerMaker\Models\Draft;
 use Simplify\ServerMaker\Modpacks\Remote;
@@ -156,14 +157,44 @@ step('another game shows its own settings', function () use ($admin) {
             ->fromContent(json_encode($definition), EggFormat::JSON, new Egg);
     }
     $cards = OtherGames::cards();
-    if (! in_array($egg->id, array_column($cards, 'id'), true)) {
+    if (! in_array('egg:'.$egg->id, array_column($cards, 'key'), true)) {
         throw new RuntimeException('the game is not offered');
     }
     Livewire\Livewire::actingAs($admin)->test(ServerMaker::class)
-        ->call('pickGame', 'other', (string) $egg->id)
+        ->call('pickGame', 'other', 'egg:'.$egg->id)
         ->assertSet('data.game', 'other')
         ->assertSet('data.egg_id', $egg->id)
         ->assertSee('Smoke Valheim');
+});
+
+step('a game from the egg index is offered, checked and added on Next', function () use ($admin) {
+    auth()->setUser($admin);
+    $game = collect(EggIndex::games())->first(fn (array $game) => filled($game['uuid'] ?? null) && filled($game['sha256'] ?? null) && ! Egg::query()->where('uuid', $game['uuid'])->exists()
+        && ! Egg::query()->where('name', $game['name'])->exists());
+    if (! $game) {
+        throw new RuntimeException('the egg index is empty');
+    }
+    if (! in_array('index:'.$game['id'], array_column(OtherGames::cards(), 'key'), true)) {
+        throw new RuntimeException('the index game is not offered');
+    }
+    // A download that does not match the checksum is never imported.
+    if (EggIndex::matches($game, '{"name":"tampered"}')) {
+        throw new RuntimeException('a download with the wrong checksum is accepted');
+    }
+    $test = Livewire\Livewire::actingAs($admin)->test(ServerMaker::class)
+        ->call('pickGame', 'other', 'index:'.$game['id'])
+        ->assertSet('data.game_index', $game['id'])
+        ->assertSet('data.egg_id', null);
+    // The egg arriving meanwhile (same uuid) is used as it is.
+    $definition = json_decode((string) file_get_contents(BundledEggs::directory().'/egg-vanilla-bedrock.json'), true);
+    $definition['name'] = 'Smoke '.$game['name'];
+    $definition['uuid'] = $game['uuid'];
+    $egg = app(EggImporterService::class)->fromContent(json_encode($definition), EggFormat::JSON, new Egg);
+    $test->call('gameDone')
+        ->assertHasNoErrors()
+        ->assertSet('data.egg_id', $egg->id)
+        ->assertSet('data.game_index', null);
+    $egg->delete();
 });
 
 step('a draft is saved after a step and opened again', function () use ($admin) {
@@ -179,8 +210,17 @@ step('a draft is saved after a step and opened again', function () use ($admin) 
     Livewire\Livewire::actingAs($admin)->test(ServerMaker::class)
         ->assertSet('data.name', 'smoke-draft')
         ->assertSet('step', 2)
-        ->assertSet('restored', true);
-    $draft->delete();
+        ->assertSet('restored', true)
+        ->assertSet('hasDraft', true)
+        // The 0.7.0 bar at the bottom: the steps (Minecraft as step 2) and the draft with Discard.
+        ->assertSee('smk-navbar', false)
+        ->assertSeeInOrder(['Game', 'Minecraft', 'Server', 'Resources', 'Review'])
+        ->assertSee('Draft saved')
+        ->call('discardDraft')
+        ->assertRedirect();
+    if (Draft::for($admin->id)) {
+        throw new RuntimeException('Discard kept the draft');
+    }
 });
 
 step('a Modrinth modpack is found and gets its egg', function () use ($admin) {

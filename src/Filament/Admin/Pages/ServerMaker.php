@@ -31,6 +31,7 @@ use Simplify\ServerMaker\Filament\Wizard\ReviewStep;
 use Simplify\ServerMaker\Filament\Wizard\ServerStep;
 use Simplify\ServerMaker\Filament\Wizard\SetupStep;
 use Simplify\ServerMaker\Games\BundledEggs;
+use Simplify\ServerMaker\Games\EggIndex;
 use Simplify\ServerMaker\Games\Java;
 use Simplify\ServerMaker\Games\Minecraft;
 use Simplify\ServerMaker\Games\MinecraftEggs;
@@ -62,6 +63,12 @@ class ServerMaker extends Page implements HasForms
 
     #[Locked]
     public bool $restored = false;
+
+    /** Review: the advanced settings are open (Edit settings), as in 0.7.0. */
+    public bool $editingAdvanced = false;
+
+    /** Whether there is a saved draft, shown in the bar at the bottom with Discard. */
+    public bool $hasDraft = false;
 
     public static function getNavigationLabel(): string
     {
@@ -99,6 +106,7 @@ class ServerMaker extends Page implements HasForms
             'software' => null,
             'version' => null,
             'egg_id' => null,
+            'game_index' => null,
             'variables' => [],
             'modpack' => null,
             'modpack_version' => null,
@@ -108,6 +116,7 @@ class ServerMaker extends Page implements HasForms
             'subdomain' => '',
             'backups' => 2,
             'skip_scripts' => false,
+            'java' => 'auto',
             'image' => '',
             'startup' => '',
             'environment' => [],
@@ -119,6 +128,7 @@ class ServerMaker extends Page implements HasForms
                 $fresh = array_replace($fresh, $draft->data);
                 $this->step = max(1, min(5, $draft->step));
                 $this->restored = true;
+                $this->hasDraft = true;
                 Notification::make()->title(__('simplify-servermaker::maker.draft.restored'))->info()->send();
             } catch (Throwable $exception) {
                 // A draft that cannot be read (for example after a new APP_KEY) is dropped.
@@ -145,21 +155,25 @@ class ServerMaker extends Page implements HasForms
                 ->color('gray')
                 ->visible(fn () => MakerSettings::canAccess())
                 ->url(fn () => MakerSettings::getUrl(panel: 'admin')),
-            Action::make('start_over')
-                ->label(__('simplify-servermaker::maker.draft.start_over'))
-                ->icon('tabler-restore')
-                ->color('gray')
-                ->visible(fn () => $this->restored)
-                ->requiresConfirmation()
-                ->modalDescription(__('simplify-servermaker::maker.draft.start_over_help'))
-                ->action(function (): void {
-                    Draft::query()->where('user_id', user()->id)->delete();
-                    $this->redirect(static::getUrl());
-                }),
         ];
     }
 
     /** Saves the answers so far after each step, so a closed tab or a lost connection costs nothing. */
+    /** Leaving the game step: a game from the egg index gets its egg first (downloaded, checked, imported). */
+    public function gameDone(): void
+    {
+        abort_unless(static::canAccess(), 403);
+        if (($this->data['game'] ?? null) === 'other' && blank($this->data['egg_id'] ?? null) && filled($this->data['game_index'] ?? null)) {
+            $egg = EggIndex::install((string) $this->data['game_index']);
+            $this->data = array_replace($this->data, [
+                'egg_id' => $egg->id,
+                'game_index' => null,
+                'variables' => GameVariables::defaults($egg, $this->isAdmin()),
+            ]);
+        }
+        $this->stepDone(1);
+    }
+
     public function stepDone(int $step): void
     {
         abort_unless(static::canAccess(), 403);
@@ -167,6 +181,39 @@ class ServerMaker extends Page implements HasForms
             ['user_id' => (int) user()->id],
             ['data' => Draft::clean($this->data ?? []), 'step' => min(5, $step + 1)],
         );
+        $this->hasDraft = true;
+    }
+
+    public function toggleAdvanced(): void
+    {
+        abort_unless($this->isAdmin(), 403);
+        $this->editingAdvanced = ! $this->editingAdvanced;
+    }
+
+    /** Discard in the bar at the bottom: the answers so far are removed and the Server Maker starts empty. */
+    public function discardDraft(): void
+    {
+        abort_unless(static::canAccess(), 403);
+        Draft::query()->where('user_id', user()->id)->delete();
+        $this->redirect(static::getUrl());
+    }
+
+    /**
+     * The step names for the bar at the bottom. The second step is Minecraft, or the game's settings.
+     *
+     * @return list<string>
+     */
+    public function stepLabels(): array
+    {
+        $t = fn (string $key) => __('simplify-servermaker::maker.steps.'.$key);
+
+        return [
+            $t('game'),
+            ($this->data['game'] ?? null) === 'other' ? $t('settings') : $t('minecraft'),
+            $t('server'),
+            $t('resources'),
+            $t('review'),
+        ];
     }
 
     public function form(Schema $schema): Schema
@@ -183,8 +230,10 @@ class ServerMaker extends Page implements HasForms
                 ])
                     ->columnSpanFull()
                     ->startOnStep(fn () => $this->step)
-                    ->nextAction(fn (Action $action) => $action->label(__('simplify-servermaker::maker.next')))
-                    ->previousAction(fn (Action $action) => $action->label(__('simplify-servermaker::maker.back')))
+                    ->nextAction(fn (Action $action) => $action->label(__('simplify-servermaker::maker.next'))
+                        ->color('gray')->extraAttributes(['class' => 'smk-next']))
+                    ->previousAction(fn (Action $action) => $action->label(__('simplify-servermaker::maker.back'))
+                        ->color('gray')->extraAttributes(['class' => 'smk-back']))
                     ->submitAction(new HtmlString(view('simplify-servermaker::wizard.create-button')->render())),
             ]);
     }
@@ -201,10 +250,26 @@ class ServerMaker extends Page implements HasForms
                 'software' => $software,
                 'version' => $this->data['version'] ?? MinecraftVersions::newest(),
                 'egg_id' => null,
+                'game_index' => null,
                 'variables' => [],
                 'modpack' => $choice === 'modpack' ? ($this->data['modpack'] ?? null) : null,
                 'modpack_version' => $choice === 'modpack' ? ($this->data['modpack_version'] ?? null) : null,
                 ...$this->resourceDefaults($choice),
+            ]);
+
+            return;
+        }
+        // A game that is not on the panel yet: its egg is installed when the game step is done.
+        $index = $game === 'other' && str_starts_with($choice, 'index:') ? EggIndex::find(substr($choice, 6)) : null;
+        if ($index && EggIndex::canInstall()) {
+            $this->data = array_replace($this->data, [
+                'game' => 'other',
+                'type' => null,
+                'software' => null,
+                'egg_id' => null,
+                'game_index' => (string) $index['id'],
+                'variables' => [],
+                ...$this->resourceDefaults(null),
             ]);
 
             return;
@@ -218,6 +283,7 @@ class ServerMaker extends Page implements HasForms
             'type' => null,
             'software' => null,
             'egg_id' => $egg->id,
+            'game_index' => null,
             'variables' => GameVariables::defaults($egg, $this->isAdmin()),
             ...$this->resourceDefaults(null),
         ]);
@@ -298,6 +364,11 @@ class ServerMaker extends Page implements HasForms
         $type = (string) ($this->data['type'] ?? '');
         if (($this->data['game'] ?? null) !== 'minecraft' || ! Minecraft::isJava($type)) {
             return null;
+        }
+        // Review → Edit settings: an administrator may pick the Java version for packs with special needs.
+        $chosen = (int) ($this->data['java'] ?? 0);
+        if ($this->isAdmin() && in_array($chosen, Java::MAJORS, true)) {
+            return $chosen;
         }
         if ($type === 'proxy') {
             return 21;
