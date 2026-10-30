@@ -24,6 +24,7 @@ use Simplify\ServerMaker\Filament\Admin\Pages\MakerSettings;
 use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
 use Simplify\ServerMaker\Filament\App\Pages\ServerMaker as AppServerMaker;
 use Simplify\ServerMaker\Games\BundledEggs;
+use Simplify\ServerMaker\Games\EggIndex;
 use Simplify\ServerMaker\Games\OtherGames;
 use Simplify\ServerMaker\Models\Draft;
 use Simplify\ServerMaker\Modpacks\Remote;
@@ -156,14 +157,47 @@ step('another game shows its own settings', function () use ($admin) {
             ->fromContent(json_encode($definition), EggFormat::JSON, new Egg);
     }
     $cards = OtherGames::cards();
-    if (! in_array($egg->id, array_column($cards, 'id'), true)) {
+    if (! in_array('egg:'.$egg->id, array_column($cards, 'key'), true)) {
         throw new RuntimeException('the game is not offered');
     }
     Livewire\Livewire::actingAs($admin)->test(ServerMaker::class)
-        ->call('pickGame', 'other', (string) $egg->id)
+        ->call('pickGame', 'other', 'egg:'.$egg->id)
         ->assertSet('data.game', 'other')
         ->assertSet('data.egg_id', $egg->id)
         ->assertSee('Smoke Valheim');
+});
+
+step('a game from the egg index is offered, checked and added on Next', function () use ($admin) {
+    auth()->setUser($admin);
+    $game = collect(EggIndex::games())->first(fn (array $game) => filled($game['uuid'] ?? null) && filled($game['sha256'] ?? null) && ! Egg::query()->where('uuid', $game['uuid'])->exists()
+        && ! Egg::query()->where('name', $game['name'])->exists());
+    if (! $game) {
+        throw new RuntimeException('the egg index is empty');
+    }
+    if (! in_array('index:'.$game['id'], array_column(OtherGames::cards(), 'key'), true)) {
+        throw new RuntimeException('the index game is not offered');
+    }
+    // A download that does not match the checksum is never imported.
+    Illuminate\Support\Facades\Http::fake(['*' => Illuminate\Support\Facades\Http::response('{"name":"tampered"}')]);
+    $test = Livewire\Livewire::actingAs($admin)->test(ServerMaker::class)
+        ->call('pickGame', 'other', 'index:'.$game['id'])
+        ->assertSet('data.game_index', $game['id'])
+        ->assertSet('data.egg_id', null)
+        ->call('gameDone')
+        ->assertHasErrors('data.game');
+    if (Egg::query()->where('name', 'tampered')->exists()) {
+        throw new RuntimeException('a download with the wrong checksum was imported');
+    }
+    // The egg arriving meanwhile (same uuid) is used as it is.
+    $definition = json_decode((string) file_get_contents(BundledEggs::directory().'/egg-vanilla-bedrock.json'), true);
+    $definition['name'] = 'Smoke '.$game['name'];
+    $definition['uuid'] = $game['uuid'];
+    $egg = app(EggImporterService::class)->fromContent(json_encode($definition), EggFormat::JSON, new Egg);
+    $test->call('gameDone')
+        ->assertHasNoErrors()
+        ->assertSet('data.egg_id', $egg->id)
+        ->assertSet('data.game_index', null);
+    $egg->delete();
 });
 
 step('a draft is saved after a step and opened again', function () use ($admin) {

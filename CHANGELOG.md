@@ -6,10 +6,15 @@
   - one bar at the bottom with Back, the steps (click a step you have done to go back to it), the saved draft with
     Discard, and Next. On a phone the bar shows the current step; tap it for the list of steps.
   - the Game step shows Minecraft in its own block with its server types; picking a type moves on by itself. Other
-    games are listed below with their initials, with a search.
+    games are listed below with their initials, with a search on longer lists.
+  - administrators see every game from the official Pelican egg index too, with All, Popular and Installed filters.
+    A game that is not on the panel yet is downloaded, checked against its published checksum and added when you
+    press Next, with an Installing screen in between.
   - the Minecraft step shows the server types as cards with an icon, so you can still switch type (Proxy is here).
-  - RAM, CPU and disk are cards with what the amount is good for.
-  - the Review step is a server overview in two columns.
+  - RAM, CPU and disk are one grid of equal cards with a small icon next to the amount.
+  - the Review step is a server overview in two columns; administrators open Edit settings under it for the egg, Java
+    version, Docker image, backups, startup command, environment variables and install script.
+  - cards have a subtle background again, so buttons and the picked choice stand out.
 - Start over above the Server Maker is now Discard in the bar at the bottom.
 
 ## 1.1.2

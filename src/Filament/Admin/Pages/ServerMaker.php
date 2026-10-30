@@ -31,6 +31,7 @@ use Simplify\ServerMaker\Filament\Wizard\ReviewStep;
 use Simplify\ServerMaker\Filament\Wizard\ServerStep;
 use Simplify\ServerMaker\Filament\Wizard\SetupStep;
 use Simplify\ServerMaker\Games\BundledEggs;
+use Simplify\ServerMaker\Games\EggIndex;
 use Simplify\ServerMaker\Games\Java;
 use Simplify\ServerMaker\Games\Minecraft;
 use Simplify\ServerMaker\Games\MinecraftEggs;
@@ -105,6 +106,7 @@ class ServerMaker extends Page implements HasForms
             'software' => null,
             'version' => null,
             'egg_id' => null,
+            'game_index' => null,
             'variables' => [],
             'modpack' => null,
             'modpack_version' => null,
@@ -157,6 +159,21 @@ class ServerMaker extends Page implements HasForms
     }
 
     /** Saves the answers so far after each step, so a closed tab or a lost connection costs nothing. */
+    /** Leaving the game step: a game from the egg index gets its egg first (downloaded, checked, imported). */
+    public function gameDone(): void
+    {
+        abort_unless(static::canAccess(), 403);
+        if (($this->data['game'] ?? null) === 'other' && blank($this->data['egg_id'] ?? null) && filled($this->data['game_index'] ?? null)) {
+            $egg = EggIndex::install((string) $this->data['game_index']);
+            $this->data = array_replace($this->data, [
+                'egg_id' => $egg->id,
+                'game_index' => null,
+                'variables' => GameVariables::defaults($egg, $this->isAdmin()),
+            ]);
+        }
+        $this->stepDone(1);
+    }
+
     public function stepDone(int $step): void
     {
         abort_unless(static::canAccess(), 403);
@@ -233,10 +250,26 @@ class ServerMaker extends Page implements HasForms
                 'software' => $software,
                 'version' => $this->data['version'] ?? MinecraftVersions::newest(),
                 'egg_id' => null,
+                'game_index' => null,
                 'variables' => [],
                 'modpack' => $choice === 'modpack' ? ($this->data['modpack'] ?? null) : null,
                 'modpack_version' => $choice === 'modpack' ? ($this->data['modpack_version'] ?? null) : null,
                 ...$this->resourceDefaults($choice),
+            ]);
+
+            return;
+        }
+        // A game that is not on the panel yet: its egg is installed when the game step is done.
+        $index = $game === 'other' && str_starts_with($choice, 'index:') ? EggIndex::find(substr($choice, 6)) : null;
+        if ($index && EggIndex::canInstall()) {
+            $this->data = array_replace($this->data, [
+                'game' => 'other',
+                'type' => null,
+                'software' => null,
+                'egg_id' => null,
+                'game_index' => (string) $index['id'],
+                'variables' => [],
+                ...$this->resourceDefaults(null),
             ]);
 
             return;
@@ -250,6 +283,7 @@ class ServerMaker extends Page implements HasForms
             'type' => null,
             'software' => null,
             'egg_id' => $egg->id,
+            'game_index' => null,
             'variables' => GameVariables::defaults($egg, $this->isAdmin()),
             ...$this->resourceDefaults(null),
         ]);

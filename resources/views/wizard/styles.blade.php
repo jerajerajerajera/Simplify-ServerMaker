@@ -11,6 +11,7 @@
         --smk-accent: var(--ps-accent, var(--primary-600));
         --smk-on-accent: var(--ps-on-accent, #fff);
         --smk-danger: var(--ps-danger, var(--danger-600, #dc2626));
+        --smk-ok: var(--ps-ok, var(--success-600, #16a34a));
         --smk-radius: var(--ps-radius, 10px);
         --smk-radius-lg: var(--ps-radius-lg, 14px);
         --smk-radius-xl: var(--ps-radius-xl, 18px);
@@ -72,6 +73,30 @@
     .smk .smk-game-text { display: grid; gap: 3px; min-width: 0; }
     .smk .smk-game-text strong { overflow: hidden; font-size: 14px; font-weight: 650; text-overflow: ellipsis; white-space: nowrap; }
     .smk .smk-game-text small { display: -webkit-box; overflow: hidden; color: var(--smk-muted); font-size: 12px; line-height: 1.35; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+    .smk .smk-games { position: relative; }
+    .smk .smk-games-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+    .smk .smk-games-bar .smk-search { flex: 1 1 260px; }
+    .smk .smk-chips { display: flex; gap: 4px; padding: 3px; border-radius: var(--smk-radius); background: color-mix(in srgb, var(--smk-ink) 5%, var(--smk-surface)); }
+    .smk .smk-chips button { min-height: 34px; padding: 0 12px; border: 0; border-radius: calc(var(--smk-radius) - 2px); background: transparent; color: var(--smk-muted); font-size: 13px; font-weight: 600; cursor: pointer; }
+    .smk .smk-chips button[aria-pressed="true"] { background: var(--smk-surface); color: var(--smk-ink); box-shadow: 0 1px 2px rgb(0 0 0 / .12); }
+    .smk .smk-game { position: relative; }
+    .smk .smk-games-grid:has(.smk-game-badge) .smk-game-text { padding-inline-end: 64px; }
+    .smk .smk-game-badge { position: absolute; top: 10px; inset-inline-end: 10px; padding: 2px 7px; border-radius: 999px; font-size: 10px; font-weight: 650; line-height: 1.5; }
+    .smk .smk-game-badge.is-installed { background: color-mix(in srgb, var(--smk-ok) 16%, transparent); color: var(--smk-ok); }
+    .smk .smk-game-badge.is-available { background: color-mix(in srgb, var(--smk-accent) 14%, transparent); color: var(--smk-accent); }
+    .smk .smk-games-note { margin: 0; padding: 10px 12px; border-radius: var(--smk-radius); background: color-mix(in srgb, var(--smk-accent) 8%, var(--smk-surface)); color: var(--smk-ink); font-size: 13px; }
+    .smk .smk-install { position: absolute; inset: -8px; z-index: 5; display: grid; align-content: center; justify-items: center; gap: 12px; padding: 24px; border-radius: var(--smk-radius-lg); background: color-mix(in srgb, var(--smk-surface) 94%, transparent); backdrop-filter: blur(3px); text-align: center; }
+    .smk .smk-install strong { font-size: 18px; }
+    .smk .smk-install ol { display: grid; gap: 8px; margin: 4px 0; padding: 0; list-style: none; text-align: start; }
+    .smk .smk-install li { position: relative; padding-inline-start: 26px; color: var(--smk-muted); font-size: 14px; }
+    .smk .smk-install li::before { content: ""; position: absolute; top: 3px; inset-inline-start: 0; width: 14px; height: 14px; border: 2px solid var(--smk-line); border-radius: 50%; }
+    .smk .smk-install li.is-now { color: var(--smk-ink); font-weight: 600; }
+    .smk .smk-install li.is-now::before { border-color: var(--smk-accent); border-inline-end-color: transparent; animation: smk-spin .8s linear infinite; }
+    .smk .smk-install li.is-done::before { border-color: var(--smk-ok); background: var(--smk-ok); }
+    .smk .smk-install small { color: var(--smk-muted); }
+    .smk .smk-install-spinner { width: 40px; height: 40px; border: 3px solid color-mix(in srgb, var(--smk-accent) 25%, transparent); border-top-color: var(--smk-accent); border-radius: 50%; animation: smk-spin .9s linear infinite; }
+    @keyframes smk-spin { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) { .smk .smk-install-spinner, .smk .smk-install li.is-now::before { animation-duration: 3s; } }
     .smk .smk-empty { color: var(--smk-muted); font-size: 13px; }
     .smk .smk-empty a, .smk .smk-notice a { color: var(--smk-accent); text-decoration: underline; }
     .smk .smk-more { justify-self: center; min-height: 36px; padding: 0 16px; border: 1px solid var(--smk-line); border-radius: var(--smk-radius); background: var(--smk-surface); color: var(--smk-ink); font-size: 13px; font-weight: 600; }

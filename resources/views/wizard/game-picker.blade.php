@@ -42,19 +42,56 @@
 
         {{-- People who are not administrators only see this when they may pick another game. --}}
         @if ($games !== [] || $this->isAdmin())
+            @php($available = count(array_filter($games, fn (array $game) => ! $game['installed'])))
             <section class="smk-games" aria-labelledby="smk-games"
                 x-data="{
                     query: '',
+                    filter: 'all',
                     limit: 24,
                     games: @js($games),
+                    installing: null,
+                    phase: 0,
+                    timer: null,
                     norm(text) { return String(text || '').toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, ' ').trim(); },
                     shown() {
                         const words = this.norm(this.query).split(' ').filter(Boolean);
-                        return this.games.filter((game) => words.every((word) => this.norm(game.name + ' ' + game.description).includes(word)));
+                        return this.games.filter((game) => (this.filter !== 'installed' || game.installed) && (this.filter !== 'popular' || game.popular > 0)
+                            && words.every((word) => this.norm(game.name + ' ' + game.description).includes(word)));
+                    },
+                    picked() {
+                        const key = $wire.data.game !== 'other' ? null : ($wire.data.game_index ? 'index:' + $wire.data.game_index : 'egg:' + $wire.data.egg_id);
+                        return this.games.find((game) => game.key === key) || null;
                     },
                     initials(name) { return name.replace(/[^A-Za-z0-9 ]/g, ' ').split(' ').filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase() || '?'; },
                     hue(name) { let h = 0; for (const ch of name) h = (h * 31 + ch.charCodeAt(0)) % 360; return h; },
+                    init() {
+                        // Next on a game that is not on the panel yet installs its egg first: shown as its own screen.
+                        this.$root.closest('.smk')?.addEventListener('click', (event) => {
+                            if (!event.target.closest('.smk-next') || !this.picked() || this.picked().installed) return;
+                            this.installing = this.picked().name;
+                            this.phase = 0;
+                            clearInterval(this.timer);
+                            this.timer = setInterval(() => this.phase = Math.min(this.phase + 1, 2), 1600);
+                        }, true);
+                        window.Livewire?.hook?.('commit', ({ succeed, fail }) => {
+                            if (!this.installing) return;
+                            const done = () => setTimeout(() => { clearInterval(this.timer); this.installing = null; }, 150);
+                            succeed(done);
+                            fail(done);
+                        });
+                    },
+                    destroy() { clearInterval(this.timer); },
                 }">
+                <div class="smk-install" x-show="installing" x-cloak role="status" aria-live="polite">
+                    <span class="smk-install-spinner" aria-hidden="true"></span>
+                    <strong>{{ $t('game.installing') }} <span x-text="installing"></span></strong>
+                    <ol>
+                        <li :class="{ 'is-done': phase > 0, 'is-now': phase === 0 }">{{ $t('game.step_download') }}</li>
+                        <li :class="{ 'is-done': phase > 1, 'is-now': phase === 1 }">{{ $t('game.step_check') }}</li>
+                        <li :class="{ 'is-now': phase === 2 }">{{ $t('game.step_add') }}</li>
+                    </ol>
+                    <small>{{ $t('game.continues') }}</small>
+                </div>
                 @if ($front !== [])
                     <h3 id="smk-games" class="smk-games-heading">{{ $t('game.other') }}</h3>
                 @else
@@ -68,31 +105,49 @@
                         @endif
                     </p>
                 @else
-                    {{-- A search only helps with a longer list. --}}
-                    @if (count($games) > 6)
-                        <label class="smk-search">
-                            <x-tabler-search aria-hidden="true" />
-                            <input type="search" x-model.debounce.120ms="query" x-on:input="limit = 24"
-                                placeholder="{{ $t('game.search', ['count' => count($games)]) }}"
-                                aria-label="{{ $t('game.search_label') }}" autocomplete="off" />
-                        </label>
+                    {{-- A search only helps with a longer list; the filters only when some games are not on the panel yet. --}}
+                    @if (count($games) > 6 || $available > 0)
+                        <div class="smk-games-bar">
+                            @if (count($games) > 6)
+                                <label class="smk-search">
+                                    <x-tabler-search aria-hidden="true" />
+                                    <input type="search" x-model.debounce.120ms="query" x-on:input="limit = 24"
+                                        placeholder="{{ $t('game.search', ['count' => count($games)]) }}"
+                                        aria-label="{{ $t('game.search_label') }}" autocomplete="off" />
+                                </label>
+                            @endif
+                            @if ($available > 0)
+                                <div class="smk-chips" role="group" aria-label="{{ $t('game.filter') }}">
+                                    <button type="button" :aria-pressed="filter === 'all'" x-on:click="filter = 'all'; limit = 24">{{ $t('game.all') }}</button>
+                                    <button type="button" :aria-pressed="filter === 'popular'" x-on:click="filter = 'popular'; limit = 24">{{ $t('game.popular') }}</button>
+                                    <button type="button" :aria-pressed="filter === 'installed'" x-on:click="filter = 'installed'; limit = 24">{{ $t('game.installed') }}</button>
+                                </div>
+                            @endif
+                        </div>
                     @endif
                     <div class="smk-games-grid" role="radiogroup" aria-labelledby="smk-games">
-                        <template x-for="game in shown().slice(0, limit)" :key="game.id">
+                        <template x-for="game in shown().slice(0, limit)" :key="game.key">
                             <button type="button" role="radio" class="smk-game"
-                                :aria-checked="$wire.data.game === 'other' && Number($wire.data.egg_id) === game.id"
-                                x-on:click="$wire.pickGame('other', String(game.id))">
+                                :aria-checked="picked()?.key === game.key"
+                                x-on:click="$wire.pickGame('other', game.key)">
                                 <span class="smk-game-icon" :style="{ '--hue': hue(game.name) }" x-text="initials(game.name)" aria-hidden="true"></span>
                                 <span class="smk-game-text">
                                     <strong x-text="game.name"></strong>
                                     <small x-text="game.description"></small>
                                 </span>
+                                @if ($available > 0)
+                                    <span class="smk-game-badge" :class="game.installed ? 'is-installed' : 'is-available'"
+                                        x-text="game.installed ? @js($t('game.installed')) : @js($t('game.available'))"></span>
+                                @endif
                             </button>
                         </template>
                     </div>
                     <p class="smk-empty" x-show="shown().length === 0" x-cloak>{{ $t('game.no_match') }}</p>
                     <button type="button" class="smk-more" x-show="shown().length > limit" x-cloak x-on:click="limit += 48"
                         x-text="@js($t('game.more')).replace(':count', shown().length - limit)"></button>
+                    <p class="smk-games-note" x-show="picked() && !picked().installed" x-cloak>
+                        <strong x-text="picked()?.name"></strong> {{ $t('game.not_here') }}
+                    </p>
                 @endif
             </section>
         @endif

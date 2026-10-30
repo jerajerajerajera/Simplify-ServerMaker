@@ -19,9 +19,10 @@ final class OtherGames
     }
 
     /**
-     * Cards for the game picker, most used first.
+     * Cards for the game picker: the games on the panel, and for people who may add eggs every game in the
+     * Pelican egg index that is not on it yet. Most played first, then the well-known games.
      *
-     * @return list<array{id: int, name: string, description: string}>
+     * @return list<array{key: string, name: string, description: string, installed: bool, popular: int}>
      */
     public static function cards(): array
     {
@@ -32,19 +33,23 @@ final class OtherGames
                 continue;
             }
             $cards[] = [
-                'id' => (int) $egg->id,
+                'key' => 'egg:'.$egg->id,
                 'name' => (string) $egg->name,
                 'description' => self::summary((string) $egg->description),
-                'used' => (int) ($used[$egg->id] ?? 0),
+                'installed' => true,
+                'popular' => (int) ($used[$egg->id] ?? 0) * 100 + EggIndex::rank((string) $egg->name),
             ];
         }
-        usort($cards, fn (array $a, array $b) => [$b['used'], $a['name']] <=> [$a['used'], $b['name']]);
+        $cards = [...$cards, ...EggIndex::cards()];
+        usort($cards, fn (array $a, array $b) => [$b['popular'], $b['installed'], $a['name']] <=> [$a['popular'], $a['installed'], $b['name']]);
 
-        return array_map(fn (array $card) => array_diff_key($card, ['used' => true]), $cards);
+        return $cards;
     }
 
+    /** The egg behind a card key (egg:12), or an egg id. */
     public static function find(mixed $id): ?Egg
     {
+        $id = is_string($id) && str_starts_with($id, 'egg:') ? substr($id, 4) : $id;
         $egg = is_numeric($id) ? self::query()->find((int) $id) : null;
 
         return $egg && ! Minecraft::isMinecraftEgg((string) $egg->name) ? $egg : null;

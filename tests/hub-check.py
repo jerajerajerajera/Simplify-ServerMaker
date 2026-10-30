@@ -82,6 +82,15 @@ for name in listed_all:
     # and their update_url is Pelican's own egg update. The plugin itself never fetches anything from GitHub.
     if name.startswith('resources/eggs/'):
         continue
+    # The egg index (as in 0.7.0): egg definitions from the official pelican-eggs repositories, pinned per egg with a
+    # sha256 and imported the way Pelican's own "Import from URL" does. Only that source is allowed, never plugin code.
+    if name in ('resources/catalog/game-index.json', 'src/Games/EggIndex.php'):
+        text = (root / name).read_text('utf-8', 'replace') if (root / name).is_file() else ''
+        urls = [g.get('url', '') for g in json.loads(text).get('games', [])] if name.endswith('.json') else re.findall(r'https?://[^\s"\']+', text)
+        for url in urls:
+            if not url.startswith('https://raw.githubusercontent.com/pelican-eggs/'):
+                failures.append(f'{name}: {url} is not a pelican-eggs egg definition')
+        continue
     text = (root / name).read_text('utf-8', 'replace') if (root / name).is_file() else ''
     for pattern in ['raw.githubusercontent.com', 'api.github.com', 'download_url']:
         if pattern in text:
