@@ -11,45 +11,48 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Support\Facades\DB;
 use Throwable;
 
 /**
  * Writes the first settings of a new server (server.properties values and server-icon.png) once Pelican has
- * installed it. Waits for the installation by trying again every 30 seconds, for up to two hours.
+ * installed it. Waits for the installation by trying again every 30 seconds, for up to two hours. The settings
+ * travel with the job itself, so nothing else has to exist on the panel.
  */
 final class ApplyFirstSettings implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable;
 
-    private const TABLE = 'simplify_server_maker_first_settings';
-
     public int $tries = 240;
 
     public int $timeout = 60;
 
-    public function __construct(public int $serverId) {}
-
     /** @param  array{properties?: array<string, string>, icon?: string}  $settings */
-    public static function queue(Server $server, array $settings): void
+    public function __construct(public int $serverId, public array $settings) {}
+
+    /**
+     * Queues the settings for a server that was just made. Not named queue(): Laravel's dispatcher calls a job's
+     * queue($queue, $job) method when it has one. Never throws: the server is already there, so a
+     * problem here is reported and the Server Maker carries on to the server page.
+     *
+     * @param  array{properties?: array<string, string>, icon?: string}  $settings
+     */
+    public static function afterInstall(Server $server, array $settings): void
     {
-        if ($settings === []) {
+        // Without a queue worker the job would run right now, before the installation, and do nothing.
+        if ($settings === [] || in_array(config('queue.default'), ['sync', 'null'], true)) {
             return;
         }
-        DB::table(self::TABLE)->updateOrInsert(
-            ['server_id' => $server->id],
-            ['settings' => json_encode($settings, JSON_THROW_ON_ERROR), 'created_at' => now(), 'updated_at' => now()],
-        );
-        self::dispatch($server->id)->delay(now()->addSeconds(20));
+        try {
+            self::dispatch($server->id, $settings)->delay(now()->addSeconds(20));
+        } catch (Throwable $exception) {
+            report($exception);
+        }
     }
 
     public function handle(DaemonFileRepository $files): void
     {
-        $row = DB::table(self::TABLE)->where('server_id', $this->serverId)->first();
         $server = Server::query()->find($this->serverId);
-        if (! $row || ! $server) {
-            DB::table(self::TABLE)->where('server_id', $this->serverId)->delete();
-
+        if (! $server) {
             return;
         }
         // Only a finished installation has installed_at and no status; anything else is tried again later.
@@ -58,25 +61,22 @@ final class ApplyFirstSettings implements ShouldQueue
 
             return;
         }
-        $settings = json_decode((string) $row->settings, true) ?: [];
         $files->setServer($server);
-        if (($settings['properties'] ?? []) !== []) {
+        if (($this->settings['properties'] ?? []) !== []) {
             try {
                 $original = $files->getContent('server.properties', 1048576);
             } catch (FileNotFoundException) {
                 $original = '';
             }
-            $files->putContent('server.properties', FirstSettings::merge($original, $settings['properties']))->throw();
+            $files->putContent('server.properties', FirstSettings::merge($original, $this->settings['properties']))->throw();
         }
-        if (filled($settings['icon'] ?? null)) {
-            $files->putContent('server-icon.png', (string) base64_decode((string) $settings['icon'], true))->throw();
+        if (filled($this->settings['icon'] ?? null)) {
+            $files->putContent('server-icon.png', (string) base64_decode((string) $this->settings['icon'], true))->throw();
         }
-        DB::table(self::TABLE)->where('server_id', $this->serverId)->delete();
     }
 
     public function failed(?Throwable $exception): void
     {
-        DB::table(self::TABLE)->where('server_id', $this->serverId)->delete();
         if ($exception) {
             report($exception);
         }

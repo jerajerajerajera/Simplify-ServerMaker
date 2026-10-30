@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3.1
+
+- Create server showed "Error while loading page" after the server was made, and the first settings (players, game
+  mode, difficulty, icon) were not applied: the job's helper was called queue(), a name Laravel's dispatcher uses
+  itself. It has its own name now, the settings travel with the job instead of a separate table, and a problem there
+  never stops the Server Maker from opening the new server.
+
 ## 1.3.0
 
 - Minecraft servers get their first settings in the Server Maker again, as in Simplify 0.7.0: maximum players, game

@@ -19,6 +19,7 @@ use Illuminate\Foundation\Testing\Concerns\MakesHttpRequests;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Testing\TestResponse;
 use Simplify\Core\Addons\Addon;
+use Simplify\ServerMaker\Creation\ApplyFirstSettings;
 use Simplify\ServerMaker\Creation\Ports;
 use Simplify\ServerMaker\Filament\Admin\Pages\MakerSettings;
 use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
@@ -145,6 +146,24 @@ step('a Minecraft server goes through every step and imports its egg', function 
         throw new RuntimeException('validation: '.json_encode($errors));
     }
     $server?->delete();
+});
+
+step('the first settings are queued for after the installation', function () {
+    // Pelican runs a real queue; the dispatcher must accept the job (1.3.0 broke here with a method named queue()).
+    $before = config('queue.default');
+    config(['queue.default' => 'database']);
+    try {
+        $server = new Server;
+        $server->id = 987654;
+        ApplyFirstSettings::afterInstall($server, ['properties' => ['max-players' => '8']]);
+        $jobs = DB::table('jobs')->where('payload', 'like', '%ApplyFirstSettings%');
+        if (! $jobs->exists()) {
+            throw new RuntimeException('the job was not queued');
+        }
+        $jobs->delete();
+    } finally {
+        config(['queue.default' => $before]);
+    }
 });
 
 step('the egg is imported only once', function () {
