@@ -180,9 +180,8 @@ return [
         'icon_invalid' => 'Biểu tượng phải là PNG 64 × 64, tối đa 100 KB.',
         'number_between' => 'Nhập số từ :min đến :max.',
         'eula' => 'Tôi chấp nhận Thỏa thuận cấp phép người dùng cuối của Minecraft (EULA)',
-        'eula_help' => 'Bắt buộc: máy chủ Minecraft chỉ khởi động khi EULA đã được chấp nhận. Đánh dấu ô này sẽ ghi eula=true cho bạn.',
+        'eula_help' => 'Máy chủ Minecraft chỉ khởi động khi EULA đã được chấp nhận. Đánh dấu ngay để khởi động luôn, hoặc để trống: máy chủ vẫn cài đặt và sẽ hỏi EULA khi bạn khởi động.',
         'eula_read' => 'Đọc EULA của Minecraft',
-        'eula_required' => 'Hãy chấp nhận EULA của Minecraft để tạo máy chủ này.',
     ],
     'review' => [
         'edit_settings' => 'Sửa cài đặt',

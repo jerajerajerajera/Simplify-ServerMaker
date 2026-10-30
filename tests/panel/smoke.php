@@ -134,10 +134,9 @@ step('a Minecraft server goes through every step and imports its egg', function 
         ->assertSet('data.max_players', 20)
         ->assertSet('data.eula', false)
         ->assertSee('Game mode');
-    // The EULA is never accepted for the user: without the tick nothing is made.
-    $test->call('create');
-    if (! array_key_exists('data.eula', $test->errors()->toArray()) || Server::query()->where('name', 'smoke-oak')->exists()) {
-        throw new RuntimeException('a server was made without accepting the EULA');
+    // The EULA box is never ticked for the user, and never blocks the browser from sending the form.
+    if (! preg_match('/<input[^>]*data\.eula[^>]*>/', $test->html(), $box) || str_contains($box[0], 'required') || str_contains($box[0], 'checked')) {
+        throw new RuntimeException('the EULA box is missing, required or ticked: '.($box[0] ?? ''));
     }
     $test->set('data.eula', true);
     // Players, game mode and difficulty are checked before the server is made.
@@ -333,7 +332,6 @@ step('a user makes a server within their allowance, in the normal panel', functi
         ->set('data.name', 'smoke-user')
         ->set('data.node_id', $node->id)
         ->set('data.allocation_id', Ports::first($node->id))
-        ->set('data.eula', true)
         ->set('data.ram', 'custom')
         ->set('data.ram_custom', 16)
         ->call('create')

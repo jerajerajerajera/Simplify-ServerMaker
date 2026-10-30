@@ -180,9 +180,8 @@ return [
         'icon_invalid' => 'Ikonen måste vara en PNG på 64 × 64, upp till 100 KB.',
         'number_between' => 'Ange ett tal mellan :min och :max.',
         'eula' => 'Jag godkänner Minecrafts licensavtal för slutanvändare (EULA)',
-        'eula_help' => 'Obligatoriskt: en Minecraft-server startar först när EULA:n är godkänd. Bocken skriver eula=true åt dig.',
+        'eula_help' => 'En Minecraft-server startar först när EULA:n är godkänd. Bocka i nu så startar den direkt, eller låt bli: servern installeras och frågar efter EULA:n när du startar den.',
         'eula_read' => 'Läs Minecrafts EULA',
-        'eula_required' => 'Godkänn Minecrafts EULA för att skapa den här servern.',
     ],
     'review' => [
         'edit_settings' => 'Redigera inställningar',

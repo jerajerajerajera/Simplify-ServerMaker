@@ -180,9 +180,8 @@ return [
         'icon_invalid' => 'Pictograma trebuie să fie un PNG de 64 × 64, până la 100 KB.',
         'number_between' => 'Introduceți un număr între :min și :max.',
         'eula' => 'Accept Acordul de licență pentru utilizatorul final Minecraft (EULA)',
-        'eula_help' => 'Obligatoriu: un server Minecraft pornește doar după ce EULA este acceptat. Bifarea scrie eula=true pentru tine.',
+        'eula_help' => 'Un server Minecraft pornește doar după ce EULA este acceptat. Bifează acum și pornește imediat, sau lasă necompletat: serverul se instalează și cere EULA la pornire.',
         'eula_read' => 'Citește EULA Minecraft',
-        'eula_required' => 'Acceptă EULA Minecraft pentru a crea acest server.',
     ],
     'review' => [
         'edit_settings' => 'Editați setările',

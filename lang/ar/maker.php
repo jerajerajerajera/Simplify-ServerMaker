@@ -180,9 +180,8 @@ return [
         'icon_invalid' => 'يجب أن تكون الأيقونة PNG بحجم 64 × 64، حتى 100 KB.',
         'number_between' => 'أدخل رقمًا بين :min و:max.',
         'eula' => 'أوافق على اتفاقية ترخيص المستخدم النهائي لـ Minecraft (EULA)',
-        'eula_help' => 'مطلوب: لا يبدأ خادم Minecraft إلا بعد قبول EULA. تحديد هذا المربع يكتب eula=true نيابةً عنك.',
+        'eula_help' => 'لا يبدأ خادم Minecraft إلا بعد قبول EULA. حدّده الآن ليبدأ فورًا، أو اتركه: سيُثبَّت الخادم ويطلب EULA عند تشغيله.',
         'eula_read' => 'اقرأ EULA الخاصة بـ Minecraft',
-        'eula_required' => 'اقبل EULA الخاصة بـ Minecraft لإنشاء هذا الخادم.',
     ],
     'review' => [
         'edit_settings' => 'تعديل الإعدادات',

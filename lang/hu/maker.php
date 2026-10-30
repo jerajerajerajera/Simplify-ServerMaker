@@ -180,9 +180,8 @@ return [
         'icon_invalid' => 'Az ikonnak 64 × 64-es PNG-nek kell lennie, legfeljebb 100 KB.',
         'number_between' => 'Adj meg egy számot :min és :max között.',
         'eula' => 'Elfogadom a Minecraft végfelhasználói licencszerződését (EULA)',
-        'eula_help' => 'Kötelező: a Minecraft-szerver csak az EULA elfogadása után indul el. A pipa beírja helyetted az eula=true értéket.',
+        'eula_help' => 'A Minecraft-szerver csak az EULA elfogadása után indul el. Pipáld be most, és rögtön indul, vagy hagyd üresen: a szerver települ, és indításkor kéri az EULA-t.',
         'eula_read' => 'A Minecraft EULA elolvasása',
-        'eula_required' => 'A szerver létrehozásához fogadd el a Minecraft EULA-t.',
     ],
     'review' => [
         'edit_settings' => 'Beállítások szerkesztése',

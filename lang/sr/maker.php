@@ -180,9 +180,8 @@ return [
         'icon_invalid' => 'Икона мора бити PNG 64 × 64, до 100 KB.',
         'number_between' => 'Унесите број између :min и :max.',
         'eula' => 'Prihvatam Ugovor o licenci za krajnjeg korisnika Minecrafta (EULA)',
-        'eula_help' => 'Obavezno: Minecraft server se pokreće tek kada je EULA prihvaćena. Ova oznaka upisuje eula=true umesto vas.',
+        'eula_help' => 'Minecraft server se pokreće tek kada je EULA prihvaćena. Označite sada i odmah se pokreće, ili ostavite prazno: server se instalira i traži EULA kada ga pokrenete.',
         'eula_read' => 'Pročitajte Minecraft EULA',
-        'eula_required' => 'Prihvatite Minecraft EULA da biste napravili ovaj server.',
     ],
     'review' => [
         'edit_settings' => 'Измени подешавања',

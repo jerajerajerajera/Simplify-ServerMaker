@@ -180,9 +180,8 @@ return [
         'icon_invalid' => 'Ikona musí byť PNG 64 × 64, do 100 KB.',
         'number_between' => 'Zadajte číslo medzi :min a :max.',
         'eula' => 'Súhlasím s licenčnou zmluvou s koncovým používateľom Minecraftu (EULA)',
-        'eula_help' => 'Povinné: server Minecraft sa spustí až po prijatí EULA. Zaškrtnutím sa za vás zapíše eula=true.',
+        'eula_help' => 'Server Minecraft sa spustí až po prijatí EULA. Zaškrtnite teraz a spustí sa hneď, alebo nechajte prázdne: server sa nainštaluje a o EULA požiada pri spustení.',
         'eula_read' => 'Prečítať EULA Minecraftu',
-        'eula_required' => 'Na vytvorenie tohto servera prijmite EULA Minecraftu.',
     ],
     'review' => [
         'edit_settings' => 'Upraviť nastavenia',

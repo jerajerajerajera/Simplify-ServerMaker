@@ -31,12 +31,10 @@ final class ReviewStep
             ->schema([
                 View::make('simplify-servermaker::wizard.review')
                     ->viewData(fn () => ['rows' => Summary::rows($page)]),
-                // Required and never ticked for the user: accepting the EULA is their own choice.
+                // Optional and never ticked for the user: without it the server installs and asks for the EULA when started.
                 Checkbox::make('eula')
                     ->label($t('first.eula'))
                     ->helperText(new HtmlString(e($t('first.eula_help')).' <a href="https://www.minecraft.net/eula" target="_blank" rel="noopener noreferrer" class="smk-link">'.e($t('first.eula_read')).'</a>'))
-                    ->accepted()
-                    ->validationMessages(['accepted' => $t('first.eula_required')])
                     ->visible(fn () => FirstSettings::needsEula($page->data['game'] ?? null, $page->data['type'] ?? null)),
                 // Hidden with CSS, not removed, so the fields keep their values while closed.
                 View::make('simplify-servermaker::wizard.advanced')
