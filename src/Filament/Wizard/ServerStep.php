@@ -7,6 +7,7 @@ namespace Simplify\ServerMaker\Filament\Wizard;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Components\View;
@@ -45,6 +46,14 @@ final class ServerStep
                                 self::suggest($name, $old, $get, $set);
                             }),
                     ),
+                Toggle::make('steam_art')
+                    ->label($t('server.steam_art'))
+                    ->helperText(fn () => $t('server.steam_art_found', ['name' => $page->steamArt()['name'] ?? '']))
+                    ->live()
+                    ->visible(fn () => $page->steamArt() !== null),
+                View::make('simplify-servermaker::wizard.steam-art')
+                    ->viewData(fn () => ['art' => $page->steamArt()])
+                    ->visible(fn (Get $get) => $get('steam_art') && $page->steamArt() !== null),
                 TextInput::make('subdomain')
                     ->label($t('server.subdomain'))
                     ->helperText($t('server.subdomain_help'))

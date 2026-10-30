@@ -5,6 +5,9 @@
 - Minecraft Java servers get the rest of their first settings on the Minecraft step: MOTD, view distance, spawn
   protection, PvP, whitelist and allow flight. With Simplify Toolkit installed the MOTD uses its MOTD maker with colours
   and a preview.
+- Other games found in the Steam store offer to copy their Steam banner and a square icon to the new server, as in
+  Simplify 0.7.0. The icon becomes the server icon; with Simplify the banner becomes the server's banner. Turn it off
+  under Server Maker settings with Offer Steam banners and icons.
 
 ## 1.3.3
 

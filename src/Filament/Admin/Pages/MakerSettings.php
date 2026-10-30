@@ -73,6 +73,7 @@ class MakerSettings extends Page implements HasForms
             'minecraft' => (bool) Settings::get('minecraft', true),
             'egg_ids' => array_map('intval', (array) Settings::get('egg_ids', [])),
             'import_eggs' => (bool) Settings::get('import_eggs', false),
+            'steam_art' => (bool) Settings::get('steam_art', true),
             ...Access::limits(),
         ];
     }
@@ -87,6 +88,10 @@ class MakerSettings extends Page implements HasForms
             ->components([
                 self::whoSection(),
                 self::allowanceSection(),
+                Section::make($t('steam'))
+                    ->schema([
+                        Toggle::make('steam_art')->label($t('steam_art'))->helperText($t('steam_art_help')),
+                    ]),
                 Section::make($t('modpacks'))
                     ->schema([
                         TextInput::make('curseforge_key')
@@ -203,6 +208,9 @@ class MakerSettings extends Page implements HasForms
             'egg_ids' => array_values(array_map('intval', (array) ($state['egg_ids'] ?? []))),
             'import_eggs' => (bool) ($state['import_eggs'] ?? false),
         ];
+        if (array_key_exists('steam_art', $state)) {
+            $values['steam_art'] = (bool) $state['steam_art'];
+        }
         foreach (array_keys(Access::LIMITS) as $limit) {
             if (array_key_exists($limit, $state)) {
                 $values[$limit] = max(0, (int) $state[$limit]);
