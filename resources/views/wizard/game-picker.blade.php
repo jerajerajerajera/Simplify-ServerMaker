@@ -68,12 +68,15 @@
                         @endif
                     </p>
                 @else
-                    <label class="smk-search">
-                        <x-tabler-search aria-hidden="true" />
-                        <input type="search" x-model.debounce.120ms="query" x-on:input="limit = 24"
-                            placeholder="{{ $t('game.search', ['count' => count($games)]) }}"
-                            aria-label="{{ $t('game.search_label') }}" autocomplete="off" />
-                    </label>
+                    {{-- A search only helps with a longer list. --}}
+                    @if (count($games) > 6)
+                        <label class="smk-search">
+                            <x-tabler-search aria-hidden="true" />
+                            <input type="search" x-model.debounce.120ms="query" x-on:input="limit = 24"
+                                placeholder="{{ $t('game.search', ['count' => count($games)]) }}"
+                                aria-label="{{ $t('game.search_label') }}" autocomplete="off" />
+                        </label>
+                    @endif
                     <div class="smk-games-grid" role="radiogroup" aria-labelledby="smk-games">
                         <template x-for="game in shown().slice(0, limit)" :key="game.id">
                             <button type="button" role="radio" class="smk-game"
