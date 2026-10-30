@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.1
+
+- Create server showed "Error while loading page" after the server was made. The first settings (players, game mode,
+  difficulty, icon) now travel with the queued job instead of a separate table, and a problem there never stops the
+  Server Maker from opening the new server.
+
 ## 1.3.0
 
 - Minecraft servers get their first settings in the Server Maker again, as in Simplify 0.7.0: maximum players, game
