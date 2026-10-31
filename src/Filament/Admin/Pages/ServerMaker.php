@@ -244,9 +244,9 @@ class ServerMaker extends Page implements HasForms
                     ->columnSpanFull()
                     ->startOnStep(fn () => $this->step)
                     ->nextAction(fn (Action $action) => $action->label(__('simplify-servermaker::maker.next'))
-                        ->color('gray')->extraAttributes(['class' => 'smk-next']))
+                        ->view(Action::LINK_VIEW)->extraAttributes(['class' => 'smk-btn smk-next']))
                     ->previousAction(fn (Action $action) => $action->label(__('simplify-servermaker::maker.back'))
-                        ->color('gray')->extraAttributes(['class' => 'smk-back']))
+                        ->view(Action::LINK_VIEW)->extraAttributes(['class' => 'smk-btn smk-back']))
                     ->submitAction(new HtmlString(view('simplify-servermaker::wizard.create-button')->render())),
             ]);
     }

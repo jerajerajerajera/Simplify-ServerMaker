@@ -110,9 +110,17 @@ step('the add-on is tagged for Simplify', function () {
     }
 });
 
-step('the Server Maker page renders', function () use ($admin) {
+step('the Server Maker page renders, with Simplify buttons instead of bare Filament buttons', function () use ($admin) {
     $url = ServerMaker::getUrl(panel: 'admin');
-    expectOk(http($admin, $url), $url);
+    $response = http($admin, $url);
+    expectOk($response, $url);
+    // The core's screen audit fails any .fi-btn inside host mode's frame.
+    if (preg_match('/<button[^>]*class="[^"]*\\bfi-btn\\b[^"]*"/', $response->getContent(), $bare)) {
+        throw new RuntimeException('bare Filament button: '.$bare[0]);
+    }
+    if (! str_contains($response->getContent(), 'smk-next')) {
+        throw new RuntimeException('no Next button');
+    }
 });
 
 // A node with free ports, so the wizard can run to the end. Wings is not there, so Create stops at Wings.
@@ -322,9 +330,14 @@ step('a Modrinth modpack is found and gets its egg', function () use ($admin) {
     Remote::$transport = null;
 });
 
-step('the settings page renders', function () use ($admin) {
+step('the settings page renders and fits the window', function () use ($admin) {
     $url = MakerSettings::getUrl(panel: 'admin');
-    expectOk(http($admin, $url), $url);
+    $response = http($admin, $url);
+    expectOk($response, $url);
+    // With the core, s-fit makes only the form scroll, never the page.
+    if (! str_contains($response->getContent(), 'class="s-fit"')) {
+        throw new RuntimeException('the settings form has no s-fit');
+    }
 });
 
 step('settings are saved and the CurseForge key stays encrypted', function () use ($admin, $node) {
