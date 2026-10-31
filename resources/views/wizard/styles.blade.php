@@ -159,11 +159,15 @@
     /* The bar at the bottom: Back and Next are the wizard's own footer; the steps and the draft lie on top of it. */
     .smk .fi-sc-wizard-footer { position: sticky; bottom: 0; z-index: 10; display: flex; flex-wrap: nowrap; align-items: center; gap: var(--smk-gap); height: var(--smk-bar); margin: 0 !important; padding: 0 16px !important; border-top: 1px solid var(--smk-line); background: var(--smk-surface); }
     .smk .fi-sc-wizard-footer > :is(:nth-child(3), :nth-child(4)) { margin-inline-start: auto; }
-    .smk .fi-sc-wizard-footer .fi-btn { box-sizing: border-box; min-width: 104px; height: var(--smk-ctl); justify-content: center; border-radius: var(--smk-radius); font-size: 14px; }
-    .smk .fi-sc-wizard-footer .fi-btn.smk-create { min-width: 140px; }
-    .smk .fi-sc-wizard-footer .fi-btn:is(.smk-next, .smk-back) { border: 1px solid var(--smk-line); background: var(--smk-surface); color: var(--smk-ink); box-shadow: none; }
-    .smk .fi-sc-wizard-footer .fi-btn:is(.smk-next, .smk-back):hover:not(:disabled) { border-color: var(--smk-accent); background: var(--smk-raised); }
-    .smk .fi-sc-wizard-footer .fi-btn.smk-create:not(:disabled) { border: 1px solid var(--smk-accent); background: var(--smk-accent); color: var(--smk-on-accent); }
+    /* Simplify's buttons, also for the wizard's own Back and Next (Filament links underneath, never bare Filament buttons). */
+    .smk button.smk-btn { box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: var(--smk-ctl); padding: 0 16px; border: 1px solid var(--smk-line); border-radius: var(--smk-radius); background: var(--smk-surface); color: var(--smk-ink); font-size: 14px; font-weight: 600; text-decoration: none; cursor: pointer; }
+    .smk button.smk-btn:hover:not(:disabled) { border-color: var(--smk-accent); background: var(--smk-raised); }
+    .smk button.smk-btn, .smk button.smk-btn * { text-decoration: none !important; }
+    .smk button.smk-btn:disabled { opacity: .6; cursor: default; }
+    .smk button.smk-btn .fi-icon { width: 18px; height: 18px; }
+    .smk .fi-sc-wizard-footer button.smk-btn { min-width: 104px; }
+    .smk .fi-sc-wizard-footer button.smk-create { min-width: 140px; }
+    .smk button.smk-btn.smk-create:not(:disabled) { border-color: var(--smk-accent); background: var(--smk-accent); color: var(--smk-on-accent); }
     .smk .smk-navbar { position: sticky; bottom: 0; z-index: 11; box-sizing: border-box; display: flex; align-items: center; gap: var(--smk-gap); height: var(--smk-bar); margin-top: calc(-1 * var(--smk-bar)); padding: 0 var(--smk-right) 0 var(--smk-left); pointer-events: none; }
     .smk .smk-navbar > * { pointer-events: auto; }
     .smk .smk-steps, .smk .smk-draft { box-sizing: border-box; display: flex; align-items: center; height: var(--smk-ctl); border: 1px solid var(--smk-line); border-radius: var(--smk-radius); background: var(--smk-surface); }
@@ -201,8 +205,8 @@
     @media (max-width: 600px) {
         .smk { --smk-gap: 6px; --smk-bar: 60px; --smk-left: calc(10px + 72px + var(--smk-gap)); --smk-right: calc(10px + 118px + var(--smk-gap)); }
         .smk .fi-sc-wizard-footer { padding: 0 10px env(safe-area-inset-bottom) !important; }
-        .smk .fi-sc-wizard-footer .fi-btn { min-width: 72px; padding: 0 12px; }
-        .smk .fi-sc-wizard-footer .fi-btn.smk-create { min-width: 118px; }
+        .smk .fi-sc-wizard-footer button.smk-btn { min-width: 72px; padding: 0 12px; }
+        .smk .fi-sc-wizard-footer button.smk-create { min-width: 118px; }
         .smk .smk-minecraft { padding: 14px; }
         .smk .smk-minecraft-types { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .smk .smk-minecraft-type { min-height: 0; }

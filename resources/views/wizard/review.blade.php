@@ -14,9 +14,10 @@
     </dl>
     @if ($this->isAdmin())
         <footer>
-            <x-filament::button type="button" color="gray" outlined wire:click="toggleAdvanced" icon="tabler-adjustments">
+            <button type="button" class="smk-btn" wire:click="toggleAdvanced">
+                <x-filament::icon icon="tabler-adjustments" />
                 {{ __('simplify-servermaker::maker.review.'.($this->editingAdvanced ? 'done_editing' : 'edit_settings')) }}
-            </x-filament::button>
+            </button>
         </footer>
     @endif
 </section>
