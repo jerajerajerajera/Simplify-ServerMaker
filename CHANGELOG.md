@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.4.2
 
 - Next and Back sit in the middle of their buttons again.
 - In Simplify's Create server popup the wizard runs to the popup's edges: no second padding around it.
