@@ -164,6 +164,7 @@
     .smk button.smk-btn:hover:not(:disabled) { border-color: var(--smk-accent); background: var(--smk-raised); }
     .smk button.smk-btn, .smk button.smk-btn * { text-decoration: none !important; }
     .smk button.smk-btn:disabled { opacity: .6; cursor: default; }
+    .smk button.smk-btn > * { align-self: center; }
     .smk button.smk-btn .fi-icon { width: 18px; height: 18px; }
     .smk .fi-sc-wizard-footer button.smk-btn { min-width: 104px; }
     .smk .fi-sc-wizard-footer button.smk-create { min-width: 140px; }
@@ -242,13 +243,17 @@
     .smk-steam-icon { position: absolute; right: 10px; bottom: 10px; width: 56px; height: 56px; overflow: hidden; border-radius: 12px; border: 3px solid var(--smk-surface); background: var(--smk-raised); }
     .smk-steam-icon img { width: 100%; aspect-ratio: 1; object-fit: cover; object-position: top; }
 
-    /* The header button (Settings) as Simplify icon buttons: a quiet bordered square, the icon turns the
-       accent colour on hover. Simplify's colours when it is installed, Pelican's otherwise. */
+    /* The header button (Settings, only without Simplify) as Simplify icon buttons: a quiet bordered square, the icon turns the
+       accent colour on hover. Pelican's colours. */
     .fi-page:has(.smk) .fi-header-actions-ctn .fi-icon-btn { display: inline-grid; place-items: center; width: var(--s-h, 36px); height: var(--s-h, 36px); margin: 0; border: 1px solid var(--s-line, var(--gray-200)); border-radius: var(--s-radius-sm, 6px); background: var(--s-surface, #fff); color: var(--s-ink, var(--gray-950)); transition: background .15s, border-color .15s, color .15s; }
     .dark .fi-page:has(.smk) .fi-header-actions-ctn .fi-icon-btn { border-color: var(--s-line, var(--gray-700)); background: var(--s-surface, var(--gray-900)); color: var(--s-ink, var(--gray-50)); }
     .fi-page:has(.smk) .fi-header-actions-ctn .fi-icon-btn .fi-icon { width: 18px; height: 18px; color: inherit; }
     .fi-page:has(.smk) .fi-header-actions-ctn .fi-icon-btn:hover { border-color: var(--s-accent, var(--primary-600)); background: var(--s-raised, var(--gray-100)); color: var(--s-accent, var(--primary-600)); }
     .dark .fi-page:has(.smk) .fi-header-actions-ctn .fi-icon-btn:hover { border-color: var(--s-accent, var(--primary-500)); background: var(--s-raised, var(--gray-800)); color: var(--s-accent, var(--primary-500)); }
+    /* In Simplify's Create server popup the popup is the card: no page padding, header or rounding around the wizard. */
+    html.ps-frame :is(.fi-main, .fi-page-header-main-ctn, .fi-page-main):has(.smk) { padding: 0 !important; row-gap: 0 !important; }
+    html.ps-frame .fi-page:has(.smk) .fi-header { display: none !important; }
+    html.ps-frame .smk .fi-sc-wizard { border-radius: 0; }
 </style>
 <script>
     // Height left under the wizard's top edge, so the page itself never scrolls; a very low window keeps the page scroll.
@@ -257,7 +262,7 @@
             const wizard = document.querySelector('.smk .fi-sc-wizard');
             const root = document.documentElement;
             if (!wizard) return root.classList.remove('smk-fit');
-            const height = Math.floor(innerHeight - (wizard.getBoundingClientRect().top + scrollY) - 16);
+            const height = Math.floor(innerHeight - (wizard.getBoundingClientRect().top + scrollY) - (root.classList.contains('ps-frame') ? 0 : 16));
             root.classList.toggle('smk-fit', height >= 320);
             root.style.setProperty('--smk-fit', height + 'px');
             // Whatever the page still has below the wizard (its bottom padding) comes off too.

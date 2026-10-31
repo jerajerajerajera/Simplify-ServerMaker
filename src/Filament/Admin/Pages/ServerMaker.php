@@ -17,6 +17,7 @@ use Filament\Schemas\Schema;
 use Illuminate\Support\HtmlString;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Locked;
+use Simplify\Core\Addons\Addon;
 use Simplify\ServerMaker\Access;
 use Simplify\ServerMaker\Creation\ApplyFirstSettings;
 use Simplify\ServerMaker\Creation\ApplySteamArt;
@@ -166,7 +167,8 @@ class ServerMaker extends Page implements HasForms
                 ->label(__('simplify-servermaker::maker.settings.title'))
                 ->icon('tabler-settings')
                 ->color('gray')
-                ->visible(fn () => MakerSettings::canAccess())
+                // With Simplify the settings open from Simplify, and this page always opens in its popup.
+                ->visible(fn () => MakerSettings::canAccess() && ! class_exists(Addon::class))
                 ->url(fn () => MakerSettings::getUrl(panel: 'admin')),
         ];
     }

@@ -121,6 +121,9 @@ step('the Server Maker page renders, with Simplify buttons instead of bare Filam
     if (! str_contains($response->getContent(), 'smk-next')) {
         throw new RuntimeException('no Next button');
     }
+    // Without Simplify the settings open from this page.
+    Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('admin'));
+    Livewire\Livewire::actingAs($admin)->test(ServerMaker::class)->assertActionVisible('settings');
 });
 
 // A node with free ports, so the wizard can run to the end. Wings is not there, so Create stops at Wings.
@@ -432,6 +435,9 @@ step('Simplify shows a Create server button to those who may use it', function (
     if ($addon->dashboardActions() !== [] || $addon->settingsUrl() !== null) {
         throw new RuntimeException('a user without self-service gets the button');
     }
+    // With Simplify its settings open from Simplify: no settings button above the wizard in Simplify's popup.
+    Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('admin'));
+    Livewire\Livewire::actingAs($admin)->test(ServerMaker::class)->assertActionHidden('settings');
 });
 
 step("Simplify's setup asks who may make servers and saves it", function () use ($admin, $node) {
