@@ -19,6 +19,7 @@ use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Locked;
 use Simplify\ServerMaker\Access;
 use Simplify\ServerMaker\Creation\ApplyFirstSettings;
+use Simplify\ServerMaker\Creation\ApplySteamArt;
 use Simplify\ServerMaker\Creation\Creator;
 use Simplify\ServerMaker\Creation\EggData;
 use Simplify\ServerMaker\Creation\FirstSettings;
@@ -39,6 +40,7 @@ use Simplify\ServerMaker\Games\Minecraft;
 use Simplify\ServerMaker\Games\MinecraftEggs;
 use Simplify\ServerMaker\Games\MinecraftVersions;
 use Simplify\ServerMaker\Games\OtherGames;
+use Simplify\ServerMaker\Games\SteamArt;
 use Simplify\ServerMaker\Models\Draft;
 use Simplify\ServerMaker\Modpacks\Sources;
 use Throwable;
@@ -115,6 +117,7 @@ class ServerMaker extends Page implements HasForms
             ...FirstSettings::DEFAULTS,
             'server_icon' => null,
             'eula' => false,
+            'steam_art' => true,
             'name' => '',
             'node_id' => $node,
             'allocation_id' => Ports::preferred($node),
@@ -363,6 +366,14 @@ class ServerMaker extends Page implements HasForms
             : null;
     }
 
+    /** The Steam art of the chosen other game, when the setting is on and the store knows it. */
+    public function steamArt(): ?array
+    {
+        $egg = ($this->data['game'] ?? null) === 'other' ? $this->egg() : null;
+
+        return $egg ? SteamArt::find((string) $egg->name) : null;
+    }
+
     /** The Java major version for a Minecraft Java server, else null. */
     public function java(): ?int
     {
@@ -455,6 +466,9 @@ class ServerMaker extends Page implements HasForms
 
         Subdomain::request($server, (string) ($state['subdomain'] ?? ''));
         ApplyFirstSettings::afterInstall($server, $first);
+        if (($state['steam_art'] ?? false) && ($art = $this->steamArt()) !== null) {
+            ApplySteamArt::afterResponse($server, $art);
+        }
         Draft::query()->where('user_id', user()->id)->delete();
         Notification::make()
             ->title(__('simplify-servermaker::maker.review.created'))

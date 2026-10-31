@@ -16,10 +16,14 @@ use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithAuthentication;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithSession;
 use Illuminate\Foundation\Testing\Concerns\MakesHttpRequests;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Testing\TestResponse;
 use Simplify\Core\Addons\Addon;
 use Simplify\ServerMaker\Creation\ApplyFirstSettings;
+use Simplify\ServerMaker\Creation\ApplySteamArt;
 use Simplify\ServerMaker\Creation\Ports;
 use Simplify\ServerMaker\Filament\Admin\Pages\MakerSettings;
 use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
@@ -27,6 +31,7 @@ use Simplify\ServerMaker\Filament\App\Pages\ServerMaker as AppServerMaker;
 use Simplify\ServerMaker\Games\BundledEggs;
 use Simplify\ServerMaker\Games\EggIndex;
 use Simplify\ServerMaker\Games\OtherGames;
+use Simplify\ServerMaker\Games\SteamArt;
 use Simplify\ServerMaker\Models\Draft;
 use Simplify\ServerMaker\Modpacks\Remote;
 use Simplify\ServerMaker\ServerMakerAddon;
@@ -206,6 +211,32 @@ step('another game shows its own settings', function () use ($admin) {
         ->assertSet('data.game', 'other')
         ->assertSet('data.egg_id', $egg->id)
         ->assertSee('Smoke Valheim');
+});
+
+step('another game offers its Steam banner and icon, copied once after creation', function () use ($admin) {
+    // The store search for the smoke egg answers Valheim; its images come from Steam's real CDN.
+    $art = SteamArt::pick([['id' => 892970, 'name' => 'Smoke Valheim']], 'Smoke Valheim');
+    Cache::put('simplify-servermaker.steam.'.md5('smoke valheim'), $art, 60);
+    $egg = Egg::query()->where('name', 'Smoke Valheim')->firstOrFail();
+    Livewire\Livewire::actingAs($admin)->test(ServerMaker::class)
+        ->call('pickGame', 'other', 'egg:'.$egg->id)
+        ->assertSet('data.steam_art', true)
+        ->assertSee(['Use the Steam banner and icon', 'Found on Steam: Smoke Valheim']);
+    Settings::put(['steam_art' => false]);
+    if (SteamArt::find('Smoke Valheim Dedicated Server') !== null) {
+        throw new RuntimeException('the setting Offer Steam banners and icons is ignored');
+    }
+    Settings::put(['steam_art' => null]);
+    $server = new Server;
+    $server->uuid = (string) Str::uuid();
+    ApplySteamArt::apply($server, $art);
+    if (method_exists($server, 'writeIcon')) {
+        $path = Server::getIconStoragePath().'/'.$server->uuid.'.png';
+        if (! Storage::disk('public')->exists($path) || getimagesizefromstring(Storage::disk('public')->get($path))[0] !== 128) {
+            throw new RuntimeException('the Steam icon is not the server icon');
+        }
+        Storage::disk('public')->delete($path);
+    }
 });
 
 step('a game from the egg index is offered, checked and added on Next', function () use ($admin) {

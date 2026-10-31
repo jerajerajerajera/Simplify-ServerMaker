@@ -225,6 +225,12 @@
         .smk .smk-draft-status, .smk .smk-discard > span { display: none; }
         .smk .smk-draft-icon { margin: 0 4px; }
     }
+    /* Server step: the Steam banner with its square icon in the corner, as it will look on the server. */
+    .smk-steam { position: relative; max-width: 460px; }
+    .smk-steam-banner { display: block; width: 100%; aspect-ratio: 460 / 215; object-fit: cover; border-radius: 10px; border: 1px solid var(--smk-line); }
+    .smk-steam-icon { position: absolute; right: 10px; bottom: 10px; width: 56px; height: 56px; overflow: hidden; border-radius: 12px; border: 3px solid var(--smk-surface); background: var(--smk-raised); }
+    .smk-steam-icon img { width: 100%; aspect-ratio: 1; object-fit: cover; object-position: top; }
+
     /* The header button (Settings) as Simplify icon buttons: a quiet bordered square, the icon turns the
        accent colour on hover. Simplify's colours when it is installed, Pelican's otherwise. */
     .fi-page:has(.smk) .fi-header-actions-ctn .fi-icon-btn { display: inline-grid; place-items: center; width: var(--s-h, 36px); height: var(--s-h, 36px); margin: 0; border: 1px solid var(--s-line, var(--gray-200)); border-radius: var(--s-radius-sm, 6px); background: var(--s-surface, #fff); color: var(--s-ink, var(--gray-950)); transition: background .15s, border-color .15s, color .15s; }

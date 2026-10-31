@@ -10,6 +10,7 @@ use Simplify\ServerMaker\Games\BundledEggs;
 use Simplify\ServerMaker\Games\Java;
 use Simplify\ServerMaker\Games\Minecraft;
 use Simplify\ServerMaker\Games\OtherGames;
+use Simplify\ServerMaker\Games\SteamArt;
 
 check('the default software of a type', Minecraft::software('mods', null) === 'fabric');
 check('a chosen software is kept', Minecraft::software('mods', 'neoforge') === 'neoforge');
@@ -64,4 +65,9 @@ try {
 }
 
 check('a card summary is one short line', OtherGames::summary("Line one\n\n  line two") === 'Line one line two');
+check('the Steam search name drops server words', SteamArt::searchName('Valheim (Plus) Dedicated Server') === 'Valheim');
+$items = [['id' => 1, 'name' => 'Valheim Soundtrack'], ['id' => 892970, 'name' => 'Valheim']];
+check('Steam prefers the exact name', SteamArt::pick($items, 'Valheim')['appid'] === 892970);
+check('Steam art comes from the CDN', str_starts_with(SteamArt::pick($items, 'Valheim')['header'], SteamArt::CDN));
+check('no Steam match is no art', SteamArt::pick([['id' => 5, 'name' => 'Rust']], 'Valheim') === null && SteamArt::pick([['id' => 'x', 'name' => 'Valheim']], 'Valheim') === null);
 echo "PASS games\n";
