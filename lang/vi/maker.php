@@ -112,6 +112,8 @@ return [
         'name' => 'Tên máy chủ',
         'name_help' => 'Hiển thị trên panel. Bạn có thể đổi sau.',
         'name_required' => 'Nhập tên máy chủ.',
+        'color' => 'Màu máy chủ',
+        'color_help' => 'Giao diện của máy chủ trong Simplify. Bạn có thể thay đổi sau.',
         'steam_art' => 'Dùng banner và biểu tượng Steam',
         'steam_art_found' => 'Tìm thấy trên Steam: :name. Đã sao chép một lần vào panel này; bạn có thể đổi sau trong cài đặt máy chủ.',
         'steam_banner' => 'Banner Steam cho :name',

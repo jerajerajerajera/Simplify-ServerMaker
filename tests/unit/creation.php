@@ -11,6 +11,7 @@ use Simplify\ServerMaker\Creation\EggData;
 use Simplify\ServerMaker\Creation\FirstSettings;
 use Simplify\ServerMaker\Creation\Payload;
 use Simplify\ServerMaker\Creation\Resources;
+use Simplify\ServerMaker\Creation\ServerColor;
 
 check('presets include the starting value', Resources::presets('ram', 6) === [2, 4, 6, 8, 12, 16]);
 check('presets add an unusual start', in_array(3, Resources::presets('ram', 3), true));
@@ -76,4 +77,5 @@ $properties = "#Minecraft server properties\nmotd=Hello\nmax-players=20\ngamemod
 check('only the chosen keys change', FirstSettings::merge($properties, ['max-players' => '8', 'difficulty' => 'hard']) === "#Minecraft server properties\nmotd=Hello\nmax-players=8\ngamemode=survival\ndifficulty=hard\n");
 check('an empty file gets the keys', FirstSettings::merge('', ['max-players' => '8']) === "max-players=8\n");
 check('without Toolkit there is no own backup schedule', ! BackupSchedule::available() && BackupSchedule::defaults() === ['backup_every' => 360, 'backup_keep' => 2, 'backup_only_when_used' => true]);
+check('without Simplify\'s colour list there is no colour to pick', ServerColor::choices() === []);
 echo "PASS creation\n";

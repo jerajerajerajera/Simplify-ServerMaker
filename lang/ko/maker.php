@@ -112,6 +112,8 @@ return [
         'name' => '서버 이름',
         'name_help' => '패널에 표시됩니다. 나중에 변경할 수 있습니다.',
         'name_required' => '서버 이름을 입력하세요.',
+        'color' => '서버 색',
+        'color_help' => 'Simplify에서 서버가 보이는 모습입니다. 나중에 바꿀 수 있습니다.',
         'steam_art' => 'Steam 배너와 아이콘 사용',
         'steam_art_found' => 'Steam에서 찾음: :name. 이 패널에 한 번 복사되며, 나중에 서버 설정에서 바꿀 수 있습니다.',
         'steam_banner' => ':name Steam 배너',

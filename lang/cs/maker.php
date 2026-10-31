@@ -112,6 +112,8 @@ return [
         'name' => 'Název serveru',
         'name_help' => 'Zobrazuje se v panelu. Později ho můžeš změnit.',
         'name_required' => 'Zadej název serveru.',
+        'color' => 'Barva serveru',
+        'color_help' => 'Jak server vypadá v Simplify. Později to můžete změnit.',
         'steam_art' => 'Použít banner a ikonu ze Steamu',
         'steam_art_found' => 'Nalezeno na Steamu: :name. Jednou zkopírováno do tohoto panelu; později lze změnit v nastavení serveru.',
         'steam_banner' => 'Banner Steam pro :name',

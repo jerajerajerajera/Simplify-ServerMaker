@@ -27,6 +27,7 @@ use Simplify\ServerMaker\Creation\FirstSettings;
 use Simplify\ServerMaker\Creation\Payload;
 use Simplify\ServerMaker\Creation\Ports;
 use Simplify\ServerMaker\Creation\Resources;
+use Simplify\ServerMaker\Creation\ServerColor;
 use Simplify\ServerMaker\Creation\Subdomain;
 use Simplify\ServerMaker\Filament\Wizard\GameStep;
 use Simplify\ServerMaker\Filament\Wizard\GameVariables;
@@ -119,6 +120,7 @@ class ServerMaker extends Page implements HasForms
             'server_icon' => null,
             'eula' => false,
             'steam_art' => true,
+            'server_color' => null,
             'backup_schedule' => false,
             ...BackupSchedule::defaults(),
             'name' => '',
@@ -470,6 +472,7 @@ class ServerMaker extends Page implements HasForms
         Subdomain::request($server, (string) ($state['subdomain'] ?? ''));
         ApplyFirstSettings::afterInstall($server, $first);
         try {
+            ServerColor::apply($server, $state['server_color'] ?? null);
             BackupSchedule::apply($server, $state);
         } catch (Throwable $exception) {
             report($exception);
