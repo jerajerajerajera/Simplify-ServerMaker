@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.4.0
 
 - Back, Next, Create and Edit settings in the Server Maker use Simplify's button style instead of Filament's.
 - With Simplify installed, the Server Maker settings page fits the window: only the form scrolls, never the page.
