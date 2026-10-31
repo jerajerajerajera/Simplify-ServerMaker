@@ -88,6 +88,15 @@ jobs:
           # Laravel can end a crashed script with exit code 0, so the job also needs the closing line.
           php plugins/simplify-servermaker/tests/panel/smoke.php | tee smoke.txt
           grep -q '^All steps passed$' smoke.txt
+      # Toolkit changes the wizard (MOTD maker, backup schedule): install it after the steps above and check those.
+      - name: Install Simplify Toolkit and open the pages again
+        working-directory: panel
+        run: |
+          git clone --quiet --depth 1 https://github.com/jerajerajerajera/simplify-mods.git plugins/simplify-toolkit
+          rm -rf plugins/simplify-toolkit/.git
+          php artisan p:plugin:install simplify-toolkit
+          php plugins/simplify-servermaker/tests/panel/toolkit.php | tee toolkit.txt
+          grep -q '^All steps passed$' toolkit.txt
       - name: Laravel log
         if: failure()
         run: grep -h -E '^\[[0-9-]+ [0-9:]+\]' panel/storage/logs/*.log | cut -c1-600 | tail -n 12 || true
