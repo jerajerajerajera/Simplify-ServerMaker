@@ -10,7 +10,8 @@ use Simplify\ServerMaker\Games\Minecraft;
 
 /**
  * What a new Minecraft server gets once it is installed (as in Simplify 0.7.0): players, game mode and difficulty in
- * server.properties, and for Java a server icon and the accepted EULA. Pure, apart from reading the uploaded icon.
+ * server.properties, and for Java also the MOTD, view distance, spawn protection, PvP, whitelist and flight, a server
+ * icon and the accepted EULA. Pure, apart from reading the uploaded icon.
  */
 final class FirstSettings
 {
@@ -18,7 +19,18 @@ final class FirstSettings
 
     public const DIFFICULTIES = ['peaceful', 'easy', 'normal', 'hard'];
 
-    public const DEFAULTS = ['max_players' => 20, 'gamemode' => 'survival', 'difficulty' => 'easy'];
+    public const DEFAULTS = ['max_players' => 20, 'gamemode' => 'survival', 'difficulty' => 'easy', ...self::JAVA];
+
+    /** Java only: Minecraft's own defaults, as the Server properties step of 0.7.0 offered them. */
+    public const JAVA = ['motd' => 'A Minecraft Server', 'view_distance' => 10, 'spawn_protection' => 16, 'pvp' => true, 'white_list' => false, 'allow_flight' => false];
+
+    /** Java numbers: form field => [property, minimum, maximum]. */
+    public const NUMBERS = ['view_distance' => ['view-distance', 2, 32], 'spawn_protection' => ['spawn-protection', 0, 1000]];
+
+    /** Java switches: form field => property. */
+    public const SWITCHES = ['pvp' => 'pvp', 'white_list' => 'white-list', 'allow_flight' => 'allow-flight'];
+
+    public const MOTD_MAX = 512;
 
     /** Every Minecraft type except a proxy has a server.properties. */
     public static function hasProperties(?string $game, ?string $type): bool
@@ -67,8 +79,11 @@ final class FirstSettings
             $difficulty = (string) array_search($difficulty, self::DIFFICULTIES, true);
         }
         $settings = ['properties' => ['max-players' => (string) $players, 'gamemode' => $gamemode, 'difficulty' => $difficulty]];
-        if (self::hasIcon($game, $type) && ($icon = self::icon($state['server_icon'] ?? null)) !== null) {
-            $settings['icon'] = $icon;
+        if (self::hasIcon($game, $type)) {
+            $settings['properties'] += self::java($state);
+            if (($icon = self::icon($state['server_icon'] ?? null)) !== null) {
+                $settings['icon'] = $icon;
+            }
         }
         // Optional: without the tick the server is made and installed, and asks for the EULA when it is started.
         if (self::needsEula($game, $type) && filter_var($state['eula'] ?? false, FILTER_VALIDATE_BOOL)) {
@@ -76,6 +91,33 @@ final class FirstSettings
         }
 
         return $settings;
+    }
+
+    /**
+     * The Java-only properties, checked like 0.7.0 did.
+     *
+     * @param  array<string, mixed>  $state
+     * @return array<string, string>
+     */
+    private static function java(array $state): array
+    {
+        $motd = str_replace(["\r\n", "\r"], "\n", (string) ($state['motd'] ?? self::JAVA['motd']));
+        if (mb_strlen($motd) > self::MOTD_MAX) {
+            self::fail('motd', __('simplify-servermaker::maker.first.motd_too_long', ['max' => self::MOTD_MAX]));
+        }
+        $properties = ['motd' => $motd];
+        foreach (self::NUMBERS as $field => [$key, $min, $max]) {
+            $number = filter_var($state[$field] ?? self::JAVA[$field], FILTER_VALIDATE_INT);
+            if ($number === false || $number < $min || $number > $max) {
+                self::fail($field, __('simplify-servermaker::maker.first.number_between', ['min' => $min, 'max' => $max]));
+            }
+            $properties[$key] = (string) $number;
+        }
+        foreach (self::SWITCHES as $field => $key) {
+            $properties[$key] = filter_var($state[$field] ?? self::JAVA[$field], FILTER_VALIDATE_BOOL) ? 'true' : 'false';
+        }
+
+        return $properties;
     }
 
     /** The uploaded icon as base64, after checking it is a 64 × 64 PNG of at most 100 KB. */
@@ -114,7 +156,7 @@ final class FirstSettings
                 if (preg_match('/^\s*([^#!\s=:]+)\s*(?:[=:]|\s)\s*/', $line, $match) && array_key_exists($match[1], $values)) {
                     $skip = true;
                     if (! isset($seen[$match[1]])) {
-                        $result[] = $match[1].'='.$values[$match[1]];
+                        $result[] = $match[1].'='.self::encode($values[$match[1]]);
                         $seen[$match[1]] = true;
                     }
                 }
@@ -127,11 +169,24 @@ final class FirstSettings
         }
         foreach ($values as $key => $value) {
             if (! isset($seen[$key])) {
-                $result[] = $key.'='.$value;
+                $result[] = $key.'='.self::encode($value);
             }
         }
 
         return rtrim(implode("\n", $result), "\n")."\n";
+    }
+
+    /** A value as Java writes it: escaped line breaks and backslashes, and \uXXXX for anything outside ASCII. */
+    public static function encode(string $value): string
+    {
+        $value = str_replace(['\\', "\r", "\n", "\t"], ['\\\\', '\\r', '\\n', '\\t'], $value);
+        $value = (string) preg_replace_callback('/^ +/', fn (array $match) => str_repeat('\\ ', strlen($match[0])), $value);
+
+        return (string) preg_replace_callback('/[^\x20-\x7e]/u', function (array $match): string {
+            $units = unpack('n*', mb_convert_encoding($match[0], 'UTF-16BE', 'UTF-8'));
+
+            return implode('', array_map(fn (int $unit) => sprintf('\\u%04x', $unit), $units));
+        }, $value);
     }
 
     private static function fail(string $field, string $message): never

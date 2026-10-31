@@ -133,7 +133,11 @@ step('a Minecraft server goes through every step and imports its egg', function 
         ->set('data.allocation_id', Ports::first($node->id))
         ->assertSet('data.max_players', 20)
         ->assertSet('data.eula', false)
-        ->assertSee('Game mode');
+        ->assertSee('Game mode')
+        // Java gets the rest of the 0.7.0 server properties on the same step.
+        ->assertSet('data.motd', 'A Minecraft Server')
+        ->assertSet('data.view_distance', 10)
+        ->assertSee(['View distance (chunks)', 'Spawn protection (blocks)', 'PvP', 'Whitelist', 'Allow flight']);
     // The EULA box is never ticked for the user, and never blocks the browser from sending the form.
     if (! preg_match('/<input[^>]*data\.eula[^>]*>/', $test->html(), $box) || str_contains($box[0], 'required') || str_contains($box[0], 'checked')) {
         throw new RuntimeException('the EULA box is missing, required or ticked: '.($box[0] ?? ''));
@@ -144,7 +148,12 @@ step('a Minecraft server goes through every step and imports its egg', function 
     if (! array_key_exists('data.max_players', $test->errors()->toArray()) || Server::query()->where('name', 'smoke-oak')->exists()) {
         throw new RuntimeException('too many players was accepted');
     }
-    $test->set('data.max_players', 12)->set('data.gamemode', 'creative')->call('create');
+    $test->set('data.max_players', 12)->set('data.view_distance', 99)->call('create');
+    if (! array_key_exists('data.view_distance', $test->errors()->toArray()) || Server::query()->where('name', 'smoke-oak')->exists()) {
+        throw new RuntimeException('a view distance of 99 was accepted');
+    }
+    $test->set('data.view_distance', 8)->set('data.motd', '§aSmoke oak')->set('data.white_list', true)
+        ->set('data.gamemode', 'creative')->call('create');
     $server = Server::query()->where('name', 'smoke-oak')->first();
     // Without Wings Pelican removes the server again after the daemon call fails; reaching that call is enough.
     $errors = $test->errors()->toArray();
