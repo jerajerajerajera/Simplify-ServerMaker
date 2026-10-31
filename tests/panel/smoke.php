@@ -16,9 +16,10 @@ use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithAuthentication;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithSession;
 use Illuminate\Foundation\Testing\Concerns\MakesHttpRequests;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Testing\TestResponse;
 use Simplify\Core\Addons\Addon;
 use Simplify\ServerMaker\Creation\ApplyFirstSettings;
@@ -213,14 +214,9 @@ step('another game shows its own settings', function () use ($admin) {
 });
 
 step('another game offers its Steam banner and icon, copied once after creation', function () use ($admin) {
-    $image = imagecreatetruecolor(300, 450);
-    ob_start();
-    imagejpeg($image);
-    $jpeg = (string) ob_get_clean();
-    Http::fake([
-        'store.steampowered.com/*' => Http::response(['items' => [['id' => 892970, 'name' => 'Smoke Valheim']]]),
-        SteamArt::CDN.'*' => Http::response($jpeg, 200, ['Content-Type' => 'image/jpeg']),
-    ]);
+    // The store search for the smoke egg answers Valheim; its images come from Steam's real CDN.
+    $art = SteamArt::pick([['id' => 892970, 'name' => 'Smoke Valheim']], 'Smoke Valheim');
+    Cache::put('simplify-servermaker.steam.'.md5('smoke valheim'), $art, 60);
     $egg = Egg::query()->where('name', 'Smoke Valheim')->firstOrFail();
     Livewire\Livewire::actingAs($admin)->test(ServerMaker::class)
         ->call('pickGame', 'other', 'egg:'.$egg->id)
@@ -232,8 +228,8 @@ step('another game offers its Steam banner and icon, copied once after creation'
     }
     Settings::put(['steam_art' => null]);
     $server = new Server;
-    $server->uuid = (string) Illuminate\Support\Str::uuid();
-    ApplySteamArt::apply($server, SteamArt::find('Smoke Valheim Dedicated Server') ?? []);
+    $server->uuid = (string) Str::uuid();
+    ApplySteamArt::apply($server, $art);
     if (method_exists($server, 'writeIcon')) {
         $path = Server::getIconStoragePath().'/'.$server->uuid.'.png';
         if (! Storage::disk('public')->exists($path) || getimagesizefromstring(Storage::disk('public')->get($path))[0] !== 128) {

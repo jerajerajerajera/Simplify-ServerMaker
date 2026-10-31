@@ -29,7 +29,7 @@ final class SteamArt
         $name = preg_replace('/\s*[\(\[][^\)\]]*[\)\]]\s*/', ' ', $eggName) ?? $eggName;
         $name = preg_replace('/\b(dedicated\s+server|dedicated|server|servers|egg|ds)\b/i', ' ', $name) ?? $name;
 
-        return trim(preg_replace('/\s+/', ' ', $name) ?? $name, " -–:|");
+        return trim(preg_replace('/\s+/', ' ', $name) ?? $name, ' -–:|');
     }
 
     /** @return array{appid: int, name: string, banner: string, header: string, capsule: string}|null */
