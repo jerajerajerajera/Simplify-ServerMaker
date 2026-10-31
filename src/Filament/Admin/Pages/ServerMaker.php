@@ -20,6 +20,7 @@ use Livewire\Attributes\Locked;
 use Simplify\ServerMaker\Access;
 use Simplify\ServerMaker\Creation\ApplyFirstSettings;
 use Simplify\ServerMaker\Creation\ApplySteamArt;
+use Simplify\ServerMaker\Creation\BackupSchedule;
 use Simplify\ServerMaker\Creation\Creator;
 use Simplify\ServerMaker\Creation\EggData;
 use Simplify\ServerMaker\Creation\FirstSettings;
@@ -118,6 +119,8 @@ class ServerMaker extends Page implements HasForms
             'server_icon' => null,
             'eula' => false,
             'steam_art' => true,
+            'backup_schedule' => false,
+            ...BackupSchedule::defaults(),
             'name' => '',
             'node_id' => $node,
             'allocation_id' => Ports::preferred($node),
@@ -466,6 +469,12 @@ class ServerMaker extends Page implements HasForms
 
         Subdomain::request($server, (string) ($state['subdomain'] ?? ''));
         ApplyFirstSettings::afterInstall($server, $first);
+        try {
+            BackupSchedule::apply($server, $state);
+        } catch (Throwable $exception) {
+            report($exception);
+            Notification::make()->title(__('simplify-servermaker::maker.resources.backup_failed'))->warning()->send();
+        }
         if (($state['steam_art'] ?? false) && ($art = $this->steamArt()) !== null) {
             ApplySteamArt::afterResponse($server, $art);
         }
