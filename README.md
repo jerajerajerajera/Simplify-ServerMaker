@@ -18,7 +18,7 @@ It works on its own. With [Simplify](https://github.com/jerajerajerajera/Simplif
 ## Use
 
 Install the plugin from the [Pelican Hub](https://hub.pelican.dev). Administrators find **Server Maker** in the
-admin area. The gear button on that page opens the settings.
+admin area. The gear button on that page opens the settings; with Simplify installed they open from Simplify's add-on list.
 
 ### Letting people make their own servers
 

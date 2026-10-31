@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Next and Back sit in the middle of their buttons again.
+- In Simplify's Create server popup the wizard runs to the popup's edges: no second padding around it.
+- With Simplify installed there is no Settings button above the wizard any more (it opened Pelican's admin inside the
+  popup); the settings open from Simplify's add-on list. Without Simplify the button stays.
+
 ## 1.4.1
 
 - Back, Next, Create and Edit settings in the Server Maker use Simplify's button style instead of Filament's.
