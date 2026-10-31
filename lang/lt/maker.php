@@ -112,6 +112,8 @@ return [
         'name' => 'Serverio pavadinimas',
         'name_help' => 'Rodomas skydelyje. Vėliau galėsite pakeisti.',
         'name_required' => 'Įveskite serverio pavadinimą.',
+        'color' => 'Serverio spalva',
+        'color_help' => 'Kaip serveris atrodo Simplify. Vėliau galėsite tai pakeisti.',
         'steam_art' => 'Naudoti Steam reklamjuostę ir piktogramą',
         'steam_art_found' => 'Rasta Steam: :name. Vieną kartą nukopijuota į šį skydelį; vėliau galite pakeisti serverio nustatymuose.',
         'steam_banner' => ':name Steam reklamjuostė',

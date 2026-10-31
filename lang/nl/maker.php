@@ -112,6 +112,8 @@ return [
         'name' => 'Servernaam',
         'name_help' => 'Zichtbaar in het paneel. Je kunt dit later wijzigen.',
         'name_required' => 'Vul een servernaam in.',
+        'color' => 'Serverkleur',
+        'color_help' => 'Hoe de server eruitziet in Simplify. Je kunt dit later aanpassen.',
         'steam_art' => 'De Steam-banner en het icoon gebruiken',
         'steam_art_found' => 'Gevonden op Steam: :name. Eén keer naar dit paneel gekopieerd; je kunt het later aanpassen in de serverinstellingen.',
         'steam_banner' => 'Steam-banner van :name',

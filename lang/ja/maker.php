@@ -112,6 +112,8 @@ return [
         'name' => 'サーバー名',
         'name_help' => 'パネルに表示されます。後で変更できます。',
         'name_required' => 'サーバー名を入力してください。',
+        'color' => 'サーバーの色',
+        'color_help' => 'Simplify でのサーバーの見た目です。後から変更できます。',
         'steam_art' => 'Steam のバナーとアイコンを使う',
         'steam_art_found' => 'Steam で見つかりました: :name。このパネルに一度コピーされます。後でサーバー設定で変更できます。',
         'steam_banner' => ':name の Steam バナー',

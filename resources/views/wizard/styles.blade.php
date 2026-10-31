@@ -225,6 +225,13 @@
         .smk .smk-draft-status, .smk .smk-discard > span { display: none; }
         .smk .smk-draft-icon { margin: 0 4px; }
     }
+    /* Server step: the colour swatches, round like Simplify's colour menu; the chosen one gets a ring. */
+    .smk-colors { display: flex; flex-wrap: wrap; gap: 8px; }
+    .smk-color { position: relative; width: 26px; height: 26px; border-radius: 50%; background: var(--smk-color); box-shadow: 0 0 0 1px var(--smk-line); cursor: pointer; }
+    .smk-color input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+    .smk-color:has(input:checked) { box-shadow: 0 0 0 2px var(--smk-surface), 0 0 0 4px var(--smk-color); }
+    .smk-color:has(input:focus-visible) { outline: 2px solid var(--smk-ink); outline-offset: 4px; }
+
     /* Server step: the Steam banner with its square icon in the corner, as it will look on the server. */
     .smk-steam { position: relative; max-width: 460px; }
     .smk-steam-banner { display: block; width: 100%; aspect-ratio: 460 / 215; object-fit: cover; border-radius: 10px; border: 1px solid var(--smk-line); }

@@ -112,6 +112,8 @@ return [
         'name' => 'Palvelimen nimi',
         'name_help' => 'Näkyy paneelissa. Voit muuttaa sitä myöhemmin.',
         'name_required' => 'Anna palvelimelle nimi.',
+        'color' => 'Palvelimen väri',
+        'color_help' => 'Miltä palvelin näyttää Simplifyssa. Voit muuttaa sitä myöhemmin.',
         'steam_art' => 'Käytä Steam-banneria ja -kuvaketta',
         'steam_art_found' => 'Löytyi Steamista: :name. Kopioitu kerran tähän paneeliin; voit muuttaa sitä myöhemmin palvelimen asetuksissa.',
         'steam_banner' => 'Steam-banneri: :name',

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Simplify\ServerMaker\Filament\Wizard;
 
 use Filament\Actions\Action;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -14,6 +15,7 @@ use Filament\Schemas\Components\View;
 use Filament\Schemas\Components\Wizard\Step;
 use Illuminate\Validation\ValidationException;
 use Simplify\ServerMaker\Creation\Ports;
+use Simplify\ServerMaker\Creation\ServerColor;
 use Simplify\ServerMaker\Creation\Subdomain;
 use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
 
@@ -46,6 +48,14 @@ final class ServerStep
                                 self::suggest($name, $old, $get, $set);
                             }),
                     ),
+                Radio::make('server_color')
+                    ->label($t('server.color'))
+                    ->helperText($t('server.color_help'))
+                    ->view('simplify-servermaker::wizard.colors')
+                    ->options(fn () => ServerColor::choices())
+                    ->in(fn () => array_keys(ServerColor::choices()))
+                    ->nullable()
+                    ->visible(fn () => ServerColor::choices() !== []),
                 Toggle::make('steam_art')
                     ->label($t('server.steam_art'))
                     ->helperText(fn () => $t('server.steam_art_found', ['name' => $page->steamArt()['name'] ?? '']))

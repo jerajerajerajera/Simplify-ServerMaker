@@ -112,6 +112,8 @@ return [
         'name' => 'Sunucu adı',
         'name_help' => 'Panelde gösterilir. Daha sonra değiştirebilirsiniz.',
         'name_required' => 'Bir sunucu adı girin.',
+        'color' => 'Sunucu rengi',
+        'color_help' => 'Sunucunun Simplify\'da nasıl göründüğü. Bunu daha sonra değiştirebilirsin.',
         'steam_art' => 'Steam banner\'ını ve simgesini kullan',
         'steam_art_found' => 'Steam\'de bulundu: :name. Bu panele bir kez kopyalandı; daha sonra sunucu ayarlarından değiştirebilirsin.',
         'steam_banner' => 'Steam banner\'ı: :name',

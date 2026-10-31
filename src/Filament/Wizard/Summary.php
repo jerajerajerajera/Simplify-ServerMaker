@@ -9,6 +9,7 @@ use Simplify\ServerMaker\Creation\BackupSchedule;
 use Simplify\ServerMaker\Creation\EggData;
 use Simplify\ServerMaker\Creation\FirstSettings;
 use Simplify\ServerMaker\Creation\Resources;
+use Simplify\ServerMaker\Creation\ServerColor;
 use Simplify\ServerMaker\Creation\Subdomain;
 use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
 use Simplify\ServerMaker\Games\Java;
@@ -59,6 +60,9 @@ final class Summary
         $rows[$t('resources.ram')] = $t('resources.gb', ['amount' => Resources::amount($data, 'ram')]);
         $rows[$t('resources.cpu')] = Resources::amount($data, 'cpu').'%';
         $rows[$t('resources.disk')] = $t('resources.gb', ['amount' => Resources::gb(Resources::amount($data, 'disk'))]);
+        if (($color = ServerColor::choices()[(string) ($data['server_color'] ?? '')] ?? null) !== null) {
+            $rows[$t('server.color')] = $color;
+        }
         if (($data['backup_schedule'] ?? false) && BackupSchedule::available()) {
             $rows[$t('resources.backup_schedule')] = (int) ($data['backup_every'] ?? 0).' min · '.(int) ($data['backup_keep'] ?? 0);
         }

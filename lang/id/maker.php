@@ -112,6 +112,8 @@ return [
         'name' => 'Nama server',
         'name_help' => 'Ditampilkan di panel. Kamu bisa mengubahnya nanti.',
         'name_required' => 'Masukkan nama server.',
+        'color' => 'Warna server',
+        'color_help' => 'Tampilan server di Simplify. Kamu bisa mengubahnya nanti.',
         'steam_art' => 'Gunakan banner dan ikon Steam',
         'steam_art_found' => 'Ditemukan di Steam: :name. Disalin sekali ke panel ini; Anda dapat mengubahnya nanti di pengaturan server.',
         'steam_banner' => 'Banner Steam untuk :name',

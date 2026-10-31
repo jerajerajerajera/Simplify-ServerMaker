@@ -112,6 +112,8 @@ return [
         'name' => 'Servernavn',
         'name_help' => 'Vises i panelet. Du kan endre det senere.',
         'name_required' => 'Skriv inn et servernavn.',
+        'color' => 'Serverfarge',
+        'color_help' => 'Hvordan serveren ser ut i Simplify. Du kan endre det senere.',
         'steam_art' => 'Bruk Steam-banneret og -ikonet',
         'steam_art_found' => 'Funnet på Steam: :name. Kopiert én gang til dette panelet; du kan endre det senere i serverinnstillingene.',
         'steam_banner' => 'Steam-banner for :name',

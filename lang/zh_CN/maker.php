@@ -112,6 +112,8 @@ return [
         'name' => '服务器名称',
         'name_help' => '显示在面板中。之后可以更改。',
         'name_required' => '请输入服务器名称。',
+        'color' => '服务器颜色',
+        'color_help' => '服务器在 Simplify 中的外观。之后可以更改。',
         'steam_art' => '使用 Steam 横幅和图标',
         'steam_art_found' => '在 Steam 上找到：:name。已复制到此面板一次；之后可在服务器设置中更改。',
         'steam_banner' => ':name 的 Steam 横幅',

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- With Simplify installed, the Server step lets you pick the server's colour, from the same colours as Simplify's
+  colour menu (as in Simplify 0.7.0). Needs a Simplify version with its colour list.
 - With Simplify Toolkit's automatic backups on, the Resources step can give the new server its own backup schedule
   (interval, recovery points, skip while it has not run), as in Simplify 0.7.0. Off keeps the panel's schedule.
 - Minecraft Java servers get the rest of their first settings on the Minecraft step: MOTD, view distance, spawn

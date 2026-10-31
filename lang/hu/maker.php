@@ -112,6 +112,8 @@ return [
         'name' => 'Szervernév',
         'name_help' => 'A panelen jelenik meg. Később módosíthatod.',
         'name_required' => 'Adj meg egy szervernevet.',
+        'color' => 'Szerver színe',
+        'color_help' => 'Hogyan néz ki a szerver a Simplifyban. Később módosíthatod.',
         'steam_art' => 'A Steam-banner és -ikon használata',
         'steam_art_found' => 'Megtalálva a Steamen: :name. Egyszer átmásolva erre a panelre; később módosíthatod a szerver beállításaiban.',
         'steam_banner' => 'Steam-banner: :name',

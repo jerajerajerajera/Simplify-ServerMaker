@@ -112,6 +112,8 @@ return [
         'name' => 'Numele serverului',
         'name_help' => 'Afișat în panou. Îl poți schimba mai târziu.',
         'name_required' => 'Introdu un nume pentru server.',
+        'color' => 'Culoarea serverului',
+        'color_help' => 'Cum arată serverul în Simplify. Poți schimba asta mai târziu.',
         'steam_art' => 'Folosiți bannerul și pictograma Steam',
         'steam_art_found' => 'Găsit pe Steam: :name. Copiat o dată pe acest panou; îl puteți modifica mai târziu în setările serverului.',
         'steam_banner' => 'Banner Steam pentru :name',

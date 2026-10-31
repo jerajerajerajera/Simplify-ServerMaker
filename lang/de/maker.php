@@ -112,6 +112,8 @@ return [
         'name' => 'Servername',
         'name_help' => 'Wird im Panel angezeigt. Du kannst ihn später ändern.',
         'name_required' => 'Gib einen Servernamen ein.',
+        'color' => 'Serverfarbe',
+        'color_help' => 'Wie der Server in Simplify aussieht. Du kannst das später ändern.',
         'steam_art' => 'Steam-Banner und -Icon verwenden',
         'steam_art_found' => 'Auf Steam gefunden: :name. Einmal auf dieses Panel kopiert; du kannst es später in den Servereinstellungen ändern.',
         'steam_banner' => 'Steam-Banner von :name',
