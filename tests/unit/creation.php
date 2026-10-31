@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 require __DIR__.'/../bootstrap.php';
 
+use Simplify\ServerMaker\Creation\BackupSchedule;
 use Simplify\ServerMaker\Creation\EggData;
 use Simplify\ServerMaker\Creation\FirstSettings;
 use Simplify\ServerMaker\Creation\Payload;
@@ -74,4 +75,5 @@ check('a strange game mode is refused', failsOn(fn () => FirstSettings::from(['g
 $properties = "#Minecraft server properties\nmotd=Hello\nmax-players=20\ngamemode=survival\n";
 check('only the chosen keys change', FirstSettings::merge($properties, ['max-players' => '8', 'difficulty' => 'hard']) === "#Minecraft server properties\nmotd=Hello\nmax-players=8\ngamemode=survival\ndifficulty=hard\n");
 check('an empty file gets the keys', FirstSettings::merge('', ['max-players' => '8']) === "max-players=8\n");
+check('without Toolkit there is no own backup schedule', ! BackupSchedule::available() && BackupSchedule::defaults() === ['backup_every' => 360, 'backup_keep' => 2, 'backup_only_when_used' => true]);
 echo "PASS creation\n";

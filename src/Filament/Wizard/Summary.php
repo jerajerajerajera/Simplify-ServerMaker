@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Simplify\ServerMaker\Filament\Wizard;
 
 use App\Models\Allocation;
+use Simplify\ServerMaker\Creation\BackupSchedule;
 use Simplify\ServerMaker\Creation\EggData;
 use Simplify\ServerMaker\Creation\FirstSettings;
 use Simplify\ServerMaker\Creation\Resources;
@@ -58,6 +59,9 @@ final class Summary
         $rows[$t('resources.ram')] = $t('resources.gb', ['amount' => Resources::amount($data, 'ram')]);
         $rows[$t('resources.cpu')] = Resources::amount($data, 'cpu').'%';
         $rows[$t('resources.disk')] = $t('resources.gb', ['amount' => Resources::gb(Resources::amount($data, 'disk'))]);
+        if (($data['backup_schedule'] ?? false) && BackupSchedule::available()) {
+            $rows[$t('resources.backup_schedule')] = (int) ($data['backup_every'] ?? 0).' min · '.(int) ($data['backup_keep'] ?? 0);
+        }
         $rows[$t('review.egg')] = (string) ($egg?->name ?? '—');
         $rows[$t('review.start')] = $t('review.start_manual');
 

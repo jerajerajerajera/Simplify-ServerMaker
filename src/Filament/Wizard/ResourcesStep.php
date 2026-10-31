@@ -6,10 +6,13 @@ namespace Simplify\ServerMaker\Filament\Wizard;
 
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Text;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Wizard\Step;
 use Simplify\ServerMaker\Access;
+use Simplify\ServerMaker\Creation\BackupSchedule;
 use Simplify\ServerMaker\Creation\Resources;
 use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
 use Simplify\ServerMaker\Games\Minecraft;
@@ -52,6 +55,23 @@ final class ResourcesStep
                 ->visible(fn (Get $get) => $get($resource) === 'custom')
                 ->required(fn (Get $get) => $get($resource) === 'custom');
         }
+
+        // An own automatic backup schedule, when Simplify Toolkit runs automatic backups.
+        $schedule = fn (Get $get) => BackupSchedule::available() && $get('backup_schedule');
+        $fields[] = Toggle::make('backup_schedule')
+            ->label($t('resources.backup_schedule'))
+            ->live()
+            ->visible(fn () => BackupSchedule::available());
+        $fields[] = Grid::make(['default' => 1, 'md' => 2])
+            ->visible($schedule)
+            ->schema([
+                TextInput::make('backup_every')->label($t('resources.backup_every'))->integer()->minValue(30)->maxValue(10080)->required($schedule),
+                TextInput::make('backup_keep')->label($t('resources.backup_keep'))->integer()->minValue(1)->maxValue(100)->required($schedule),
+            ]);
+        $fields[] = Toggle::make('backup_only_when_used')
+            ->label($t('resources.backup_only_when_used'))
+            ->helperText($t('resources.backup_only_when_used_help'))
+            ->visible($schedule);
 
         return Step::make('resources')
             ->label($t('steps.resources'))

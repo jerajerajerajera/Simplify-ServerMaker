@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- With Simplify Toolkit's automatic backups on, the Resources step can give the new server its own backup schedule
+  (interval, recovery points, skip while it has not run), as in Simplify 0.7.0. Off keeps the panel's schedule.
 - Minecraft Java servers get the rest of their first settings on the Minecraft step: MOTD, view distance, spawn
   protection, PvP, whitelist and allow flight. With Simplify Toolkit installed the MOTD uses its MOTD maker with colours
   and a preview.
