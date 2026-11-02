@@ -298,4 +298,11 @@ return [
             'backup' => 'Fă mai întâi un backup: e nevoie de unul reușit din ultimele 30 de minute.',
         ],
     ],
+    'performance' => [
+        'title' => 'Performanță',
+        'restart' => 'Noile limite se aplică după următoarea repornire.',
+        'ask_admin' => 'Cere unui administrator să le schimbe.',
+        'saved' => 'Limite noi salvate. Se aplică după următoarea repornire.',
+        'unlimited' => 'Nelimitat',
+    ],
 ];

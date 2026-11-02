@@ -298,4 +298,11 @@ return [
             'backup' => 'Pirmiausia padarykite atsarginę kopiją: reikia sėkmingos kopijos iš paskutinių 30 minučių.',
         ],
     ],
+    'performance' => [
+        'title' => 'Našumas',
+        'restart' => 'Nauji limitai galioja po kito paleidimo iš naujo.',
+        'ask_admin' => 'Paprašykite administratoriaus juos pakeisti.',
+        'saved' => 'Nauji limitai išsaugoti. Jie galioja po kito paleidimo iš naujo.',
+        'unlimited' => 'Neribota',
+    ],
 ];

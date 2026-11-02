@@ -298,4 +298,11 @@ return [
             'backup' => 'Gör först en säkerhetskopia: det krävs en lyckad från de senaste 30 minuterna.',
         ],
     ],
+    'performance' => [
+        'title' => 'Prestanda',
+        'restart' => 'Nya gränser gäller efter nästa omstart.',
+        'ask_admin' => 'Be en administratör att ändra dem.',
+        'saved' => 'Nya gränser sparade. De gäller efter nästa omstart.',
+        'unlimited' => 'Obegränsat',
+    ],
 ];

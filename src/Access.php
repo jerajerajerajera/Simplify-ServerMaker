@@ -119,13 +119,17 @@ final class Access
         ];
     }
 
-    /** The upper limits for the resource fields: the allowance for users, the plain maximum for administrators. */
-    public static function resourceLimits(): ?array
+    /**
+     * The upper limits for the resource fields: the allowance for users, the plain maximum (null) for administrators.
+     * For an existing server what that server has counts as free, so it can keep or change it.
+     */
+    public static function resourceLimits(?Server $except = null): ?array
     {
         if (self::admin()) {
             return null;
         }
-        $left = self::remaining(user());
+        $servers = Server::query()->where('owner_id', user()->id)->when($except, fn ($query) => $query->whereKeyNot($except->id))->get(['memory', 'disk']);
+        $left = self::left(self::limits(), $servers->count(), (int) $servers->sum('memory'), (int) $servers->sum('disk'));
 
         return ['ram' => $left['ram'], 'cpu' => $left['cpu'], 'disk' => $left['disk']];
     }

@@ -298,4 +298,11 @@ return [
             'backup' => 'Faites d’abord une sauvegarde : il faut une sauvegarde réussie des 30 dernières minutes.',
         ],
     ],
+    'performance' => [
+        'title' => 'Performances',
+        'restart' => 'Les nouvelles limites s’appliquent après le prochain redémarrage.',
+        'ask_admin' => 'Demandez à un administrateur de les modifier.',
+        'saved' => 'Nouvelles limites enregistrées. Elles s’appliquent après le prochain redémarrage.',
+        'unlimited' => 'Illimité',
+    ],
 ];

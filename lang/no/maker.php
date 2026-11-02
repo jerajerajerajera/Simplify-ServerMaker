@@ -298,4 +298,11 @@ return [
             'backup' => 'Ta først en sikkerhetskopi: det trengs en vellykket fra de siste 30 minuttene.',
         ],
     ],
+    'performance' => [
+        'title' => 'Ytelse',
+        'restart' => 'Nye grenser gjelder etter neste omstart.',
+        'ask_admin' => 'Be en administrator om å endre dem.',
+        'saved' => 'Nye grenser lagret. De gjelder etter neste omstart.',
+        'unlimited' => 'Ubegrenset',
+    ],
 ];

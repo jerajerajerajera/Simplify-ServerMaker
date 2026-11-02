@@ -298,4 +298,11 @@ return [
             'backup' => 'Prima fai un backup: serve un backup riuscito degli ultimi 30 minuti.',
         ],
     ],
+    'performance' => [
+        'title' => 'Prestazioni',
+        'restart' => 'I nuovi limiti valgono dopo il prossimo riavvio.',
+        'ask_admin' => 'Chiedi a un amministratore di modificarli.',
+        'saved' => 'Nuovi limiti salvati. Valgono dopo il prossimo riavvio.',
+        'unlimited' => 'Illimitato',
+    ],
 ];

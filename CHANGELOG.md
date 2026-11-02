@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- New Performance page on every server, as in Simplify 0.7.0: the CPU, RAM and disk limits, and new ones with the
+  same choices as the Server Maker. Administrators change them freely; owners who may make servers themselves within
+  their allowance; everyone else sees the limits only. New limits apply after the next restart.
 - New Server software page on Minecraft Java servers, as in Simplify 0.7.0: switch to other software, another
   Minecraft version or a modpack, with the same choices as the Server Maker. Only the owner or an administrator, with
   the server stopped, a successful backup from the last 30 minutes and the server name typed to confirm. The old

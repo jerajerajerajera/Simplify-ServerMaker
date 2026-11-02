@@ -298,4 +298,11 @@ return [
             'backup' => 'Tee ensin varmuuskopio: tarvitaan onnistunut varmuuskopio viimeiseltä 30 minuutilta.',
         ],
     ],
+    'performance' => [
+        'title' => 'Suorituskyky',
+        'restart' => 'Uudet rajat ovat voimassa seuraavan uudelleenkäynnistyksen jälkeen.',
+        'ask_admin' => 'Pyydä ylläpitäjää muuttamaan näitä.',
+        'saved' => 'Uudet rajat tallennettu. Ne ovat voimassa seuraavan uudelleenkäynnistyksen jälkeen.',
+        'unlimited' => 'Rajoittamaton',
+    ],
 ];

@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Simplify\ServerMaker\Filament\Wizard;
 
+use Closure;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Component;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Text;
 use Filament\Schemas\Components\Utilities\Get;
@@ -27,32 +29,7 @@ final class ResourcesStep
 
         // The help sits above the fields: no box in the box (Simplify's style rules).
         $fields = [Text::make(fn (Get $get) => self::help($get, $t))->color('gray')];
-        foreach (['ram', 'cpu', 'disk'] as $resource) {
-            $fields[] = Radio::make($resource)
-                ->label($t('resources.'.$resource))
-                ->view('simplify-servermaker::wizard.resources')
-                ->viewData(['resource' => $resource])
-                ->options(function (Get $get) use ($resource, $start, $t): array {
-                    $limit = Access::resourceLimits()[$resource] ?? null;
-                    $options = [];
-                    foreach (Resources::presets($resource, $start($get, $resource), $limit) as $value) {
-                        $options[(string) $value] = self::label($resource, $value, $t);
-                    }
-
-                    return $options + ['custom' => $t('resources.custom')];
-                })
-                ->required()
-                ->live();
-            $fields[] = TextInput::make($resource.'_custom')
-                ->hiddenLabel()
-                ->integer()
-                ->minValue($resource === 'disk' ? 1024 : 1)
-                ->maxValue(fn () => Access::resourceLimits()[$resource] ?? Resources::MAX[$resource])
-                ->suffix($t('resources.unit.'.$resource))
-                ->helperText($t('resources.custom_help.'.$resource))
-                ->visible(fn (Get $get) => $get($resource) === 'custom')
-                ->required(fn (Get $get) => $get($resource) === 'custom');
-        }
+        $fields = [...$fields, ...self::amountFields($start, fn (string $resource) => Access::resourceLimits()[$resource] ?? null, $t)];
 
         // An own automatic backup schedule, when Simplify Toolkit runs automatic backups.
         $schedule = fn (Get $get) => BackupSchedule::available() && $get('backup_schedule');
@@ -80,16 +57,62 @@ final class ResourcesStep
             });
     }
 
+    /**
+     * RAM, CPU and disk as presets around a starting amount, or an amount of your own up to a limit (null: the plain
+     * maximum); shared with the Performance page.
+     *
+     * @param  Closure(Get, string): int  $start
+     * @param  Closure(string): ?int  $limit
+     * @return list<Component>
+     */
+    public static function amountFields(Closure $start, Closure $limit, Closure $t): array
+    {
+        $fields = [];
+        foreach (['ram', 'cpu', 'disk'] as $resource) {
+            $fields[] = Radio::make($resource)
+                ->label($t('resources.'.$resource))
+                ->view('simplify-servermaker::wizard.resources')
+                ->viewData(['resource' => $resource])
+                ->options(function (Get $get) use ($resource, $start, $limit, $t): array {
+                    $options = [];
+                    foreach (Resources::presets($resource, $start($get, $resource), $limit($resource)) as $value) {
+                        $options[(string) $value] = self::label($resource, $value, $t);
+                    }
+
+                    return $options + ['custom' => $t('resources.custom')];
+                })
+                ->required()
+                ->live();
+            $fields[] = TextInput::make($resource.'_custom')
+                ->hiddenLabel()
+                ->integer()
+                ->minValue($resource === 'disk' ? 1024 : 1)
+                ->maxValue(fn () => $limit($resource) ?? Resources::MAX[$resource])
+                ->suffix($t('resources.unit.'.$resource))
+                ->helperText($t('resources.custom_help.'.$resource))
+                ->visible(fn (Get $get) => $get($resource) === 'custom')
+                ->required(fn (Get $get) => $get($resource) === 'custom');
+        }
+
+        return $fields;
+    }
+
     /** What the step is about, plus what is left of the allowance for people who are not administrators. */
     private static function help(Get $get, callable $t): string
     {
         $help = $get('game') === 'minecraft' ? $t('resources.help_type') : $t('resources.help_game');
-        $limits = Access::resourceLimits();
+
+        return trim($help.' '.self::left(Access::resourceLimits(), $t));
+    }
+
+    /** What is left of the allowance, for people who are not administrators; '' for administrators (null). */
+    public static function left(?array $limits, callable $t): string
+    {
         if ($limits === null) {
-            return $help;
+            return '';
         }
 
-        return $help.' '.$t('access.left', [
+        return $t('access.left', [
             'ram' => $limits['ram'],
             'disk' => Resources::gb($limits['disk']),
             'cpu' => rtrim(rtrim(number_format($limits['cpu'] / 100, 1, '.', ''), '0'), '.'),

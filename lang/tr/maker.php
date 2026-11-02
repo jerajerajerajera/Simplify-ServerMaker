@@ -298,4 +298,11 @@ return [
             'backup' => 'Önce yedek alın: son 30 dakikadan başarılı bir yedek gerekir.',
         ],
     ],
+    'performance' => [
+        'title' => 'Performans',
+        'restart' => 'Yeni sınırlar bir sonraki yeniden başlatmadan sonra geçerli olur.',
+        'ask_admin' => 'Bunları değiştirmesi için bir yöneticiye başvurun.',
+        'saved' => 'Yeni sınırlar kaydedildi. Bir sonraki yeniden başlatmadan sonra geçerli olur.',
+        'unlimited' => 'Sınırsız',
+    ],
 ];
