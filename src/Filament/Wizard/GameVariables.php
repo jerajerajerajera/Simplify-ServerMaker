@@ -6,10 +6,16 @@ namespace Simplify\ServerMaker\Filament\Wizard;
 
 use App\Models\Egg;
 use App\Models\EggVariable;
+use Filament\Actions\Action;
 use Filament\Forms\Components\Field;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Notifications\Notification;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
+use Illuminate\Validation\ValidationException;
+use Simplify\ServerMaker\Steam\SteamKeys;
 
 /**
  * Form fields for an egg's variables, typed from their rules: a fixed list becomes a select, true/false a toggle,
@@ -87,11 +93,38 @@ final class GameVariables
         $field->label(trim((string) preg_replace('/^\[[^\]]*\]\s*/', '', (string) $variable->name)))
             ->helperText($variable->description ?: null)
             ->default($default);
+        $token = $field instanceof TextInput && SteamKeys::isTokenVariable((string) $variable->env_variable);
         if (in_array('required', $rules, true) && ! $field instanceof Toggle) {
-            $field->required();
+            // Left empty, a Steam login token is made when the server is created.
+            $field->required(fn () => ! ($token && SteamKeys::autoTokens(user())));
         }
 
-        return $field;
+        return $token ? self::token($field, $variable) : $field;
+    }
+
+    /** A Steam login token field: one click (key) or automatically with the person's own Steam key (as in 0.7.0). */
+    private static function token(TextInput $field, EggVariable $variable): TextInput
+    {
+        $t = fn (string $key) => __('simplify-servermaker::maker.steam.'.$key);
+
+        return $field
+            ->helperText(fn () => match (true) {
+                SteamKeys::autoTokens(user()) => $t('token_auto'),
+                SteamKeys::connected(user()) => $variable->description ?: null,
+                default => $t('token_connect'),
+            })
+            ->suffixAction(Action::make('steam_token_'.strtolower((string) $variable->env_variable))
+                ->icon('tabler-key')
+                ->tooltip($t('token_create'))
+                ->visible(fn () => SteamKeys::connected(user()))
+                ->action(function (Get $get, Set $set) use ($field, $variable, $t): void {
+                    try {
+                        $set($field->getName(), SteamKeys::createForGame(user(), (string) $variable->egg?->name, (string) ($get('name') ?: $variable->egg?->name)));
+                        Notification::make()->title($t('token_created'))->success()->send();
+                    } catch (ValidationException $exception) {
+                        Notification::make()->title($t('token_failed'))->body(collect($exception->errors())->flatten()->first())->danger()->send();
+                    }
+                }));
     }
 
     /** @return list<string> */

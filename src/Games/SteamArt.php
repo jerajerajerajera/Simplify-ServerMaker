@@ -32,11 +32,15 @@ final class SteamArt
         return trim(preg_replace('/\s+/', ' ', $name) ?? $name, ' -–:|');
     }
 
-    /** @return array{appid: int, name: string, banner: string, header: string, capsule: string}|null */
-    public static function find(string $eggName): ?array
+    /**
+     * The game on Steam for an egg; $always also when the art setting is off (for Steam login tokens).
+     *
+     * @return array{appid: int, name: string, banner: string, header: string, capsule: string}|null
+     */
+    public static function find(string $eggName, bool $always = false): ?array
     {
         $term = self::searchName($eggName);
-        if (! self::enabled() || mb_strlen($term) < 2) {
+        if ((! $always && ! self::enabled()) || mb_strlen($term) < 2) {
             return null;
         }
         $key = 'simplify-servermaker.steam.'.md5(mb_strtolower($term));

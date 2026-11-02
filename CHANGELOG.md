@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Steam: connect your own Steam Web API key once (in Simplify's account menu, or Pelican's user menu without
+  Simplify), as in Simplify 0.7.0. Games that need a login token per server (CS2, Unturned, Insurgency: Sandstorm …)
+  then get one with one click in the Server Maker, or automatically when the field is left empty. The key is stored
+  encrypted and never shown again; only its last four characters.
 - New Performance page on every server, as in Simplify 0.7.0: the CPU, RAM and disk limits, and new ones with the
   same choices as the Server Maker. Administrators change them freely; owners who may make servers themselves within
   their allowance; everyone else sees the limits only. New limits apply after the next restart.

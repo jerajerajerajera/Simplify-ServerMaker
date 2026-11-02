@@ -47,6 +47,7 @@ use Simplify\ServerMaker\Games\OtherGames;
 use Simplify\ServerMaker\Games\SteamArt;
 use Simplify\ServerMaker\Models\Draft;
 use Simplify\ServerMaker\Modpacks\Sources;
+use Simplify\ServerMaker\Steam\SteamKeys;
 use Throwable;
 
 /** The Server Maker: a wizard that creates a game server in a few steps. */
@@ -404,6 +405,9 @@ class ServerMaker extends Page implements HasForms
         $admin = $this->isAdmin();
         if (! $admin) {
             $state['backups'] = min(2, Access::limits()['max_backups']);
+        }
+        if (($state['game'] ?? null) === 'other') {
+            $state['variables'] = SteamKeys::fillTokens(user(), $egg, (array) ($state['variables'] ?? []), (string) ($state['name'] ?? ''), $admin);
         }
         $first = FirstSettings::from([...$this->data, ...$state]);
         $payload = Payload::build(
