@@ -520,6 +520,7 @@ step('Performance gives a server extra ports from the free ports of its node, an
     Allocation::query()->whereKey($ids[30000])->update(['server_id' => $server->id]);
     $ports = fn () => Allocation::query()->where('server_id', $server->id)->orderBy('port')->pluck('port')->map(fn ($port) => (int) $port)->all();
 
+    expectOk(http($admin, Performance::getUrl(panel: 'server', tenant: $server)), 'Performance');
     Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('server'));
     Filament\Facades\Filament::setTenant($server);
     $test = Livewire\Livewire::actingAs($admin)->test(Performance::class);
