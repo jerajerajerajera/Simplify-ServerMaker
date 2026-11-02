@@ -7,6 +7,7 @@ namespace Simplify\ServerMaker\Creation;
 use App\Models\Allocation;
 use App\Models\Server;
 use Illuminate\Contracts\Cache\LockTimeoutException;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -23,10 +24,16 @@ final class ExtraPorts
     /** @return list<Allocation> the server's ports, the main one first */
     public static function of(Server $server): array
     {
-        return Allocation::query()->where('server_id', $server->id)->get()
+        return self::allocations()->where('server_id', $server->id)->get()
             ->sortBy(fn (Allocation $allocation) => [(int) $allocation->id !== (int) $server->allocation_id, (int) $allocation->port])
             ->values()
             ->all();
+    }
+
+    /** In the server panel Filament scopes allocations to the server; free ports belong to no server, so no scopes. */
+    private static function allocations(): Builder
+    {
+        return Allocation::withoutGlobalScopes();
     }
 
     public static function count(Server $server): int
@@ -39,11 +46,11 @@ final class ExtraPorts
     {
         try {
             Cache::lock('simplify-servermaker.create', 30)->block(10, fn () => DB::transaction(function () use ($server, $count): void {
-                $main = Allocation::query()->whereKey($server->allocation_id)->first();
-                $extra = Allocation::query()->where('server_id', $server->id)->whereKeyNot((int) $server->allocation_id)
+                $main = self::allocations()->whereKey($server->allocation_id)->first();
+                $extra = self::allocations()->where('server_id', $server->id)->whereKeyNot((int) $server->allocation_id)
                     ->orderByDesc('updated_at')->orderByDesc('id')->lockForUpdate()->get();
                 if ($extra->count() > $count) {
-                    Allocation::query()->whereKey($extra->take($extra->count() - $count)->pluck('id'))
+                    self::allocations()->whereKey($extra->take($extra->count() - $count)->pluck('id'))
                         ->update(['server_id' => null]);
 
                     return;
@@ -54,7 +61,7 @@ final class ExtraPorts
                 if (count($picked) < $count - $extra->count()) {
                     throw ValidationException::withMessages(['data.extra_ports' => __('simplify-servermaker::maker.performance.no_ports')]);
                 }
-                Allocation::query()->whereKey($picked)->update(['server_id' => $server->id]);
+                self::allocations()->whereKey($picked)->update(['server_id' => $server->id]);
             }));
         } catch (LockTimeoutException) {
             throw ValidationException::withMessages(['data.extra_ports' => __('simplify-servermaker::maker.review.busy')]);

@@ -513,6 +513,10 @@ step('Performance gives a server extra ports from the free ports of its node, an
         ?? User::factory()->create(['email' => 'smoke-maker-perf@example.com']);
     $owner->syncRoles([]);
     Allocation::query()->where('node_id', $node->id)->whereBetween('port', [29999, 30002])->delete();
+    // Made before the panel has a tenant: with the server as tenant, Filament gives new allocations to that server.
+    foreach ([30001, 30002, 29999] as $port) {
+        Allocation::query()->create(['node_id' => $node->id, 'ip' => '127.0.0.1', 'port' => $port]);
+    }
     $main = Allocation::query()->create(['node_id' => $node->id, 'ip' => '127.0.0.1', 'port' => 30000]);
     $server = Server::factory()->create(['owner_id' => $owner->id, 'node_id' => $node->id, 'name' => 'smoke-ports', 'allocation_id' => $main->id, 'memory' => 4096, 'cpu' => 100, 'disk' => 10240]);
     // The server factory can bring its own allocation: make 30000 the main port.
@@ -523,10 +527,6 @@ step('Performance gives a server extra ports from the free ports of its node, an
     $ports = fn () => Allocation::query()->where('server_id', $server->id)->orderBy('port')->pluck('port')->map(fn ($port) => (int) $port)->all();
     expectOk(http($admin, Performance::getUrl(panel: 'server', tenant: $server)), 'Performance');
 
-    // Free ports around the main one, made after the page request: in CI that request drops free test allocations.
-    foreach ([30001, 30002, 29999] as $port) {
-        Allocation::query()->create(['node_id' => $node->id, 'ip' => '127.0.0.1', 'port' => $port]);
-    }
     Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('server'));
     Filament\Facades\Filament::setTenant($server);
     $test = Livewire\Livewire::actingAs($admin)->test(Performance::class);
@@ -563,7 +563,7 @@ step('Performance gives a server extra ports from the free ports of its node, an
     }
     Settings::put(['max_ports' => 0]);
     $server->delete();
-    Allocation::query()->where('node_id', $node->id)->whereBetween('port', [29999, 30002])->delete();
+    Allocation::withoutGlobalScopes()->where('node_id', $node->id)->whereBetween('port', [29999, 30002])->delete();
 });
 
 step('a Steam key is checked, stored encrypted, never shown again, and makes login tokens', function () use ($admin) {
