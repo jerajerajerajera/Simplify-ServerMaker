@@ -533,6 +533,9 @@ step('Performance gives a server extra ports from the free ports of its node, an
     if ($ports() !== [30000] || (int) $test->get('data.extra_ports') !== 0) {
         throw new RuntimeException('the server does not start with only its main port: '.json_encode($ports()).' '.json_encode($test->get('data.extra_ports')));
     }
+    if (! str_contains($test->html(), 'data-simplify-unsaved')) {
+        throw new RuntimeException('Performance does not ask Save or Discard before leaving with changes');
+    }
     if (! preg_match('/30000\s*·\s*main/u', $test->html())) {
         throw new RuntimeException('the main port does not show: '.substr(strip_tags((string) strstr($test->html(), 'smk-field-ports') ?: 'no ports field'), 0, 300));
     }
@@ -614,6 +617,31 @@ step('a Steam key is checked, stored encrypted, never shown again, and makes log
     SteamKeys::$transport = null;
     if (SteamKeys::connected($admin)) {
         throw new RuntimeException('Disconnect kept the key');
+    }
+});
+
+step('nothing saves itself: the Steam switch and the settings wait for Save', function () use ($admin) {
+    SteamKeys::$transport = fn (string $method, string $url, array $params): array => [200, ['response' => ['actor' => '76561190000000001']]];
+    SteamKeys::save($admin, 'ABCDEF0123456789ABCDEF0123456789');
+    Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('app'));
+    $test = Livewire\Livewire::actingAs($admin)->test(Steam::class);
+    if (! str_contains($test->html(), 'data-simplify-unsaved')) {
+        throw new RuntimeException('the Steam page does not ask Save or Discard before leaving with changes');
+    }
+    $test->set('data.auto', false);
+    if (! SteamKeys::status($admin)['auto']) {
+        throw new RuntimeException('turning the Steam switch off saved it without Save');
+    }
+    $test->call('save');
+    if ($test->errors()->isNotEmpty() || SteamKeys::status($admin)['auto']) {
+        throw new RuntimeException('Save did not save the Steam switch: '.json_encode($test->errors()->toArray()));
+    }
+    SteamKeys::remove($admin);
+    SteamKeys::$transport = null;
+
+    Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('admin'));
+    if (! str_contains(Livewire\Livewire::actingAs($admin)->test(MakerSettings::class)->html(), 'data-simplify-unsaved')) {
+        throw new RuntimeException('the settings do not ask Save or Discard before leaving with changes');
     }
 });
 
