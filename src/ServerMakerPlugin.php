@@ -35,7 +35,8 @@ final class ServerMakerPlugin implements Plugin
     /** Without Simplify's account menu (add-on API 4) the Steam page is reached from Pelican's user menu. */
     private static function steamMenu(): array
     {
-        if (class_exists(Addon::class) && Addon::API >= 4) {
+        // Older Simplify versions have no API constant at all.
+        if (class_exists(Addon::class) && defined(Addon::class.'::API') && constant(Addon::class.'::API') >= 4) {
             return [];
         }
 
