@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Extra ports per server: the Performance page lists a server's ports, the main one first, and gives it extra ports
+  (for a voice chat, a map or a query port) from the free ports of its machine, right after the main port when it can.
+  Fewer ports removes the newest ones; the main port never changes. Administrators up to 10; owners who may make
+  servers themselves up to the new "Extra ports per server" allowance (0 by default).
 - Steam: connect your own Steam Web API key once (in Simplify's account menu, or Pelican's user menu without
   Simplify), as in Simplify 0.7.0. Games that need a login token per server (CS2, Unturned, Insurgency: Sandstorm …)
   then get one with one click in the Server Maker, or automatically when the field is left empty. The key is stored

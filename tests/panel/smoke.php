@@ -507,6 +507,55 @@ step('Performance shows the limits; administrators change them freely, owners wi
     $server->delete();
 });
 
+step('Performance gives a server extra ports from the free ports of its node, and takes the newest away', function () use ($admin, $node) {
+    $owner = User::where('email', 'smoke-maker-perf@example.com')->first()
+        ?? User::factory()->create(['email' => 'smoke-maker-perf@example.com']);
+    $owner->syncRoles([]);
+    Allocation::query()->where('ip', '127.0.0.2')->delete();
+    $ids = [];
+    foreach ([30000, 30001, 30002, 29999] as $port) {
+        $ids[$port] = Allocation::query()->create(['node_id' => $node->id, 'ip' => '127.0.0.2', 'port' => $port])->id;
+    }
+    $server = Server::factory()->create(['owner_id' => $owner->id, 'node_id' => $node->id, 'name' => 'smoke-ports', 'allocation_id' => $ids[30000], 'memory' => 4096, 'cpu' => 100, 'disk' => 10240]);
+    Allocation::query()->whereKey($ids[30000])->update(['server_id' => $server->id]);
+    $ports = fn () => Allocation::query()->where('server_id', $server->id)->orderBy('port')->pluck('port')->map(fn ($port) => (int) $port)->all();
+
+    Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('server'));
+    Filament\Facades\Filament::setTenant($server);
+    $test = Livewire\Livewire::actingAs($admin)->test(Performance::class);
+    if (! str_contains($test->html(), '30000 · main') || (int) $test->get('data.extra_ports') !== 0) {
+        throw new RuntimeException('the main port does not show');
+    }
+    // Two extra ports: those right after the main port.
+    $test->set('data.extra_ports', 2)->call('save');
+    if ($test->errors()->isNotEmpty() || $ports() !== [30000, 30001, 30002]) {
+        throw new RuntimeException('the extra ports were not given: '.json_encode($test->errors()->toArray()).' '.json_encode($ports()));
+    }
+    // More than the node has free: refused, nothing changes.
+    $test->set('data.extra_ports', 5)->call('save');
+    if (! $test->errors()->has('data.extra_ports') || $ports() !== [30000, 30001, 30002]) {
+        throw new RuntimeException('more ports than free were accepted: '.json_encode($ports()));
+    }
+
+    // The owner may have one extra port: two is refused, one takes the newest away, the main port stays.
+    Settings::put(['self_service' => true, 'role_ids' => [], 'node_ids' => [$node->id], 'max_ports' => 1]);
+    $test = Livewire\Livewire::actingAs($owner)->test(Performance::class)->set('data.extra_ports', 2)->call('save');
+    if ($test->errors()->isEmpty()) {
+        throw new RuntimeException('more ports than the allowance were accepted');
+    }
+    $test->set('data.extra_ports', 1)->call('save');
+    if ($test->errors()->isNotEmpty() || count($ports()) !== 2 || ! in_array(30000, $ports(), true)) {
+        throw new RuntimeException('the owner could not lower the ports: '.json_encode($test->errors()->toArray()).' '.json_encode($ports()));
+    }
+    $test->set('data.extra_ports', 0)->call('save');
+    if ($ports() !== [30000]) {
+        throw new RuntimeException('the main port did not stay alone: '.json_encode($ports()));
+    }
+    Settings::put(['max_ports' => 0]);
+    $server->delete();
+    Allocation::query()->where('ip', '127.0.0.2')->delete();
+});
+
 step('a Steam key is checked, stored encrypted, never shown again, and makes login tokens', function () use ($admin) {
     $key = 'ABCDEF0123456789ABCDEF0123456789';
     $calls = [];

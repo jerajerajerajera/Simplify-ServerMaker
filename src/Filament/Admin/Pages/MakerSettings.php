@@ -23,6 +23,7 @@ use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Support\Enums\FontWeight;
 use Simplify\ServerMaker\Access;
+use Simplify\ServerMaker\Creation\ExtraPorts;
 use Simplify\ServerMaker\Creation\StartingResources;
 use Simplify\ServerMaker\Games\Minecraft;
 use Simplify\ServerMaker\Settings;
@@ -165,6 +166,7 @@ class MakerSettings extends Page implements HasForms
                 TextInput::make('max_disk')->label($t('max_disk'))->integer()->minValue(0)->maxValue(10240)->suffix('GB')->required(),
                 TextInput::make('max_cpu')->label($t('max_cpu'))->helperText($t('max_cpu_help'))->integer()->minValue(0)->maxValue(1600)->suffix('%')->required(),
                 TextInput::make('max_backups')->label($t('max_backups'))->integer()->minValue(0)->maxValue(100)->required(),
+                TextInput::make('max_ports')->label($t('max_ports'))->helperText($t('max_ports_help'))->integer()->minValue(0)->maxValue(ExtraPorts::MAX)->required(),
             ]);
     }
 
