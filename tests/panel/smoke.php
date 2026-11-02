@@ -513,28 +513,23 @@ step('Performance gives a server extra ports from the free ports of its node, an
         ?? User::factory()->create(['email' => 'smoke-maker-perf@example.com']);
     $owner->syncRoles([]);
     Allocation::query()->where('node_id', $node->id)->whereBetween('port', [29999, 30002])->delete();
-    $ids = [];
-    foreach ([30000, 30001, 30002, 29999] as $port) {
-        // On the node's own IP: allocations on another IP were gone after a page request in CI.
-        $ids[$port] = Allocation::query()->create(['node_id' => $node->id, 'ip' => '127.0.0.1', 'port' => $port])->id;
-    }
-    $snapshot = fn () => Allocation::query()->whereKey($ids)->get()->map(fn ($a) => $a->id.':'.$a->port.':'.($a->server_id ?? '-').':'.$a->node_id.':'.$a->ip)->implode(',');
-    $trace = ['made '.json_encode($ids).' '.$snapshot()];
-    $server = Server::factory()->create(['owner_id' => $owner->id, 'node_id' => $node->id, 'name' => 'smoke-ports', 'allocation_id' => $ids[30000], 'memory' => 4096, 'cpu' => 100, 'disk' => 10240]);
+    $main = Allocation::query()->create(['node_id' => $node->id, 'ip' => '127.0.0.1', 'port' => 30000]);
+    $server = Server::factory()->create(['owner_id' => $owner->id, 'node_id' => $node->id, 'name' => 'smoke-ports', 'allocation_id' => $main->id, 'memory' => 4096, 'cpu' => 100, 'disk' => 10240]);
     // The server factory can bring its own allocation: make 30000 the main port.
     Allocation::query()->where('server_id', $server->id)->update(['server_id' => null]);
-    Allocation::query()->whereKey($ids[30000])->update(['server_id' => $server->id]);
-    Server::query()->whereKey($server->id)->update(['allocation_id' => $ids[30000]]);
+    $main->forceFill(['server_id' => $server->id])->save();
+    Server::query()->whereKey($server->id)->update(['allocation_id' => $main->id]);
     $server->refresh();
-    $trace[] = 'server '.$snapshot();
     $ports = fn () => Allocation::query()->where('server_id', $server->id)->orderBy('port')->pluck('port')->map(fn ($port) => (int) $port)->all();
-
     expectOk(http($admin, Performance::getUrl(panel: 'server', tenant: $server)), 'Performance');
-    $trace[] = 'http '.$snapshot();
+
+    // Free ports around the main one, made after the page request: in CI that request drops free test allocations.
+    foreach ([30001, 30002, 29999] as $port) {
+        Allocation::query()->create(['node_id' => $node->id, 'ip' => '127.0.0.1', 'port' => $port]);
+    }
     Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('server'));
     Filament\Facades\Filament::setTenant($server);
     $test = Livewire\Livewire::actingAs($admin)->test(Performance::class);
-    $trace[] = 'page '.$snapshot();
     if ($ports() !== [30000] || (int) $test->get('data.extra_ports') !== 0) {
         throw new RuntimeException('the server does not start with only its main port: '.json_encode($ports()).' '.json_encode($test->get('data.extra_ports')));
     }
@@ -544,7 +539,7 @@ step('Performance gives a server extra ports from the free ports of its node, an
     // Two extra ports: those right after the main port.
     $test->set('data.extra_ports', 2)->call('save');
     if ($test->errors()->isNotEmpty() || $ports() !== [30000, 30001, 30002]) {
-        throw new RuntimeException('no extra ports: '.implode(' | ', $trace).' | after '.$snapshot().' | '.json_encode($server->fresh()->only(['node_id', 'allocation_id'])));
+        throw new RuntimeException('the extra ports were not given: '.json_encode($test->errors()->toArray()).' '.json_encode($ports()));
     }
     // More than the node has free: refused, nothing changes.
     $test->set('data.extra_ports', ExtraPorts::MAX)->call('save');
