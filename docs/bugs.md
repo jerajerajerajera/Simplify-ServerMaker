@@ -10,6 +10,8 @@
 |---|---|---|---|---|---|---|---|
 | B14 | 1.4.1, 1.4.2 | Knoppen in de wizard in Filament-stijl, of Next/Back niet in het midden van hun knop | Knoppen niet via Simplify's knopstijl | 1.4.1, 1.4.2 | `tests/panel/smoke.php` "the Server Maker page renders, with Simplify buttons instead of bare Filament buttons"; centrering: audit `maker-*` | 1× | P-8 |
 | B9 | 1.4.1 | Instellingspagina scrolt als geheel met Simplify | Formulier zonder `s-fit` | 1.4.1 | `tests/panel/smoke.php` (settings form has s-fit) | 0× (patroon met andere add-ons) | P-7 |
+| B16 | 2-11 (Unreleased, R3) | Op Performance stond de hoofdpoort zonder "· main" | Blade-`@if` direct na `}}` rendert niet | #45 (bf7b543) | `tests/panel/smoke.php` "Performance gives a server extra ports…" (rood op 6419d6c) | 0× | P-27 |
+| B17 | 2-11 (Unreleased, R3) | Extra poorten gaven altijd "not enough free ports" | In het serverpaneel scoopt Filament `Allocation`-queries op de tenant-server; vrije poorten waren onzichtbaar | #45 (d2114f0): `Allocation::withoutGlobalScopes()` in `ExtraPorts` en `Ports::free` | `tests/panel/smoke.php` "Performance gives a server extra ports…" (rood op 9c215b3) | 0× | P-27 |
 
 ## Patronen
 
