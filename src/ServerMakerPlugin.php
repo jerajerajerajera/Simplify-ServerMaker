@@ -9,6 +9,7 @@ use Filament\Panel;
 use Simplify\ServerMaker\Filament\Admin\Pages\MakerSettings;
 use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
 use Simplify\ServerMaker\Filament\App\Pages\ServerMaker as AppServerMaker;
+use Simplify\ServerMaker\Filament\Server\Pages\ServerSoftware;
 
 final class ServerMakerPlugin implements Plugin
 {
@@ -22,6 +23,7 @@ final class ServerMakerPlugin implements Plugin
         match ($panel->getId()) {
             'admin' => $panel->pages([ServerMaker::class, MakerSettings::class]),
             'app' => $panel->pages([AppServerMaker::class]),
+            'server' => $panel->pages([ServerSoftware::class]),
             default => null,
         };
     }

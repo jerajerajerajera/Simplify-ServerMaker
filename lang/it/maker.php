@@ -283,4 +283,19 @@ return [
         'curseforge_saved' => 'È salvata una chiave. Inseriscine una nuova per sostituirla.',
         'curseforge_forget' => 'Rimuovi la chiave salvata',
     ],
+    'software' => [
+        'title' => 'Software del server',
+        'warning' => 'Installare un altro software reinstalla il server. Mondi e file restano, ma plugin o mod potrebbero non adattarsi al nuovo software. Servono un backup riuscito degli ultimi 30 minuti e il server fermo.',
+        'now' => 'Ora: :software',
+        'confirm' => 'Scrivi :name per confermare',
+        'install' => 'Installa',
+        'installing' => 'Il nuovo software è in installazione.',
+        'wrong_name' => 'Scrivi il nome esatto del server.',
+        'failed' => 'Impossibile cambiare il software. Le vecchie impostazioni sono state ripristinate.',
+        'blocked' => [
+            'installing' => 'Attendi che il server finisca l’installazione.',
+            'running' => 'Prima ferma il server.',
+            'backup' => 'Prima fai un backup: serve un backup riuscito degli ultimi 30 minuti.',
+        ],
+    ],
 ];

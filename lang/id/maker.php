@@ -283,4 +283,19 @@ return [
         'curseforge_saved' => 'Kunci sudah disimpan. Isi kunci baru untuk menggantinya.',
         'curseforge_forget' => 'Hapus kunci yang disimpan',
     ],
+    'software' => [
+        'title' => 'Perangkat lunak server',
+        'warning' => 'Memasang perangkat lunak lain akan memasang ulang server. Dunia dan berkas tetap ada, tetapi plugin atau mod mungkin tidak cocok dengan perangkat lunak baru. Diperlukan cadangan yang berhasil dari 30 menit terakhir dan server harus berhenti.',
+        'now' => 'Sekarang: :software',
+        'confirm' => 'Ketik :name untuk konfirmasi',
+        'install' => 'Pasang',
+        'installing' => 'Perangkat lunak baru sedang dipasang.',
+        'wrong_name' => 'Ketik nama server dengan tepat.',
+        'failed' => 'Perangkat lunak tidak dapat diganti. Pengaturan lama dikembalikan.',
+        'blocked' => [
+            'installing' => 'Tunggu sampai server selesai dipasang.',
+            'running' => 'Hentikan server dulu.',
+            'backup' => 'Buat cadangan dulu: diperlukan cadangan yang berhasil dari 30 menit terakhir.',
+        ],
+    ],
 ];

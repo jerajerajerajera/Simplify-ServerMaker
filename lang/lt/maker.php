@@ -283,4 +283,19 @@ return [
         'curseforge_saved' => 'Raktas išsaugotas. Įveskite naują, kad jį pakeistumėte.',
         'curseforge_forget' => 'Pašalinti išsaugotą raktą',
     ],
+    'software' => [
+        'title' => 'Serverio programinė įranga',
+        'warning' => 'Įdiegus kitą programinę įrangą serveris įdiegiamas iš naujo. Pasauliai ir failai lieka, bet įskiepiai ar modai gali netikti naujai įrangai. Reikia sėkmingos atsarginės kopijos iš paskutinių 30 minučių, o serveris turi būti sustabdytas.',
+        'now' => 'Dabar: :software',
+        'confirm' => 'Patvirtinkite įrašę :name',
+        'install' => 'Įdiegti',
+        'installing' => 'Nauja programinė įranga diegiama.',
+        'wrong_name' => 'Įrašykite tikslų serverio pavadinimą.',
+        'failed' => 'Programinės įrangos pakeisti nepavyko. Senieji nustatymai grąžinti.',
+        'blocked' => [
+            'installing' => 'Palaukite, kol serveris baigs diegimą.',
+            'running' => 'Pirmiausia sustabdykite serverį.',
+            'backup' => 'Pirmiausia padarykite atsarginę kopiją: reikia sėkmingos kopijos iš paskutinių 30 minučių.',
+        ],
+    ],
 ];

@@ -283,4 +283,19 @@ return [
         'curseforge_saved' => 'Une clé est enregistrée. Saisissez-en une nouvelle pour la remplacer.',
         'curseforge_forget' => 'Supprimer la clé enregistrée',
     ],
+    'software' => [
+        'title' => 'Logiciel du serveur',
+        'warning' => 'Installer un autre logiciel réinstalle le serveur. Vos mondes et fichiers restent, mais les plugins ou mods peuvent ne pas convenir au nouveau logiciel. Il faut une sauvegarde réussie des 30 dernières minutes et un serveur arrêté.',
+        'now' => 'Actuel : :software',
+        'confirm' => 'Tapez :name pour confirmer',
+        'install' => 'Installer',
+        'installing' => 'Le nouveau logiciel est en cours d’installation.',
+        'wrong_name' => 'Tapez exactement le nom du serveur.',
+        'failed' => 'Le logiciel n’a pas pu être changé. Les anciens réglages sont rétablis.',
+        'blocked' => [
+            'installing' => 'Attendez la fin de l’installation du serveur.',
+            'running' => 'Arrêtez d’abord le serveur.',
+            'backup' => 'Faites d’abord une sauvegarde : il faut une sauvegarde réussie des 30 dernières minutes.',
+        ],
+    ],
 ];

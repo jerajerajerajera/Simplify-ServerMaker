@@ -283,4 +283,19 @@ return [
         'curseforge_saved' => 'Există o cheie salvată. Introdu una nouă ca s-o înlocuiești.',
         'curseforge_forget' => 'Elimină cheia salvată',
     ],
+    'software' => [
+        'title' => 'Software server',
+        'warning' => 'Instalarea altui software reinstalează serverul. Lumile și fișierele rămân, dar pluginurile sau modurile s-ar putea să nu se potrivească noului software. E nevoie de un backup reușit din ultimele 30 de minute și de serverul oprit.',
+        'now' => 'Acum: :software',
+        'confirm' => 'Scrie :name pentru a confirma',
+        'install' => 'Instalează',
+        'installing' => 'Noul software se instalează.',
+        'wrong_name' => 'Scrie exact numele serverului.',
+        'failed' => 'Software-ul nu a putut fi schimbat. Setările vechi au revenit.',
+        'blocked' => [
+            'installing' => 'Așteaptă până termină serverul instalarea.',
+            'running' => 'Oprește mai întâi serverul.',
+            'backup' => 'Fă mai întâi un backup: e nevoie de unul reușit din ultimele 30 de minute.',
+        ],
+    ],
 ];

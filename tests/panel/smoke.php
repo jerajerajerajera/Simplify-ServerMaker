@@ -28,14 +28,18 @@ use Simplify\ServerMaker\Creation\Ports;
 use Simplify\ServerMaker\Filament\Admin\Pages\MakerSettings;
 use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
 use Simplify\ServerMaker\Filament\App\Pages\ServerMaker as AppServerMaker;
+use Simplify\ServerMaker\Filament\Server\Pages\ServerSoftware;
 use Simplify\ServerMaker\Games\BundledEggs;
 use Simplify\ServerMaker\Games\EggIndex;
+use Simplify\ServerMaker\Games\MinecraftEggs;
 use Simplify\ServerMaker\Games\OtherGames;
 use Simplify\ServerMaker\Games\SteamArt;
 use Simplify\ServerMaker\Models\Draft;
 use Simplify\ServerMaker\Modpacks\Remote;
 use Simplify\ServerMaker\ServerMakerAddon;
 use Simplify\ServerMaker\Settings;
+use Simplify\ServerMaker\Software\ChangeSoftware;
+use Simplify\ServerMaker\Software\Startup;
 use Simplify\Subdomains\Subdomains;
 
 define('LARAVEL_START', microtime(true));
@@ -201,6 +205,46 @@ step('the egg is imported only once', function () {
     if (Egg::query()->whereRaw('LOWER(name) = ?', ['paper'])->count() !== 1) {
         throw new RuntimeException('Paper is on the panel more than once');
     }
+});
+
+step('Server software is offered for Minecraft Java, checked before it reinstalls, and undone when the reinstall fails', function () use ($admin) {
+    $paper = Egg::query()->where('name', 'Paper')->firstOrFail();
+    $server = Server::factory()->create(['owner_id' => $admin->id, 'egg_id' => $paper->id, 'name' => 'smoke-software', 'installed_at' => now()]);
+    Startup::write($server, ['egg_id' => $paper->id, 'image' => (string) $server->image, 'startup' => (string) $server->startup, 'environment' => ['MINECRAFT_VERSION' => '1.21.1']]);
+    $before = Startup::of($server->fresh());
+
+    expectOk(http($admin, ServerSoftware::getUrl(panel: 'server', tenant: $server)), 'Server software');
+    Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('server'));
+    Filament\Facades\Filament::setTenant($server);
+    $test = Livewire\Livewire::actingAs($admin)->test(ServerSoftware::class)
+        ->assertSee(['Server software', 'Paper 1.21.1', 'Type smoke-software to confirm'])
+        ->assertSet('data.type', 'plugins')
+        ->assertSet('data.software', 'paper')
+        ->assertSet('data.version', '1.21.1')
+        ->assertActionDisabled('install')
+        ->call('pickGame', 'minecraft', 'vanilla')
+        ->assertSet('data.type', 'vanilla')
+        ->set('data.confirm', 'smoke')
+        ->call('install')
+        ->assertHasErrors(['data.confirm']);
+    // Without Wings the server is not known to be stopped (and has no backup): nothing changes.
+    $test->set('data.confirm', 'smoke-software')->assertActionEnabled('install')->call('install')->assertHasNoErrors();
+    if (Startup::of($server->fresh()) !== $before) {
+        throw new RuntimeException('the software changed while the server was not stopped');
+    }
+
+    // The reinstall cannot reach Wings: the old egg, image, command and variables come back.
+    $vanilla = MinecraftEggs::ensure('vanilla', null);
+    $failed = false;
+    try {
+        ChangeSoftware::apply($server, ['egg_id' => $vanilla->id, 'image' => 'ghcr.io/pelican-eggs/yolks:java_21', 'startup' => 'java -jar server.jar', 'environment' => ['VANILLA_VERSION' => '1.21.4']]);
+    } catch (Throwable) {
+        $failed = true;
+    }
+    if (! $failed || Startup::of($server->fresh()) !== $before) {
+        throw new RuntimeException('the old settings did not come back: '.json_encode(Startup::of($server->fresh())));
+    }
+    $server->delete();
 });
 
 step('another game shows its own settings', function () use ($admin) {

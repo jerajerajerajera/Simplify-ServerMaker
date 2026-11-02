@@ -283,4 +283,19 @@ return [
         'curseforge_saved' => 'Kayıtlı bir anahtar var. Değiştirmek için yenisini girin.',
         'curseforge_forget' => 'Kayıtlı anahtarı kaldır',
     ],
+    'software' => [
+        'title' => 'Sunucu yazılımı',
+        'warning' => 'Başka yazılım kurmak sunucuyu yeniden kurar. Dünyalar ve dosyalar kalır, ancak eklentiler veya modlar yeni yazılıma uymayabilir. Son 30 dakikadan başarılı bir yedek gerekir ve sunucu durdurulmuş olmalıdır.',
+        'now' => 'Şu an: :software',
+        'confirm' => 'Onaylamak için :name yazın',
+        'install' => 'Kur',
+        'installing' => 'Yeni yazılım kuruluyor.',
+        'wrong_name' => 'Sunucu adını tam olarak yazın.',
+        'failed' => 'Yazılım değiştirilemedi. Eski ayarlar geri yüklendi.',
+        'blocked' => [
+            'installing' => 'Sunucunun kurulumu bitirmesini bekleyin.',
+            'running' => 'Önce sunucuyu durdurun.',
+            'backup' => 'Önce yedek alın: son 30 dakikadan başarılı bir yedek gerekir.',
+        ],
+    ],
 ];

@@ -283,4 +283,19 @@ return [
         'curseforge_saved' => 'Er is een sleutel opgeslagen. Vul een nieuwe in om die te vervangen.',
         'curseforge_forget' => 'Opgeslagen sleutel verwijderen',
     ],
+    'software' => [
+        'title' => 'Serversoftware',
+        'warning' => 'Andere software installeren herinstalleert de server. Je werelden en bestanden blijven, maar plugins of mods passen misschien niet bij de nieuwe software. Er is een geslaagde back-up van de laatste 30 minuten nodig en de server moet gestopt zijn.',
+        'now' => 'Nu: :software',
+        'confirm' => 'Typ :name om te bevestigen',
+        'install' => 'Installeren',
+        'installing' => 'De nieuwe software wordt geïnstalleerd.',
+        'wrong_name' => 'Typ de servernaam precies over.',
+        'failed' => 'De software kon niet worden gewisseld. De oude instellingen staan terug.',
+        'blocked' => [
+            'installing' => 'Wacht tot de server klaar is met installeren.',
+            'running' => 'Stop eerst de server.',
+            'backup' => 'Maak eerst een back-up: er is een geslaagde back-up van de laatste 30 minuten nodig.',
+        ],
+    ],
 ];

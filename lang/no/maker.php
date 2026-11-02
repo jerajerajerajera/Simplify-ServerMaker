@@ -283,4 +283,19 @@ return [
         'curseforge_saved' => 'En nøkkel er lagret. Fyll inn en ny for å erstatte den.',
         'curseforge_forget' => 'Fjern den lagrede nøkkelen',
     ],
+    'software' => [
+        'title' => 'Serverprogramvare',
+        'warning' => 'Å installere annen programvare installerer serveren på nytt. Verdener og filer blir, men plugins eller mods passer kanskje ikke med den nye programvaren. Det trengs en vellykket sikkerhetskopi fra de siste 30 minuttene, og serveren må være stoppet.',
+        'now' => 'Nå: :software',
+        'confirm' => 'Skriv :name for å bekrefte',
+        'install' => 'Installer',
+        'installing' => 'Den nye programvaren installeres.',
+        'wrong_name' => 'Skriv servernavnet nøyaktig.',
+        'failed' => 'Programvaren kunne ikke byttes. De gamle innstillingene er tilbake.',
+        'blocked' => [
+            'installing' => 'Vent til serveren er ferdig installert.',
+            'running' => 'Stopp serveren først.',
+            'backup' => 'Ta først en sikkerhetskopi: det trengs en vellykket fra de siste 30 minuttene.',
+        ],
+    ],
 ];

@@ -283,4 +283,19 @@ return [
         'curseforge_saved' => 'Klucz jest zapisany. Wpisz nowy, aby go zastąpić.',
         'curseforge_forget' => 'Usuń zapisany klucz',
     ],
+    'software' => [
+        'title' => 'Oprogramowanie serwera',
+        'warning' => 'Instalacja innego oprogramowania instaluje serwer od nowa. Światy i pliki zostają, ale pluginy lub mody mogą nie pasować do nowego oprogramowania. Potrzebna jest udana kopia zapasowa z ostatnich 30 minut i zatrzymany serwer.',
+        'now' => 'Teraz: :software',
+        'confirm' => 'Wpisz :name, aby potwierdzić',
+        'install' => 'Zainstaluj',
+        'installing' => 'Nowe oprogramowanie jest instalowane.',
+        'wrong_name' => 'Wpisz dokładną nazwę serwera.',
+        'failed' => 'Nie udało się zmienić oprogramowania. Przywrócono stare ustawienia.',
+        'blocked' => [
+            'installing' => 'Poczekaj, aż serwer skończy instalację.',
+            'running' => 'Najpierw zatrzymaj serwer.',
+            'backup' => 'Najpierw zrób kopię zapasową: potrzebna jest udana kopia z ostatnich 30 minut.',
+        ],
+    ],
 ];

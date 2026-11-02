@@ -283,4 +283,19 @@ return [
         'curseforge_saved' => 'Klíč je uložený. Pokud ho chceš nahradit, vyplň nový.',
         'curseforge_forget' => 'Odstranit uložený klíč',
     ],
+    'software' => [
+        'title' => 'Software serveru',
+        'warning' => 'Instalace jiného softwaru server přeinstaluje. Světy a soubory zůstanou, ale pluginy nebo mody nemusí s novým softwarem fungovat. Je potřeba úspěšná záloha z posledních 30 minut a zastavený server.',
+        'now' => 'Nyní: :software',
+        'confirm' => 'Pro potvrzení napište :name',
+        'install' => 'Instalovat',
+        'installing' => 'Nový software se instaluje.',
+        'wrong_name' => 'Napište přesný název serveru.',
+        'failed' => 'Software se nepodařilo změnit. Původní nastavení je zpět.',
+        'blocked' => [
+            'installing' => 'Počkejte, až se server dokončí instalaci.',
+            'running' => 'Nejprve zastavte server.',
+            'backup' => 'Nejprve vytvořte zálohu: je potřeba úspěšná záloha z posledních 30 minut.',
+        ],
+    ],
 ];

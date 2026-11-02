@@ -328,29 +328,7 @@ class ServerMaker extends Page implements HasForms
         if (($this->data['game'] ?? null) !== 'minecraft') {
             return;
         }
-        $type = (string) $this->data['type'];
-        $software = $this->data['software'] ?? null;
-        $mayImport = Access::mayImportEggs();
-        try {
-            if ($type === 'modpack') {
-                $key = (string) ($this->data['modpack'] ?? '');
-                if (! array_key_exists((string) ($this->data['modpack_version'] ?? ''), Sources::versions($key))) {
-                    throw ValidationException::withMessages(['data.modpack_version' => __('simplify-servermaker::maker.modpack.version_required')]);
-                }
-                $egg = Sources::egg($key, $mayImport);
-            } else {
-                $egg = MinecraftEggs::find($type, $software) ?? ($mayImport ? MinecraftEggs::ensure($type, $software) : null);
-            }
-        } catch (ValidationException $exception) {
-            throw $exception;
-        } catch (Throwable $exception) {
-            report($exception);
-            throw ValidationException::withMessages(['data.type' => __('simplify-servermaker::maker.minecraft.egg_failed')]);
-        }
-        if (! $egg) {
-            throw ValidationException::withMessages(['data.type' => __('simplify-servermaker::maker.minecraft.egg_missing')]);
-        }
-        $this->data['egg_id'] = $egg->id;
+        $this->data['egg_id'] = MinecraftEggs::forChoice($this->data)->id;
     }
 
     /** The chosen egg. For people who are not administrators only an egg they may use, whatever the browser sends. */
@@ -385,8 +363,7 @@ class ServerMaker extends Page implements HasForms
     /** The Java major version for a Minecraft Java server, else null. */
     public function java(): ?int
     {
-        $type = (string) ($this->data['type'] ?? '');
-        if (($this->data['game'] ?? null) !== 'minecraft' || ! Minecraft::isJava($type)) {
+        if (($this->data['game'] ?? null) !== 'minecraft' || ! Minecraft::isJava((string) ($this->data['type'] ?? ''))) {
             return null;
         }
         // Review → Edit settings: an administrator may pick the Java version for packs with special needs.
@@ -394,20 +371,8 @@ class ServerMaker extends Page implements HasForms
         if ($this->isAdmin() && in_array($chosen, Java::MAJORS, true)) {
             return $chosen;
         }
-        if ($type === 'proxy') {
-            return 21;
-        }
-        if ($type === 'modpack') {
-            $runtime = Sources::runtime($this->data['modpack'] ?? null, $this->data['modpack_version'] ?? null);
-            if (in_array($runtime['java'] ?? null, Java::MAJORS, true)) {
-                return $runtime['java'];
-            }
 
-            return isset($runtime['minecraft']) ? MinecraftVersions::java($runtime['minecraft'], $type) : null;
-        }
-        $version = (string) ($this->data['version'] ?? '');
-
-        return Minecraft::validVersion($version) ? MinecraftVersions::java($version, $type) : null;
+        return MinecraftVersions::javaFor($this->data);
     }
 
     public function randomName(): string
