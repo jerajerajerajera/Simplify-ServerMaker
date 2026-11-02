@@ -71,9 +71,7 @@ final class Steam extends Page implements HasForms
             Toggle::make('auto')
                 ->label($t('auto'))
                 ->helperText($t('auto_help'))
-                ->visible(fn () => SteamKeys::connected(user()))
-                ->live()
-                ->afterStateUpdated(fn (bool $state) => SteamKeys::setAuto(user(), $state)),
+                ->visible(fn () => SteamKeys::connected(user())),
         ]);
     }
 
@@ -82,6 +80,12 @@ final class Steam extends Page implements HasForms
         $t = fn (string $key) => __('simplify-servermaker::maker.steam.'.$key);
 
         return [
+            Action::make('save')
+                ->label(__('simplify-servermaker::maker.settings.save'))
+                ->icon('tabler-device-floppy')
+                ->visible(fn () => SteamKeys::connected(user()))
+                ->action(fn () => $this->save())
+                ->keyBindings(['mod+s']),
             Action::make('connect')
                 ->label(fn () => SteamKeys::connected(user()) ? $t('replace') : $t('connect'))
                 ->icon('tabler-key')
@@ -113,6 +117,13 @@ final class Steam extends Page implements HasForms
                     }),
             ])->visible(fn () => SteamKeys::connected(user())),
         ];
+    }
+
+    public function save(): void
+    {
+        abort_unless(SteamKeys::connected(user()), 403);
+        SteamKeys::setAuto(user(), (bool) ($this->form->getState()['auto'] ?? false));
+        Notification::make()->title(__('simplify-servermaker::maker.settings.saved'))->success()->send();
     }
 
     private function translate(string $key): string
