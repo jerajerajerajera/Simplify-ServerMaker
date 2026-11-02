@@ -48,8 +48,7 @@ final class ExtraPorts
 
                     return;
                 }
-                $free = Allocation::query()->where('node_id', $server->node_id)->whereNull('server_id')
-                    ->when($main, fn ($query) => $query->where('ip', $main->ip))
+                $free = Ports::free($server->node_id)->when($main, fn ($query) => $query->where('ip', $main->ip))
                     ->lockForUpdate()->pluck('port', 'id')->all();
                 $picked = self::pick((int) $main?->port, $free, $count - $extra->count());
                 if (count($picked) < $count - $extra->count()) {

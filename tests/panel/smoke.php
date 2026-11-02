@@ -25,6 +25,7 @@ use Illuminate\Validation\ValidationException;
 use Simplify\Core\Addons\Addon;
 use Simplify\ServerMaker\Creation\ApplyFirstSettings;
 use Simplify\ServerMaker\Creation\ApplySteamArt;
+use Simplify\ServerMaker\Creation\ExtraPorts;
 use Simplify\ServerMaker\Creation\Ports;
 use Simplify\ServerMaker\Filament\Admin\Pages\MakerSettings;
 use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
@@ -511,10 +512,11 @@ step('Performance gives a server extra ports from the free ports of its node, an
     $owner = User::where('email', 'smoke-maker-perf@example.com')->first()
         ?? User::factory()->create(['email' => 'smoke-maker-perf@example.com']);
     $owner->syncRoles([]);
-    Allocation::query()->where('ip', '127.0.0.2')->delete();
+    Allocation::query()->where('node_id', $node->id)->whereBetween('port', [29999, 30002])->delete();
     $ids = [];
     foreach ([30000, 30001, 30002, 29999] as $port) {
-        $ids[$port] = Allocation::query()->create(['node_id' => $node->id, 'ip' => '127.0.0.2', 'port' => $port])->id;
+        // On the node's own IP: allocations on another IP were gone after a page request in CI.
+        $ids[$port] = Allocation::query()->create(['node_id' => $node->id, 'ip' => '127.0.0.1', 'port' => $port])->id;
     }
     $snapshot = fn () => Allocation::query()->whereKey($ids)->get()->map(fn ($a) => $a->id.':'.$a->port.':'.($a->server_id ?? '-').':'.$a->node_id.':'.$a->ip)->implode(',');
     $trace = ['made '.json_encode($ids).' '.$snapshot()];
@@ -545,7 +547,7 @@ step('Performance gives a server extra ports from the free ports of its node, an
         throw new RuntimeException('no extra ports: '.implode(' | ', $trace).' | after '.$snapshot().' | '.json_encode($server->fresh()->only(['node_id', 'allocation_id'])));
     }
     // More than the node has free: refused, nothing changes.
-    $test->set('data.extra_ports', 5)->call('save');
+    $test->set('data.extra_ports', ExtraPorts::MAX)->call('save');
     if (! $test->errors()->has('data.extra_ports') || $ports() !== [30000, 30001, 30002]) {
         throw new RuntimeException('more ports than free were accepted: '.json_encode($ports()));
     }
@@ -566,7 +568,7 @@ step('Performance gives a server extra ports from the free ports of its node, an
     }
     Settings::put(['max_ports' => 0]);
     $server->delete();
-    Allocation::query()->where('ip', '127.0.0.2')->delete();
+    Allocation::query()->where('node_id', $node->id)->whereBetween('port', [29999, 30002])->delete();
 });
 
 step('a Steam key is checked, stored encrypted, never shown again, and makes login tokens', function () use ($admin) {
