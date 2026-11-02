@@ -151,7 +151,8 @@ final class ServerSoftware extends Page implements HasForms
         if (! hash_equals($server->name, (string) ($this->data['confirm'] ?? ''))) {
             throw ValidationException::withMessages(['data.confirm' => __('simplify-servermaker::maker.software.wrong_name')]);
         }
-        $data = $this->form->getState();
+        // The type comes from the cards, which are no form field.
+        $data = [...$this->form->getState(), 'type' => $this->data['type'] ?? null];
         if (! in_array($data['type'] ?? null, self::TYPES, true)) {
             throw ValidationException::withMessages(['data.type' => __('simplify-servermaker::maker.minecraft.egg_missing')]);
         }
