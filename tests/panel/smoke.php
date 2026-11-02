@@ -524,8 +524,11 @@ step('Performance gives a server extra ports from the free ports of its node, an
     Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('server'));
     Filament\Facades\Filament::setTenant($server);
     $test = Livewire\Livewire::actingAs($admin)->test(Performance::class);
-    if (! str_contains($test->html(), '30000 · main') || (int) $test->get('data.extra_ports') !== 0) {
-        throw new RuntimeException('the main port does not show');
+    if ($ports() !== [30000] || (int) $test->get('data.extra_ports') !== 0) {
+        throw new RuntimeException('the server does not start with only its main port: '.json_encode($ports()).' '.json_encode($test->get('data.extra_ports')));
+    }
+    if (! preg_match('/30000\s*·\s*main/u', $test->html())) {
+        throw new RuntimeException('the main port does not show: '.substr(strip_tags((string) strstr($test->html(), 'smk-field-ports') ?: 'no ports field'), 0, 300));
     }
     // Two extra ports: those right after the main port.
     $test->set('data.extra_ports', 2)->call('save');
