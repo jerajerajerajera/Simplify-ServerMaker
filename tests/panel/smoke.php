@@ -216,19 +216,34 @@ step('Server software is offered for Minecraft Java, checked before it reinstall
     expectOk(http($admin, ServerSoftware::getUrl(panel: 'server', tenant: $server)), 'Server software');
     Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('server'));
     Filament\Facades\Filament::setTenant($server);
-    $test = Livewire\Livewire::actingAs($admin)->test(ServerSoftware::class)
-        ->assertSee(['Server software', 'Paper 1.21.1', 'Type smoke-software to confirm'])
-        ->assertSet('data.type', 'plugins')
-        ->assertSet('data.software', 'paper')
-        ->assertSet('data.version', '1.21.1')
-        ->assertActionDisabled('install')
-        ->call('pickGame', 'minecraft', 'vanilla')
-        ->assertSet('data.type', 'vanilla')
-        ->set('data.confirm', 'smoke')
-        ->call('install')
-        ->assertHasErrors(['data.confirm']);
+    // Plain checks instead of Livewire's assertions: a failing PHPUnit assertion cannot report outside PHPUnit.
+    $test = Livewire\Livewire::actingAs($admin)->test(ServerSoftware::class);
+    $html = $test->html();
+    foreach (['Server software', 'Paper 1.21.1', 'Type smoke-software to confirm'] as $text) {
+        if (! str_contains($html, $text)) {
+            throw new RuntimeException("the page does not show: $text");
+        }
+    }
+    $state = [$test->get('data.type'), $test->get('data.software'), $test->get('data.version')];
+    if ($state !== ['plugins', 'paper', '1.21.1']) {
+        throw new RuntimeException('the page does not start at the current software: '.json_encode($state));
+    }
+    if (! $test->instance()->getAction('install')->isDisabled()) {
+        throw new RuntimeException('Install works before the name is typed');
+    }
+    $test->call('pickGame', 'minecraft', 'vanilla')->set('data.confirm', 'smoke')->call('install');
+    if ($test->get('data.type') !== 'vanilla' || ! array_key_exists('data.confirm', $test->errors()->toArray())) {
+        throw new RuntimeException('a wrong name was accepted: '.json_encode($test->errors()->toArray()));
+    }
     // Without Wings the server is not known to be stopped (and has no backup): nothing changes.
-    $test->set('data.confirm', 'smoke-software')->assertActionEnabled('install')->call('install')->assertHasNoErrors();
+    $test->set('data.confirm', 'smoke-software');
+    if ($test->instance()->getAction('install')->isDisabled()) {
+        throw new RuntimeException('Install stays disabled after the name is typed');
+    }
+    $test->call('install');
+    if ($test->errors()->isNotEmpty()) {
+        throw new RuntimeException('validation: '.json_encode($test->errors()->toArray()));
+    }
     if (Startup::of($server->fresh()) !== $before) {
         throw new RuntimeException('the software changed while the server was not stopped');
     }
