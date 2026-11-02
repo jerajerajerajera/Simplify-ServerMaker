@@ -283,4 +283,19 @@ return [
         'curseforge_saved' => 'Hay una clave guardada. Escribe una nueva para reemplazarla.',
         'curseforge_forget' => 'Eliminar la clave guardada',
     ],
+    'software' => [
+        'title' => 'Software del servidor',
+        'warning' => 'Instalar otro software reinstala el servidor. Tus mundos y archivos se quedan, pero los plugins o mods quizá no encajen con el nuevo software. Se necesita una copia de seguridad correcta de los últimos 30 minutos y el servidor detenido.',
+        'now' => 'Ahora: :software',
+        'confirm' => 'Escribe :name para confirmar',
+        'install' => 'Instalar',
+        'installing' => 'Se está instalando el nuevo software.',
+        'wrong_name' => 'Escribe el nombre exacto del servidor.',
+        'failed' => 'No se pudo cambiar el software. Se ha vuelto a la configuración anterior.',
+        'blocked' => [
+            'installing' => 'Espera a que el servidor termine de instalarse.',
+            'running' => 'Detén primero el servidor.',
+            'backup' => 'Haz primero una copia de seguridad: se necesita una correcta de los últimos 30 minutos.',
+        ],
+    ],
 ];

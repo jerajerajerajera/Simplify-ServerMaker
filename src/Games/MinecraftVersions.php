@@ -6,6 +6,7 @@ namespace Simplify\ServerMaker\Games;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Simplify\ServerMaker\Modpacks\Sources;
 use Throwable;
 
 /**
@@ -94,5 +95,32 @@ final class MinecraftVersions
         Cache::put($key, $value ?? false, $value === null ? 600 : 21600);
 
         return $value;
+    }
+
+    /**
+     * The Java major version for a chosen Minecraft Java type, version or modpack (form state), else null.
+     *
+     * @param  array<string, mixed>  $data
+     */
+    public static function javaFor(array $data): ?int
+    {
+        $type = (string) ($data['type'] ?? '');
+        if (! Minecraft::isJava($type)) {
+            return null;
+        }
+        if ($type === 'proxy') {
+            return 21;
+        }
+        if ($type === 'modpack') {
+            $runtime = Sources::runtime($data['modpack'] ?? null, $data['modpack_version'] ?? null);
+            if (in_array($runtime['java'] ?? null, Java::MAJORS, true)) {
+                return $runtime['java'];
+            }
+
+            return isset($runtime['minecraft']) ? self::java($runtime['minecraft'], $type) : null;
+        }
+        $version = (string) ($data['version'] ?? '');
+
+        return Minecraft::validVersion($version) ? self::java($version, $type) : null;
     }
 }

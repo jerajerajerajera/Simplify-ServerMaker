@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- New Server software page on Minecraft Java servers, as in Simplify 0.7.0: switch to other software, another
+  Minecraft version or a modpack, with the same choices as the Server Maker. Only the owner or an administrator, with
+  the server stopped, a successful backup from the last 30 minutes and the server name typed to confirm. The old
+  startup settings are kept and put back when the reinstall fails.
 - The settings have a Starting resources table: the CPU, RAM and disk a new Minecraft server starts with, per type
   (Vanilla, Plugins, Mods, Modpack, Bedrock, Proxy), as in Simplify 0.7.0. The Resources step starts from these
   values, within each person's allowance.

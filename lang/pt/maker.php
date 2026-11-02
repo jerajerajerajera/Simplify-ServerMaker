@@ -283,4 +283,19 @@ return [
         'curseforge_saved' => 'Há uma chave guardada. Introduza uma nova para a substituir.',
         'curseforge_forget' => 'Remover a chave guardada',
     ],
+    'software' => [
+        'title' => 'Software do servidor',
+        'warning' => 'Instalar outro software reinstala o servidor. Os mundos e ficheiros ficam, mas plugins ou mods podem não servir no novo software. É preciso uma cópia de segurança bem-sucedida dos últimos 30 minutos e o servidor parado.',
+        'now' => 'Agora: :software',
+        'confirm' => 'Escreva :name para confirmar',
+        'install' => 'Instalar',
+        'installing' => 'O novo software está a ser instalado.',
+        'wrong_name' => 'Escreva o nome exato do servidor.',
+        'failed' => 'Não foi possível trocar o software. As definições antigas foram repostas.',
+        'blocked' => [
+            'installing' => 'Aguarde até o servidor terminar a instalação.',
+            'running' => 'Pare primeiro o servidor.',
+            'backup' => 'Faça primeiro uma cópia de segurança: é precisa uma bem-sucedida dos últimos 30 minutos.',
+        ],
+    ],
 ];

@@ -87,8 +87,12 @@ final class Payload
         ];
     }
 
-    /** @return array<string, string> */
-    private static function minecraftEnvironment(array $state, EggData $egg, ?int $java): array
+    /**
+     * The egg's defaults with the chosen Minecraft version and Java filled in.
+     *
+     * @return array<string, string>
+     */
+    public static function minecraftEnvironment(array $state, EggData $egg, ?int $java): array
     {
         $type = (string) ($state['type'] ?? '');
         $version = (string) ($state['version'] ?? '');

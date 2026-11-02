@@ -283,4 +283,19 @@ return [
         'curseforge_saved' => 'Avain on tallennettu. Korvaa se kirjoittamalla uusi.',
         'curseforge_forget' => 'Poista tallennettu avain',
     ],
+    'software' => [
+        'title' => 'Palvelinohjelmisto',
+        'warning' => 'Toisen ohjelmiston asentaminen asentaa palvelimen uudelleen. Maailmat ja tiedostot säilyvät, mutta lisäosat tai modit eivät ehkä sovi uuteen ohjelmistoon. Tarvitaan onnistunut varmuuskopio viimeiseltä 30 minuutilta, ja palvelimen on oltava pysäytetty.',
+        'now' => 'Nyt: :software',
+        'confirm' => 'Vahvista kirjoittamalla :name',
+        'install' => 'Asenna',
+        'installing' => 'Uutta ohjelmistoa asennetaan.',
+        'wrong_name' => 'Kirjoita palvelimen nimi tarkasti.',
+        'failed' => 'Ohjelmistoa ei voitu vaihtaa. Vanhat asetukset palautettiin.',
+        'blocked' => [
+            'installing' => 'Odota, että palvelimen asennus valmistuu.',
+            'running' => 'Pysäytä palvelin ensin.',
+            'backup' => 'Tee ensin varmuuskopio: tarvitaan onnistunut varmuuskopio viimeiseltä 30 minuutilta.',
+        ],
+    ],
 ];

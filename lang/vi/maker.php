@@ -283,4 +283,19 @@ return [
         'curseforge_saved' => 'Đã lưu một khóa. Nhập khóa mới để thay thế.',
         'curseforge_forget' => 'Xóa khóa đã lưu',
     ],
+    'software' => [
+        'title' => 'Phần mềm máy chủ',
+        'warning' => 'Cài phần mềm khác sẽ cài lại máy chủ. Thế giới và tệp vẫn giữ, nhưng plugin hoặc mod có thể không hợp với phần mềm mới. Cần một bản sao lưu thành công trong 30 phút gần nhất và máy chủ phải dừng.',
+        'now' => 'Hiện tại: :software',
+        'confirm' => 'Nhập :name để xác nhận',
+        'install' => 'Cài đặt',
+        'installing' => 'Phần mềm mới đang được cài.',
+        'wrong_name' => 'Nhập chính xác tên máy chủ.',
+        'failed' => 'Không thể đổi phần mềm. Cài đặt cũ đã được khôi phục.',
+        'blocked' => [
+            'installing' => 'Chờ máy chủ cài đặt xong.',
+            'running' => 'Hãy dừng máy chủ trước.',
+            'backup' => 'Hãy sao lưu trước: cần một bản sao lưu thành công trong 30 phút gần nhất.',
+        ],
+    ],
 ];

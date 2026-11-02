@@ -283,4 +283,19 @@ return [
         'curseforge_saved' => 'En nyckel är sparad. Fyll i en ny för att ersätta den.',
         'curseforge_forget' => 'Ta bort den sparade nyckeln',
     ],
+    'software' => [
+        'title' => 'Serverprogramvara',
+        'warning' => 'Att installera annan programvara installerar om servern. Världar och filer finns kvar, men plugins eller moddar kanske inte passar den nya programvaran. Det krävs en lyckad säkerhetskopia från de senaste 30 minuterna och att servern är stoppad.',
+        'now' => 'Nu: :software',
+        'confirm' => 'Skriv :name för att bekräfta',
+        'install' => 'Installera',
+        'installing' => 'Den nya programvaran installeras.',
+        'wrong_name' => 'Skriv serverns namn exakt.',
+        'failed' => 'Programvaran kunde inte bytas. De gamla inställningarna är tillbaka.',
+        'blocked' => [
+            'installing' => 'Vänta tills servern har installerats klart.',
+            'running' => 'Stoppa servern först.',
+            'backup' => 'Gör först en säkerhetskopia: det krävs en lyckad från de senaste 30 minuterna.',
+        ],
+    ],
 ];

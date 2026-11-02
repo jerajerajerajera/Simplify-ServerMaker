@@ -283,4 +283,19 @@ return [
         'curseforge_saved' => 'Der er gemt en nøgle. Udfyld en ny for at erstatte den.',
         'curseforge_forget' => 'Fjern den gemte nøgle',
     ],
+    'software' => [
+        'title' => 'Serversoftware',
+        'warning' => 'Installation af anden software geninstallerer serveren. Verdener og filer bliver, men plugins eller mods passer måske ikke til den nye software. Der kræves en vellykket backup fra de sidste 30 minutter, og serveren skal være stoppet.',
+        'now' => 'Nu: :software',
+        'confirm' => 'Skriv :name for at bekræfte',
+        'install' => 'Installér',
+        'installing' => 'Den nye software installeres.',
+        'wrong_name' => 'Skriv servernavnet præcist.',
+        'failed' => 'Softwaren kunne ikke skiftes. De gamle indstillinger er tilbage.',
+        'blocked' => [
+            'installing' => 'Vent, til serveren er færdig med at installere.',
+            'running' => 'Stop serveren først.',
+            'backup' => 'Lav først en backup: der kræves en vellykket backup fra de sidste 30 minutter.',
+        ],
+    ],
 ];

@@ -283,4 +283,19 @@ return [
         'curseforge_saved' => 'Ein Schlüssel ist gespeichert. Gib einen neuen ein, um ihn zu ersetzen.',
         'curseforge_forget' => 'Gespeicherten Schlüssel entfernen',
     ],
+    'software' => [
+        'title' => 'Server-Software',
+        'warning' => 'Andere Software zu installieren installiert den Server neu. Welten und Dateien bleiben, aber Plugins oder Mods passen vielleicht nicht zur neuen Software. Nötig sind ein erfolgreiches Backup der letzten 30 Minuten und ein gestoppter Server.',
+        'now' => 'Jetzt: :software',
+        'confirm' => 'Zum Bestätigen :name eingeben',
+        'install' => 'Installieren',
+        'installing' => 'Die neue Software wird installiert.',
+        'wrong_name' => 'Gib den Servernamen genau ein.',
+        'failed' => 'Die Software konnte nicht gewechselt werden. Die alten Einstellungen sind wiederhergestellt.',
+        'blocked' => [
+            'installing' => 'Warte, bis die Installation des Servers fertig ist.',
+            'running' => 'Stoppe zuerst den Server.',
+            'backup' => 'Erstelle zuerst ein Backup: nötig ist ein erfolgreiches Backup der letzten 30 Minuten.',
+        ],
+    ],
 ];

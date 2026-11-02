@@ -9,7 +9,8 @@
     "class": "ServerMakerPlugin",
     "panels": [
         "admin",
-        "app"
+        "app",
+        "server"
     ],
     "panel_version": "^1.0.0-beta38",
     "api_version": 1,

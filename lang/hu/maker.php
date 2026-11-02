@@ -283,4 +283,19 @@ return [
         'curseforge_saved' => 'Van mentett kulcs. A cseréjéhez adj meg egy újat.',
         'curseforge_forget' => 'Mentett kulcs törlése',
     ],
+    'software' => [
+        'title' => 'Szerverszoftver',
+        'warning' => 'Más szoftver telepítése újratelepíti a szervert. A világok és fájlok megmaradnak, de a pluginok vagy modok nem biztos, hogy illenek az új szoftverhez. Szükség van egy sikeres mentésre az elmúlt 30 percből, és a szervernek le kell állnia.',
+        'now' => 'Most: :software',
+        'confirm' => 'A megerősítéshez írd be: :name',
+        'install' => 'Telepítés',
+        'installing' => 'Az új szoftver telepítése folyamatban.',
+        'wrong_name' => 'Írd be pontosan a szerver nevét.',
+        'failed' => 'A szoftvert nem sikerült cserélni. A régi beállítások visszaálltak.',
+        'blocked' => [
+            'installing' => 'Várd meg, amíg a szerver telepítése befejeződik.',
+            'running' => 'Előbb állítsd le a szervert.',
+            'backup' => 'Előbb készíts mentést: sikeres mentés kell az elmúlt 30 percből.',
+        ],
+    ],
 ];
