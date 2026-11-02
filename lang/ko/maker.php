@@ -266,6 +266,8 @@ return [
         'import_eggs_help' => 'Minecraft 유형이나 모드팩용 egg가 아직 패널에 없으면 Server Maker가 포함된 egg에서 추가합니다.',
         'allowance' => '1인당 한도',
         'allowance_help' => '한 사람이 소유한 모든 서버를 합산합니다.',
+        'starting' => '시작 리소스',
+        'starting_help' => '새 Minecraft 서버가 유형별로 시작할 때의 CPU, RAM, 디스크입니다. 할당량 안에서 리소스 단계에서 바꿀 수 있습니다.',
         'max_servers' => '서버 수',
         'max_ram' => 'RAM 합계',
         'max_disk' => '디스크 합계',

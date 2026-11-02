@@ -266,6 +266,8 @@ return [
         'import_eggs_help' => 'Minecraft の種類や Modpack 用の egg がまだパネルにない場合、Server Maker が付属の egg から追加します。',
         'allowance' => '1 人あたりの上限',
         'allowance_help' => 'その人が所有するすべてのサーバーの合計で数えます。',
+        'starting' => '初期リソース',
+        'starting_help' => '新しい Minecraft サーバーが種類ごとに最初に持つ CPU、RAM、ディスク。割り当ての範囲内で、リソースの手順で変更できます。',
         'max_servers' => 'サーバー数',
         'max_ram' => 'RAM の合計',
         'max_disk' => 'ディスクの合計',

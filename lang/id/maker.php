@@ -266,6 +266,8 @@ return [
         'import_eggs_help' => 'Jika egg untuk jenis Minecraft atau modpack belum ada di panel, Server Maker menambahkannya dari egg bawaannya.',
         'allowance' => 'Jatah per orang',
         'allowance_help' => 'Dihitung dari semua server milik seseorang.',
+        'starting' => 'Sumber daya awal',
+        'starting_help' => 'CPU, RAM, dan disk yang dipakai server Minecraft baru saat mulai, per jenis. Masih bisa diubah di langkah Sumber daya, dalam batas jatah.',
         'max_servers' => 'Server',
         'max_ram' => 'Total RAM',
         'max_disk' => 'Total disk',

@@ -266,6 +266,8 @@ return [
         'import_eggs_help' => 'Staat de egg voor een Minecraft-type of modpack nog niet op het paneel, dan voegt Server Maker die toe uit de meegeleverde eggs.',
         'allowance' => 'Limiet per persoon',
         'allowance_help' => 'Geteld over alle servers die iemand bezit.',
+        'starting' => 'Startresources',
+        'starting_help' => 'De CPU, RAM en schijf waarmee een nieuwe Minecraft-server begint, per type. Mensen kunnen ze nog aanpassen bij de stap Resources, binnen hun ruimte.',
         'max_servers' => 'Servers',
         'max_ram' => 'RAM in totaal',
         'max_disk' => 'Schijfruimte in totaal',

@@ -14,8 +14,8 @@ use Filament\Schemas\Components\Wizard\Step;
 use Simplify\ServerMaker\Access;
 use Simplify\ServerMaker\Creation\BackupSchedule;
 use Simplify\ServerMaker\Creation\Resources;
+use Simplify\ServerMaker\Creation\StartingResources;
 use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
-use Simplify\ServerMaker\Games\Minecraft;
 
 /** Step 4: RAM, CPU and disk, as presets that start at what the chosen game needs, or an amount of your own. */
 final class ResourcesStep
@@ -23,9 +23,7 @@ final class ResourcesStep
     public static function make(ServerMaker $page): Step
     {
         $t = fn (string $key, array $replace = []) => __('simplify-servermaker::maker.'.$key, $replace);
-        $start = fn (Get $get, string $resource): int => $get('game') === 'minecraft'
-            ? Minecraft::resources((string) $get('type'))[$resource]
-            : ['cpu' => 100, 'ram' => 4, 'disk' => 10240][$resource];
+        $start = fn (Get $get, string $resource): int => StartingResources::for($get('game') === 'minecraft' ? (string) $get('type') : null)[$resource];
 
         // The help sits above the fields: no box in the box (Simplify's style rules).
         $fields = [Text::make(fn (Get $get) => self::help($get, $t))->color('gray')];

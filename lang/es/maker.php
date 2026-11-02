@@ -266,6 +266,8 @@ return [
         'import_eggs_help' => 'Si el egg de un tipo de Minecraft o de un modpack aún no está en el panel, Server Maker lo añade a partir de los eggs que incluye.',
         'allowance' => 'Cuota por persona',
         'allowance_help' => 'Se cuenta sobre todos los servidores de cada persona.',
+        'starting' => 'Recursos iniciales',
+        'starting_help' => 'La CPU, la RAM y el disco con los que empieza un nuevo servidor de Minecraft, por tipo. Aún se pueden cambiar en el paso Recursos, dentro de la asignación.',
         'max_servers' => 'Servidores',
         'max_ram' => 'RAM en total',
         'max_disk' => 'Disco en total',

@@ -266,6 +266,8 @@ return [
         'import_eggs_help' => 'Jei Minecraft tipo ar modpack egg dar nėra skydelyje, Server Maker jį prideda iš savo pateikiamų egg.',
         'allowance' => 'Limitas vienam asmeniui',
         'allowance_help' => 'Skaičiuojama pagal visus asmens serverius.',
+        'starting' => 'Pradiniai ištekliai',
+        'starting_help' => 'CPU, RAM ir diskas, su kuriais pradeda naujas Minecraft serveris, pagal tipą. Juos dar galima keisti žingsnyje Ištekliai, neviršijant kvotos.',
         'max_servers' => 'Serveriai',
         'max_ram' => 'RAM iš viso',
         'max_disk' => 'Diskas iš viso',

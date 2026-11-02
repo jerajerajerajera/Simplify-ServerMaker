@@ -29,6 +29,7 @@ use Simplify\ServerMaker\Creation\Payload;
 use Simplify\ServerMaker\Creation\Ports;
 use Simplify\ServerMaker\Creation\Resources;
 use Simplify\ServerMaker\Creation\ServerColor;
+use Simplify\ServerMaker\Creation\StartingResources;
 use Simplify\ServerMaker\Creation\Subdomain;
 use Simplify\ServerMaker\Filament\Wizard\GameStep;
 use Simplify\ServerMaker\Filament\Wizard\GameVariables;
@@ -307,7 +308,7 @@ class ServerMaker extends Page implements HasForms
     /** @return array<string, int|string> the resource fields for a Minecraft type, or for other games */
     private function resourceDefaults(?string $type): array
     {
-        $start = $type === null ? ['cpu' => 100, 'ram' => 4, 'disk' => 10240] : Minecraft::resources($type);
+        $start = StartingResources::for($type);
         $limits = Access::resourceLimits();
         $values = [];
         foreach ($start as $resource => $amount) {

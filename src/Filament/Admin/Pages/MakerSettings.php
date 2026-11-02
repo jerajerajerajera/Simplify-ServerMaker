@@ -16,15 +16,20 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Text;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
+use Filament\Support\Enums\FontWeight;
 use Simplify\ServerMaker\Access;
+use Simplify\ServerMaker\Creation\StartingResources;
+use Simplify\ServerMaker\Games\Minecraft;
 use Simplify\ServerMaker\Settings;
 
 /**
- * The Server Maker's settings: who besides administrators may make servers, where, which games and how much, and the
- * CurseForge key. Opened from the Server Maker page (and from Simplify when it is installed), so it has no menu item.
+ * The Server Maker's settings: who besides administrators may make servers, where, which games and how much, what a
+ * new Minecraft server starts with, and the CurseForge key. Opened from the Server Maker page (and from Simplify when it is installed), so it has no menu item.
  */
 class MakerSettings extends Page implements HasForms
 {
@@ -74,6 +79,7 @@ class MakerSettings extends Page implements HasForms
             'egg_ids' => array_map('intval', (array) Settings::get('egg_ids', [])),
             'import_eggs' => (bool) Settings::get('import_eggs', false),
             'steam_art' => (bool) Settings::get('steam_art', true),
+            'starting' => StartingResources::table(),
             ...Access::limits(),
         ];
     }
@@ -88,6 +94,7 @@ class MakerSettings extends Page implements HasForms
             ->components([
                 self::whoSection(),
                 self::allowanceSection(),
+                self::startingSection(),
                 Section::make($t('steam'))
                     ->schema([
                         Toggle::make('steam_art')->label($t('steam_art'))->helperText($t('steam_art_help')),
@@ -161,6 +168,33 @@ class MakerSettings extends Page implements HasForms
             ]);
     }
 
+    /** The CPU, RAM and disk a new Minecraft server starts with, per type, as one compact table. */
+    public static function startingSection(): Section
+    {
+        $t = fn (string $key) => __('simplify-servermaker::maker.'.$key);
+        $cells = [Text::make('')];
+        foreach (['cpu', 'ram', 'disk'] as $resource) {
+            $cells[] = Text::make($t('resources.'.$resource))->color('gray');
+        }
+        foreach (Minecraft::TYPES as $type) {
+            $cells[] = Text::make($t('minecraft.types.'.$type.'.label'))->weight(FontWeight::SemiBold);
+            foreach (['cpu' => '%', 'ram' => 'GB', 'disk' => 'GB'] as $resource => $unit) {
+                [$min, $max] = StartingResources::RANGE[$resource];
+                $cells[] = TextInput::make('starting.'.$type.'.'.$resource)
+                    ->hiddenLabel()
+                    ->integer()
+                    ->minValue($resource === 'disk' ? 1 : $min)
+                    ->maxValue($resource === 'disk' ? intdiv($max, 1024) : $max)
+                    ->suffix($unit)
+                    ->required();
+            }
+        }
+
+        return Section::make($t('settings.starting'))
+            ->description($t('settings.starting_help'))
+            ->schema([Grid::make(['default' => 4])->schema($cells)]);
+    }
+
     protected function getHeaderActions(): array
     {
         return [
@@ -208,6 +242,9 @@ class MakerSettings extends Page implements HasForms
             'egg_ids' => array_values(array_map('intval', (array) ($state['egg_ids'] ?? []))),
             'import_eggs' => (bool) ($state['import_eggs'] ?? false),
         ];
+        if (array_key_exists('starting', $state)) {
+            $values['starting_resources'] = StartingResources::fromTable((array) $state['starting']);
+        }
         if (array_key_exists('steam_art', $state)) {
             $values['steam_art'] = (bool) $state['steam_art'];
         }

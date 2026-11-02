@@ -266,6 +266,8 @@ return [
         'import_eggs_help' => 'Pokud egg pro typ Minecraft nebo modpack ještě na panelu není, Server Maker ho přidá z eggů, které obsahuje.',
         'allowance' => 'Limit na osobu',
         'allowance_help' => 'Počítá se za všechny servery, které daná osoba vlastní.',
+        'starting' => 'Počáteční prostředky',
+        'starting_help' => 'CPU, RAM a disk, se kterými nový server Minecraft začíná, podle typu. V kroku Prostředky je lze ještě změnit v rámci přídělu.',
         'max_servers' => 'Servery',
         'max_ram' => 'RAM celkem',
         'max_disk' => 'Disk celkem',
