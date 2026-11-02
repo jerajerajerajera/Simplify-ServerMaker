@@ -298,4 +298,11 @@ return [
             'backup' => 'Haz primero una copia de seguridad: se necesita una correcta de los últimos 30 minutos.',
         ],
     ],
+    'performance' => [
+        'title' => 'Rendimiento',
+        'restart' => 'Los nuevos límites se aplican tras el próximo reinicio.',
+        'ask_admin' => 'Pide a un administrador que los cambie.',
+        'saved' => 'Nuevos límites guardados. Se aplican tras el próximo reinicio.',
+        'unlimited' => 'Ilimitado',
+    ],
 ];

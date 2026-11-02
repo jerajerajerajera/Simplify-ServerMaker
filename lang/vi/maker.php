@@ -298,4 +298,11 @@ return [
             'backup' => 'Hãy sao lưu trước: cần một bản sao lưu thành công trong 30 phút gần nhất.',
         ],
     ],
+    'performance' => [
+        'title' => 'Hiệu năng',
+        'restart' => 'Giới hạn mới áp dụng sau lần khởi động lại tiếp theo.',
+        'ask_admin' => 'Hãy nhờ quản trị viên thay đổi.',
+        'saved' => 'Đã lưu giới hạn mới. Áp dụng sau lần khởi động lại tiếp theo.',
+        'unlimited' => 'Không giới hạn',
+    ],
 ];

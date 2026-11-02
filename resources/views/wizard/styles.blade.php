@@ -123,6 +123,10 @@
 
     /* Resources: RAM, CPU and disk in one grid of cards of the same size, a small icon next to the amount. */
     .smk .smk-amounts { display: grid; grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); gap: 8px; }
+    /* Performance: the limits now, three numbers in a row. */
+    .smk .smk-limits { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 0; }
+    .smk .smk-limits dt { font-size: 12px; color: var(--smk-muted); }
+    .smk .smk-limits dd { margin: 0; font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; }
     .smk .smk-amount { position: relative; gap: 8px; height: 44px; padding: 0 12px; border-radius: var(--smk-radius); }
     .smk .smk-amount strong { overflow: hidden; font-size: 14px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; font-variant-numeric: tabular-nums; }
     .smk .smk-amount-icon { flex: none; width: 16px; height: 16px; color: var(--smk-muted); }

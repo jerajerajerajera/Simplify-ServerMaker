@@ -298,4 +298,11 @@ return [
             'backup' => 'Buat cadangan dulu: diperlukan cadangan yang berhasil dari 30 menit terakhir.',
         ],
     ],
+    'performance' => [
+        'title' => 'Performa',
+        'restart' => 'Batas baru berlaku setelah restart berikutnya.',
+        'ask_admin' => 'Minta administrator untuk mengubahnya.',
+        'saved' => 'Batas baru disimpan. Berlaku setelah restart berikutnya.',
+        'unlimited' => 'Tanpa batas',
+    ],
 ];

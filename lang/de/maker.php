@@ -298,4 +298,11 @@ return [
             'backup' => 'Erstelle zuerst ein Backup: nötig ist ein erfolgreiches Backup der letzten 30 Minuten.',
         ],
     ],
+    'performance' => [
+        'title' => 'Leistung',
+        'restart' => 'Neue Limits gelten nach dem nächsten Neustart.',
+        'ask_admin' => 'Bitte einen Administrator, diese zu ändern.',
+        'saved' => 'Neue Limits gespeichert. Sie gelten nach dem nächsten Neustart.',
+        'unlimited' => 'Unbegrenzt',
+    ],
 ];

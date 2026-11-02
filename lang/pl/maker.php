@@ -298,4 +298,11 @@ return [
             'backup' => 'Najpierw zrób kopię zapasową: potrzebna jest udana kopia z ostatnich 30 minut.',
         ],
     ],
+    'performance' => [
+        'title' => 'Wydajność',
+        'restart' => 'Nowe limity obowiązują po następnym restarcie.',
+        'ask_admin' => 'Poproś administratora o ich zmianę.',
+        'saved' => 'Zapisano nowe limity. Obowiązują po następnym restarcie.',
+        'unlimited' => 'Bez limitu',
+    ],
 ];

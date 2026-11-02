@@ -28,6 +28,7 @@ use Simplify\ServerMaker\Creation\Ports;
 use Simplify\ServerMaker\Filament\Admin\Pages\MakerSettings;
 use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
 use Simplify\ServerMaker\Filament\App\Pages\ServerMaker as AppServerMaker;
+use Simplify\ServerMaker\Filament\Server\Pages\Performance;
 use Simplify\ServerMaker\Filament\Server\Pages\ServerSoftware;
 use Simplify\ServerMaker\Games\BundledEggs;
 use Simplify\ServerMaker\Games\EggIndex;
@@ -41,6 +42,7 @@ use Simplify\ServerMaker\Settings;
 use Simplify\ServerMaker\Software\ChangeSoftware;
 use Simplify\ServerMaker\Software\Startup;
 use Simplify\Subdomains\Subdomains;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 define('LARAVEL_START', microtime(true));
 require getcwd().'/vendor/autoload.php';
@@ -445,6 +447,61 @@ step('the starting resources per Minecraft type are saved and used by the wizard
         ->call('pickGame', 'minecraft', 'vanilla')
         ->assertSet('data.ram_custom', 4);
     Settings::put(['starting_resources' => null]);
+});
+
+step('Performance shows the limits; administrators change them freely, owners within their allowance', function () use ($admin, $node) {
+    $owner = User::where('email', 'smoke-maker-perf@example.com')->first()
+        ?? User::factory()->create(['email' => 'smoke-maker-perf@example.com']);
+    $owner->syncRoles([]);
+    Server::query()->where('owner_id', $owner->id)->delete();
+    $server = Server::factory()->create(['owner_id' => $owner->id, 'node_id' => $node->id, 'name' => 'smoke-performance', 'memory' => 4096, 'cpu' => 100, 'disk' => 10240]);
+
+    expectOk(http($admin, Performance::getUrl(panel: 'server', tenant: $server)), 'Performance');
+    Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('server'));
+    Filament\Facades\Filament::setTenant($server);
+    // An administrator: any amount, no allowance. Plain checks: a failing PHPUnit assertion cannot report here.
+    $test = Livewire\Livewire::actingAs($admin)->test(Performance::class);
+    foreach (['100 %', '4 GB', '10 GB'] as $text) {
+        if (! str_contains($test->html(), $text)) {
+            throw new RuntimeException("the limits do not show $text");
+        }
+    }
+    if ($test->get('data.ram') !== '4' || ! $test->instance()->getAction('save')->isVisible()) {
+        throw new RuntimeException('the page does not start at 4 GB with Save: '.json_encode($test->get('data')));
+    }
+    $test->set('data.ram', 'custom')->set('data.ram_custom', 24)->call('save');
+    if ($test->errors()->isNotEmpty() || (int) $server->fresh()->memory !== 24576 || (int) $server->fresh()->disk !== 10240) {
+        throw new RuntimeException('the administrator could not change the RAM: '.json_encode($test->errors()->toArray()).' '.$server->fresh()->memory);
+    }
+
+    // The owner with self-service (8 GB RAM in all): up to 8 GB on their only server, not more.
+    Settings::put(['self_service' => true, 'role_ids' => [], 'node_ids' => [$node->id], 'max_ram' => 8]);
+    $test = Livewire\Livewire::actingAs($owner)->test(Performance::class)
+        ->set('data.ram', 'custom')->set('data.ram_custom', 12)->call('save');
+    if ($test->errors()->isEmpty() || (int) $server->fresh()->memory !== 24576) {
+        throw new RuntimeException('more than the allowance was saved');
+    }
+    $test->set('data.ram', '8')->call('save');
+    if ($test->errors()->isNotEmpty() || (int) $server->fresh()->memory !== 8192) {
+        throw new RuntimeException('the owner could not change the RAM within the allowance: '.json_encode($test->errors()->toArray()));
+    }
+
+    // Without self-service only the limits, and saving is refused.
+    Settings::put(['self_service' => false]);
+    $test = Livewire\Livewire::actingAs($owner)->test(Performance::class);
+    if (! str_contains($test->html(), 'Ask an administrator to change these.') || $test->instance()->getAction('save')->isVisible()) {
+        throw new RuntimeException('without self-service the owner can still change the limits');
+    }
+    try {
+        $test->instance()->save();
+        throw new LogicException('saved without self-service');
+    } catch (HttpException $exception) {
+        if ($exception->getStatusCode() !== 403) {
+            throw $exception;
+        }
+    }
+    Settings::put(['self_service' => true]);
+    $server->delete();
 });
 
 $user = User::where('email', 'smoke-maker-user@example.com')->first()

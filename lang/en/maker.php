@@ -298,4 +298,11 @@ return [
             'backup' => 'Make a backup first: a successful backup from the last 30 minutes is needed.',
         ],
     ],
+    'performance' => [
+        'title' => 'Performance',
+        'restart' => 'New limits apply after the next restart.',
+        'ask_admin' => 'Ask an administrator to change these.',
+        'saved' => 'New limits saved. They apply after the next restart.',
+        'unlimited' => 'Unlimited',
+    ],
 ];

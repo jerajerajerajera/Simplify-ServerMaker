@@ -298,4 +298,11 @@ return [
             'backup' => 'Najprv vytvorte zálohu: je potrebná úspešná záloha z posledných 30 minút.',
         ],
     ],
+    'performance' => [
+        'title' => 'Výkon',
+        'restart' => 'Nové limity platia po ďalšom reštarte.',
+        'ask_admin' => 'Požiadajte správcu o ich zmenu.',
+        'saved' => 'Nové limity uložené. Platia po ďalšom reštarte.',
+        'unlimited' => 'Neobmedzené',
+    ],
 ];

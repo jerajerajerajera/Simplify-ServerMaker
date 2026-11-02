@@ -298,4 +298,11 @@ return [
             'backup' => 'Előbb készíts mentést: sikeres mentés kell az elmúlt 30 percből.',
         ],
     ],
+    'performance' => [
+        'title' => 'Teljesítmény',
+        'restart' => 'Az új korlátok a következő újraindítás után érvényesek.',
+        'ask_admin' => 'Kérj meg egy adminisztrátort a módosításukra.',
+        'saved' => 'Új korlátok mentve. A következő újraindítás után érvényesek.',
+        'unlimited' => 'Korlátlan',
+    ],
 ];

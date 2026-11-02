@@ -298,4 +298,11 @@ return [
             'backup' => 'Maak eerst een back-up: er is een geslaagde back-up van de laatste 30 minuten nodig.',
         ],
     ],
+    'performance' => [
+        'title' => 'Prestaties',
+        'restart' => 'Nieuwe limieten gelden na de volgende herstart.',
+        'ask_admin' => 'Vraag een beheerder om deze te wijzigen.',
+        'saved' => 'Nieuwe limieten opgeslagen. Ze gelden na de volgende herstart.',
+        'unlimited' => 'Onbeperkt',
+    ],
 ];

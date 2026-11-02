@@ -298,4 +298,11 @@ return [
             'backup' => 'Lav først en backup: der kræves en vellykket backup fra de sidste 30 minutter.',
         ],
     ],
+    'performance' => [
+        'title' => 'Ydelse',
+        'restart' => 'Nye grænser gælder efter næste genstart.',
+        'ask_admin' => 'Bed en administrator om at ændre dem.',
+        'saved' => 'Nye grænser gemt. De gælder efter næste genstart.',
+        'unlimited' => 'Ubegrænset',
+    ],
 ];
