@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Testing\TestResponse;
+use Illuminate\Validation\ValidationException;
 use Simplify\Core\Addons\Addon;
 use Simplify\ServerMaker\Creation\ApplyFirstSettings;
 use Simplify\ServerMaker\Creation\ApplySteamArt;
@@ -28,6 +29,7 @@ use Simplify\ServerMaker\Creation\Ports;
 use Simplify\ServerMaker\Filament\Admin\Pages\MakerSettings;
 use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
 use Simplify\ServerMaker\Filament\App\Pages\ServerMaker as AppServerMaker;
+use Simplify\ServerMaker\Filament\App\Pages\Steam;
 use Simplify\ServerMaker\Filament\Server\Pages\Performance;
 use Simplify\ServerMaker\Filament\Server\Pages\ServerSoftware;
 use Simplify\ServerMaker\Games\BundledEggs;
@@ -41,6 +43,7 @@ use Simplify\ServerMaker\ServerMakerAddon;
 use Simplify\ServerMaker\Settings;
 use Simplify\ServerMaker\Software\ChangeSoftware;
 use Simplify\ServerMaker\Software\Startup;
+use Simplify\ServerMaker\Steam\SteamKeys;
 use Simplify\Subdomains\Subdomains;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -502,6 +505,57 @@ step('Performance shows the limits; administrators change them freely, owners wi
     }
     Settings::put(['self_service' => true]);
     $server->delete();
+});
+
+step('a Steam key is checked, stored encrypted, never shown again, and makes login tokens', function () use ($admin) {
+    $key = 'ABCDEF0123456789ABCDEF0123456789';
+    $calls = [];
+    SteamKeys::$transport = function (string $method, string $url, array $params) use (&$calls): array {
+        $calls[] = [$method, basename(dirname($url)), $params['appid'] ?? null, $params['memo'] ?? null];
+
+        return str_contains($url, 'GetAccountList')
+            ? [200, ['response' => ['actor' => '76561190000000001']]]
+            : [200, ['response' => ['login_token' => 'SMOKETOKEN0123456789ABCD']]];
+    };
+    SteamKeys::remove($admin);
+    try {
+        SteamKeys::save($admin, 'not-a-key');
+        throw new LogicException('a wrong key was accepted');
+    } catch (ValidationException) {
+    }
+    SteamKeys::save($admin, strtolower($key));
+    $status = SteamKeys::status($admin);
+    if (! $status['connected'] || $status['hint'] !== '6789' || $status['steamid'] !== '76561190000000001' || ! $status['auto']) {
+        throw new RuntimeException('not connected: '.json_encode($status));
+    }
+    $raw = (string) DB::table('simplify_server_maker_settings')->where('key', 'steam_key.'.$admin->id)->value('value');
+    if ($raw === '' || str_contains($raw, $key)) {
+        throw new RuntimeException('the key is stored readable');
+    }
+
+    // The page shows only the last four characters.
+    $response = http($admin, Steam::getUrl(panel: 'app'));
+    expectOk($response, 'Steam');
+    if (! str_contains($response->getContent(), 'ending in 6789') || str_contains($response->getContent(), $key)) {
+        throw new RuntimeException('the Steam page does not show the hint, or shows the key');
+    }
+
+    // A token for the game of an egg: Steam's own app of the game (CS2 is 730), the server name as memo.
+    Cache::put('simplify-servermaker.steam.'.md5('counter-strike 2'), ['appid' => 730, 'name' => 'Counter-Strike 2', 'banner' => '', 'header' => '', 'capsule' => ''], 60);
+    $token = SteamKeys::createForGame($admin, 'Counter-Strike 2', 'smoke-cs2');
+    if ($token !== 'SMOKETOKEN0123456789ABCD' || end($calls) !== ['POST', 'CreateAccount', 730, 'smoke-cs2']) {
+        throw new RuntimeException('no token: '.json_encode($calls));
+    }
+    foreach (glob(storage_path('logs/*.log')) ?: [] as $log) {
+        if (str_contains((string) file_get_contents($log), $key)) {
+            throw new RuntimeException('the key is in '.basename($log));
+        }
+    }
+    SteamKeys::remove($admin);
+    SteamKeys::$transport = null;
+    if (SteamKeys::connected($admin)) {
+        throw new RuntimeException('Disconnect kept the key');
+    }
 });
 
 $user = User::where('email', 'smoke-maker-user@example.com')->first()
