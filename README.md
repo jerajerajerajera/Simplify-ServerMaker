@@ -4,14 +4,18 @@ A [Pelican](https://pelican.dev) plugin to create a game server in a few clear s
 give it a name, choose the resources and press Create. The Server Maker picks the egg, the port and the Docker image.
 
 For Minecraft you pick the server type (Vanilla, Paper, Purpur, Fabric, Forge, NeoForge, Quilt, a modpack, Bedrock or
-a proxy) and the version, and set the first settings: maximum players, game mode, difficulty and, for Java, a server icon. Tick
+a proxy) and the version, and set the first settings: maximum players, game mode, difficulty and, for Java, the MOTD,
+view distance, spawn protection, PvP, whitelist, allow flight and a server icon. Tick
 the Minecraft EULA on the last step and you can start the server as soon as it is installed; leave it and it asks for
-the EULA at its first start. Administrators can also pick any game from the official Pelican egg index. A draft is kept, so
-you can carry on later.
+the EULA at its first start. Other games found in the Steam store can take their Steam banner and icon along.
+Administrators can also pick any game from the official Pelican egg index. A draft is kept, so you can carry on later.
 
 It works on its own. With [Simplify](https://github.com/jerajerajerajera/Simplify) installed you also get:
 
 - Create server in Simplify opens the Server Maker inside Simplify, and its settings are linked from the add-on list;
+- a colour for the new server, from the same colours as Simplify's colour menu;
+- with [Simplify Toolkit](https://github.com/jerajerajerajera/Simplify-Toolkit) also installed, the MOTD maker with
+  colours and a preview, and the new server's own automatic backup schedule;
 - a subdomain for the new server, suggested from its name, on a port that is forwarded, when Simplify's subdomains
   are set up.
 
