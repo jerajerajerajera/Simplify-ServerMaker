@@ -42,6 +42,7 @@ use Simplify\ServerMaker\Settings;
 use Simplify\ServerMaker\Software\ChangeSoftware;
 use Simplify\ServerMaker\Software\Startup;
 use Simplify\Subdomains\Subdomains;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 define('LARAVEL_START', microtime(true));
 require getcwd().'/vendor/autoload.php';
@@ -494,7 +495,7 @@ step('Performance shows the limits; administrators change them freely, owners wi
     try {
         $test->instance()->save();
         throw new LogicException('saved without self-service');
-    } catch (Symfony\Component\HttpKernel\Exception\HttpException $exception) {
+    } catch (HttpException $exception) {
         if ($exception->getStatusCode() !== 403) {
             throw $exception;
         }
