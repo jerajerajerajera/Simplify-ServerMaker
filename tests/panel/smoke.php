@@ -517,7 +517,11 @@ step('Performance gives a server extra ports from the free ports of its node, an
         $ids[$port] = Allocation::query()->create(['node_id' => $node->id, 'ip' => '127.0.0.2', 'port' => $port])->id;
     }
     $server = Server::factory()->create(['owner_id' => $owner->id, 'node_id' => $node->id, 'name' => 'smoke-ports', 'allocation_id' => $ids[30000], 'memory' => 4096, 'cpu' => 100, 'disk' => 10240]);
+    // The server factory can bring its own allocation: make 30000 the main port.
+    Allocation::query()->where('server_id', $server->id)->update(['server_id' => null]);
     Allocation::query()->whereKey($ids[30000])->update(['server_id' => $server->id]);
+    Server::query()->whereKey($server->id)->update(['allocation_id' => $ids[30000]]);
+    $server->refresh();
     $ports = fn () => Allocation::query()->where('server_id', $server->id)->orderBy('port')->pluck('port')->map(fn ($port) => (int) $port)->all();
 
     expectOk(http($admin, Performance::getUrl(panel: 'server', tenant: $server)), 'Performance');
@@ -533,7 +537,7 @@ step('Performance gives a server extra ports from the free ports of its node, an
     // Two extra ports: those right after the main port.
     $test->set('data.extra_ports', 2)->call('save');
     if ($test->errors()->isNotEmpty() || $ports() !== [30000, 30001, 30002]) {
-        throw new RuntimeException('the extra ports were not given: '.json_encode($test->errors()->toArray()).' '.json_encode($ports()));
+        throw new RuntimeException('the extra ports were not given: '.json_encode($test->errors()->toArray()).' '.json_encode($ports()).' main '.$server->fresh()->allocation_id.' / '.$ids[30000]);
     }
     // More than the node has free: refused, nothing changes.
     $test->set('data.extra_ports', 5)->call('save');
