@@ -12,6 +12,7 @@
 | B9 | 1.4.1 | Instellingspagina scrolt als geheel met Simplify | Formulier zonder `s-fit` | 1.4.1 | `tests/panel/smoke.php` (settings form has s-fit) | 0× (patroon met andere add-ons) | P-7 |
 | B16 | 2-11 (Unreleased, R3) | Op Performance stond de hoofdpoort zonder "· main" | Blade-`@if` direct na `}}` rendert niet | #45 (bf7b543) | `tests/panel/smoke.php` "Performance gives a server extra ports…" (rood op 6419d6c) | 0× | P-27 |
 | B17 | 2-11 (Unreleased, R3) | Extra poorten gaven altijd "not enough free ports" | In het serverpaneel scoopt Filament `Allocation`-queries op de tenant-server; vrije poorten waren onzichtbaar | #45 (d2114f0): `Allocation::withoutGlobalScopes()` in `ExtraPorts` en `Ports::free` | `tests/panel/smoke.php` "Performance gives a server extra ports…" (rood op 9c215b3) | 0× | P-27 |
+| SM-B1 | 2-11 (Unreleased, M02) | De Steam-schakelaar "automatisch tokens maken" sloeg zichzelf op; instellingen en Performance vroegen niets bij verlaten met wijzigingen | `afterStateUpdated` sloeg direct op; formulieren zonder `data-simplify-unsaved` | #52 | `tests/panel/smoke.php` "nothing saves itself…" + check in "Performance gives a server extra ports…" (rood op 4d358e8) | 0× | P-38 |
 
 ## Patronen
 
