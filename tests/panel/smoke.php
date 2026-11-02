@@ -365,6 +365,29 @@ step('settings are saved and the CurseForge key stays encrypted', function () us
     }
 });
 
+step('the starting resources per Minecraft type are saved and used by the wizard', function () use ($admin) {
+    Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('admin'));
+    Livewire\Livewire::actingAs($admin)->test(MakerSettings::class)
+        ->assertSee('Starting resources')
+        ->assertSet('data.starting.modpack.ram', 6)
+        ->set('data.starting.mods.cpu', 300)
+        ->set('data.starting.mods.ram', 8)
+        ->set('data.starting.mods.disk', 40)
+        ->call('save')
+        ->assertHasNoErrors();
+    if ((Settings::get('starting_resources')['mods'] ?? null) !== ['cpu' => 300, 'ram' => 8, 'disk' => 40960]) {
+        throw new RuntimeException('not saved: '.json_encode(Settings::get('starting_resources')));
+    }
+    Livewire\Livewire::actingAs($admin)->test(ServerMaker::class)
+        ->call('pickGame', 'minecraft', 'mods')
+        ->assertSet('data.cpu_custom', 300)
+        ->assertSet('data.ram_custom', 8)
+        ->assertSet('data.disk_custom', 40960)
+        ->call('pickGame', 'minecraft', 'vanilla')
+        ->assertSet('data.ram_custom', 4);
+    Settings::put(['starting_resources' => null]);
+});
+
 $user = User::where('email', 'smoke-maker-user@example.com')->first()
     ?? User::factory()->create(['email' => 'smoke-maker-user@example.com']);
 $user->syncRoles([]);

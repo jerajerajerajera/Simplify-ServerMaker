@@ -266,6 +266,8 @@ return [
         'import_eggs_help' => 'Jos Minecraft-tyypin tai modipaketin eggiä ei vielä ole paneelissa, Server Maker lisää sen mukana tulevista eggeistä.',
         'allowance' => 'Kiintiö henkilöä kohden',
         'allowance_help' => 'Lasketaan kaikista henkilön omistamista palvelimista.',
+        'starting' => 'Aloitusresurssit',
+        'starting_help' => 'Prosessori, RAM ja levy, joilla uusi Minecraft-palvelin aloittaa, tyypeittäin. Niitä voi yhä muuttaa Resurssit-vaiheessa kiintiön rajoissa.',
         'max_servers' => 'Palvelimet',
         'max_ram' => 'RAM yhteensä',
         'max_disk' => 'Levytila yhteensä',

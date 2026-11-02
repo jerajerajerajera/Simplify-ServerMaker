@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- The settings have a Starting resources table: the CPU, RAM and disk a new Minecraft server starts with, per type
+  (Vanilla, Plugins, Mods, Modpack, Bedrock, Proxy), as in Simplify 0.7.0. The Resources step starts from these
+  values, within each person's allowance.
+
 ## 1.4.2
 
 - Next and Back sit in the middle of their buttons again.

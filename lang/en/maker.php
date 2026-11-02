@@ -266,6 +266,8 @@ return [
         'import_eggs_help' => 'When the egg for a Minecraft type or modpack is not on the panel yet, the Server Maker adds it from the eggs it comes with.',
         'allowance' => 'Allowance per person',
         'allowance_help' => 'Counted over all servers someone owns.',
+        'starting' => 'Starting resources',
+        'starting_help' => 'The CPU, RAM and disk a new Minecraft server starts with, per type. People can still change them on the Resources step, within their allowance.',
         'max_servers' => 'Servers',
         'max_ram' => 'RAM in total',
         'max_disk' => 'Disk in total',

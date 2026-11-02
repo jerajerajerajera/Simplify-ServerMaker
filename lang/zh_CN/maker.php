@@ -266,6 +266,8 @@ return [
         'import_eggs_help' => '如果面板上还没有某种 Minecraft 类型或整合包的 egg,Server Maker 会从自带的 egg 中添加。',
         'allowance' => '每人配额',
         'allowance_help' => '按某人拥有的所有服务器合计。',
+        'starting' => '初始资源',
+        'starting_help' => '新 Minecraft 服务器按类型起始的 CPU、内存和磁盘。仍可在“资源”步骤中在配额内修改。',
         'max_servers' => '服务器数',
         'max_ram' => 'RAM 总量',
         'max_disk' => '磁盘总量',

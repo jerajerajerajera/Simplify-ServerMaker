@@ -266,6 +266,8 @@ return [
         'import_eggs_help' => 'Bir Minecraft türü veya mod paketi için egg panelde henüz yoksa, Server Maker onu kendi egg\'lerinden ekler.',
         'allowance' => 'Kişi başına kota',
         'allowance_help' => 'Bir kişinin sahip olduğu tüm sunucular üzerinden hesaplanır.',
+        'starting' => 'Başlangıç kaynakları',
+        'starting_help' => 'Yeni bir Minecraft sunucusunun türe göre başladığı CPU, RAM ve disk. Kaynaklar adımında, kota içinde hâlâ değiştirilebilir.',
         'max_servers' => 'Sunucular',
         'max_ram' => 'Toplam RAM',
         'max_disk' => 'Toplam disk',

@@ -266,6 +266,8 @@ return [
         'import_eggs_help' => 'Nếu egg cho một loại Minecraft hoặc modpack chưa có trên panel, Server Maker sẽ thêm nó từ các egg đi kèm.',
         'allowance' => 'Hạn mức mỗi người',
         'allowance_help' => 'Tính trên tất cả máy chủ mà một người sở hữu.',
+        'starting' => 'Tài nguyên ban đầu',
+        'starting_help' => 'CPU, RAM và ổ đĩa mà máy chủ Minecraft mới bắt đầu, theo từng loại. Vẫn có thể đổi ở bước Tài nguyên, trong hạn mức.',
         'max_servers' => 'Máy chủ',
         'max_ram' => 'Tổng RAM',
         'max_disk' => 'Tổng ổ đĩa',

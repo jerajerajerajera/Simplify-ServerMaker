@@ -266,6 +266,8 @@ return [
         'import_eggs_help' => 'Ha egy Minecraft-típus vagy modpack eggje még nincs a panelen, a Server Maker hozzáadja a saját eggjei közül.',
         'allowance' => 'Keret személyenként',
         'allowance_help' => 'Az adott személy összes szerverére együtt számítva.',
+        'starting' => 'Kezdő erőforrások',
+        'starting_help' => 'A CPU, RAM és lemez, amellyel egy új Minecraft-szerver indul, típusonként. Az Erőforrások lépésnél a kereten belül még módosíthatók.',
         'max_servers' => 'Szerverek',
         'max_ram' => 'RAM összesen',
         'max_disk' => 'Lemezterület összesen',

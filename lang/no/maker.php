@@ -266,6 +266,8 @@ return [
         'import_eggs_help' => 'Hvis egget for en Minecraft-type eller modpack ikke finnes på panelet ennå, legger Server Maker det til fra eggene som følger med.',
         'allowance' => 'Kvote per person',
         'allowance_help' => 'Telles over alle servere en person eier.',
+        'starting' => 'Startressurser',
+        'starting_help' => 'CPU, RAM og disk en ny Minecraft-server starter med, per type. De kan fortsatt endres i trinnet Ressurser, innenfor kvoten.',
         'max_servers' => 'Servere',
         'max_ram' => 'RAM totalt',
         'max_disk' => 'Disk totalt',

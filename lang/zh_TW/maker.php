@@ -266,6 +266,8 @@ return [
         'import_eggs_help' => '如果面板上還沒有某種 Minecraft 類型或模組包的 egg,Server Maker 會從隨附的 egg 中新增。',
         'allowance' => '每人配額',
         'allowance_help' => '按某人擁有的所有伺服器合計。',
+        'starting' => '初始資源',
+        'starting_help' => '新 Minecraft 伺服器依類型起始的 CPU、記憶體和磁碟。仍可在「資源」步驟中於配額內修改。',
         'max_servers' => '伺服器數',
         'max_ram' => 'RAM 總量',
         'max_disk' => '磁碟總量',

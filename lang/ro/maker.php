@@ -266,6 +266,8 @@ return [
         'import_eggs_help' => 'Dacă egg-ul pentru un tip de Minecraft sau un modpack nu este încă pe panou, Server Maker îl adaugă din egg-urile incluse.',
         'allowance' => 'Cotă per persoană',
         'allowance_help' => 'Se calculează pentru toate serverele unei persoane.',
+        'starting' => 'Resurse inițiale',
+        'starting_help' => 'CPU, RAM și disc cu care pornește un server Minecraft nou, pe tip. Se pot schimba încă la pasul Resurse, în limita alocării.',
         'max_servers' => 'Servere',
         'max_ram' => 'RAM în total',
         'max_disk' => 'Disc în total',

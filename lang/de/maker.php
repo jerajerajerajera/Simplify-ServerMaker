@@ -266,6 +266,8 @@ return [
         'import_eggs_help' => 'Fehlt das Egg für eine Minecraft-Variante oder ein Modpack noch im Panel, fügt Server Maker es aus den mitgelieferten Eggs hinzu.',
         'allowance' => 'Kontingent pro Person',
         'allowance_help' => 'Gezählt über alle Server, die jemand besitzt.',
+        'starting' => 'Startressourcen',
+        'starting_help' => 'CPU, RAM und Speicher, mit denen ein neuer Minecraft-Server startet, pro Typ. Im Schritt Ressourcen lassen sie sich im Rahmen des Kontingents noch ändern.',
         'max_servers' => 'Server',
         'max_ram' => 'RAM insgesamt',
         'max_disk' => 'Speicherplatz insgesamt',
