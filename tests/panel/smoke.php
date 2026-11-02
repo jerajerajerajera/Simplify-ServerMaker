@@ -537,7 +537,7 @@ step('Performance gives a server extra ports from the free ports of its node, an
     // Two extra ports: those right after the main port.
     $test->set('data.extra_ports', 2)->call('save');
     if ($test->errors()->isNotEmpty() || $ports() !== [30000, 30001, 30002]) {
-        throw new RuntimeException('the extra ports were not given: '.json_encode($test->errors()->toArray()).' '.json_encode($ports()).' main '.$server->fresh()->allocation_id.' / '.$ids[30000]);
+        throw new RuntimeException('the extra ports were not given: '.json_encode($test->errors()->toArray()).' '.json_encode($ports()).' server '.json_encode($server->fresh()->only(['id', 'node_id', 'allocation_id'])).' node '.json_encode(Allocation::query()->where('ip', '127.0.0.2')->get(['id', 'node_id', 'ip', 'port', 'server_id'])->toArray()));
     }
     // More than the node has free: refused, nothing changes.
     $test->set('data.extra_ports', 5)->call('save');
