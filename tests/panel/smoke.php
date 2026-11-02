@@ -516,7 +516,7 @@ step('Performance gives a server extra ports from the free ports of its node, an
     foreach ([30000, 30001, 30002, 29999] as $port) {
         $ids[$port] = Allocation::query()->create(['node_id' => $node->id, 'ip' => '127.0.0.2', 'port' => $port])->id;
     }
-    $snapshot = fn () => json_encode(Allocation::query()->whereKey($ids)->get(['id', 'node_id', 'ip', 'port', 'server_id'])->toArray());
+    $snapshot = fn () => Allocation::query()->whereKey($ids)->get()->map(fn ($a) => $a->id.':'.$a->port.':'.($a->server_id ?? '-').':'.$a->node_id.':'.$a->ip)->implode(',');
     $trace = ['made '.json_encode($ids).' '.$snapshot()];
     $server = Server::factory()->create(['owner_id' => $owner->id, 'node_id' => $node->id, 'name' => 'smoke-ports', 'allocation_id' => $ids[30000], 'memory' => 4096, 'cpu' => 100, 'disk' => 10240]);
     // The server factory can bring its own allocation: make 30000 the main port.
@@ -528,6 +528,7 @@ step('Performance gives a server extra ports from the free ports of its node, an
     $ports = fn () => Allocation::query()->where('server_id', $server->id)->orderBy('port')->pluck('port')->map(fn ($port) => (int) $port)->all();
 
     expectOk(http($admin, Performance::getUrl(panel: 'server', tenant: $server)), 'Performance');
+    $trace[] = 'http '.$snapshot();
     Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('server'));
     Filament\Facades\Filament::setTenant($server);
     $test = Livewire\Livewire::actingAs($admin)->test(Performance::class);
@@ -541,7 +542,7 @@ step('Performance gives a server extra ports from the free ports of its node, an
     // Two extra ports: those right after the main port.
     $test->set('data.extra_ports', 2)->call('save');
     if ($test->errors()->isNotEmpty() || $ports() !== [30000, 30001, 30002]) {
-        throw new RuntimeException('the extra ports were not given: '.json_encode($test->errors()->toArray()).' '.json_encode($ports()).' server '.json_encode($server->fresh()->only(['id', 'node_id', 'allocation_id'])).' after '.$snapshot().' '.implode(' ', $trace));
+        throw new RuntimeException('no extra ports: '.implode(' | ', $trace).' | after '.$snapshot().' | '.json_encode($server->fresh()->only(['node_id', 'allocation_id'])));
     }
     // More than the node has free: refused, nothing changes.
     $test->set('data.extra_ports', 5)->call('save');
