@@ -21,7 +21,7 @@ final class Ports
     /** @return Builder<Allocation> */
     public static function free(?int $nodeId): Builder
     {
-        return Allocation::query()->where('node_id', (int) $nodeId)->whereNull('server_id')->orderBy('port');
+        return Allocation::withoutGlobalScopes()->where('node_id', (int) $nodeId)->whereNull('server_id')->orderBy('port');
     }
 
     public static function first(?int $nodeId): ?int

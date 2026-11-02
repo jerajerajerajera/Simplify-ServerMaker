@@ -24,6 +24,7 @@ final class Access
         'max_disk' => 40,
         'max_cpu' => 200,
         'max_backups' => 2,
+        'max_ports' => 0,
     ];
 
     public static function admin(?User $user = null): bool
@@ -83,7 +84,7 @@ final class Access
         return (bool) user()?->can('create', Egg::class) || (self::selfService() && (bool) Settings::get('import_eggs', false));
     }
 
-    /** @return array{max_servers: int, max_ram: int, max_disk: int, max_cpu: int, max_backups: int} */
+    /** @return array{max_servers: int, max_ram: int, max_disk: int, max_cpu: int, max_backups: int, max_ports: int} */
     public static function limits(): array
     {
         $limits = [];

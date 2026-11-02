@@ -7,6 +7,7 @@ namespace Simplify\ServerMaker\Filament\Server\Pages;
 use App\Models\Server;
 use Filament\Actions\Action;
 use Filament\Facades\Filament;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
@@ -18,6 +19,7 @@ use Filament\Schemas\Components\View;
 use Filament\Schemas\Schema;
 use Simplify\ServerMaker\Access;
 use Simplify\ServerMaker\Creation\ChangeResources;
+use Simplify\ServerMaker\Creation\ExtraPorts;
 use Simplify\ServerMaker\Creation\Resources;
 use Simplify\ServerMaker\Creation\StartingResources;
 use Simplify\ServerMaker\Filament\Wizard\ResourcesStep;
@@ -95,7 +97,7 @@ final class Performance extends Page implements HasForms
             $state[$resource] = Resources::choice($amount, Resources::presets($resource, $amount));
             $state[$resource.'_custom'] = $amount;
         }
-        $this->form->fill($state);
+        $this->form->fill([...$state, 'extra_ports' => ExtraPorts::count($this->server())]);
     }
 
     public function form(Schema $schema): Schema
@@ -113,8 +115,23 @@ final class Performance extends Page implements HasForms
             Text::make(fn () => trim(ResourcesStep::left($limits(), $t).' '.$t('performance.restart')))
                 ->color('gray')
                 ->visible(fn () => self::canChange()),
+            View::make('simplify-servermaker::wizard.ports')->viewData(['ports' => fn () => ExtraPorts::of($this->server())]),
+            TextInput::make('extra_ports')
+                ->label($t('performance.extra_ports'))
+                ->helperText(fn () => $t('performance.ports_help', ['count' => self::maxPorts()]))
+                ->integer()
+                ->minValue(0)
+                ->maxValue(fn () => self::maxPorts())
+                ->required()
+                ->visible(fn () => self::canChange()),
             Text::make($t('performance.ask_admin'))->color('gray')->visible(fn () => ! self::canChange()),
         ]);
+    }
+
+    /** Extra ports this server may have: the setting for owners, the plain maximum for administrators. */
+    private static function maxPorts(): int
+    {
+        return Access::admin() ? ExtraPorts::MAX : min(ExtraPorts::MAX, Access::limits()['max_ports']);
     }
 
     protected function getHeaderActions(): array
@@ -136,6 +153,11 @@ final class Performance extends Page implements HasForms
         $state = $this->form->getState();
         $check = fn () => Resources::payload($state, Access::resourceLimits($server));
         ChangeResources::apply($server, $check(), Access::admin() ? null : $check);
+        $ports = (int) $state['extra_ports'];
+        if ($ports !== ExtraPorts::count($server)) {
+            abort_unless($ports >= 0 && $ports <= self::maxPorts(), 422);
+            ExtraPorts::set($server, $ports);
+        }
         Notification::make()->title(__('simplify-servermaker::maker.performance.saved'))->success()->send();
     }
 }
