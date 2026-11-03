@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Runs every check that needs no panel: php -l, the unit tests, the translations and the Pelican Hub checks.
+# Runs every check that needs no panel: php -l, the unit tests, the translations, the Pelican Hub checks and the step bar
+# in a browser.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 git ls-files --cached --others --exclude-standard -z -- '*.php' | xargs -0 -n1 php -l >/dev/null
@@ -8,3 +9,4 @@ for test in tests/unit/*.php; do
 done
 php tests/lang.php
 python3 tests/hub-check.py
+node tests/steps.cjs
