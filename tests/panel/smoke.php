@@ -693,19 +693,19 @@ step('a user without servers left is stopped', function () use ($user, $node) {
         ->assertHasErrors(['data.name']);
 });
 
-step('an empty list of nodes or eggs means all of them; adding eggs from the index follows that', function () use ($user, $node) {
+step('an empty list of nodes or eggs means all of them; only administrators add eggs from the index', function () use ($user, $node) {
     Settings::put(['self_service' => true, 'role_ids' => [], 'node_ids' => [], 'eggs' => [], 'max_servers' => null, 'import_eggs' => true]);
     Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('app'));
     auth()->setUser($user);
     if (! Access::canUse($user) || ! in_array($node->id, Ports::nodes()->pluck('id')->all(), true)) {
         throw new RuntimeException('with no nodes chosen the user cannot make a server on every node');
     }
-    if (! Access::minecraft() || OtherGames::query()->count() !== Egg::query()->count() || ! EggIndex::canInstall()) {
-        throw new RuntimeException('with no eggs chosen the user does not get every egg');
+    if (! Access::minecraft() || OtherGames::query()->count() !== Egg::query()->count() || EggIndex::canInstall()) {
+        throw new RuntimeException('with no eggs chosen the user does not get every egg, or may add eggs from the index');
     }
-    // Only Minecraft: no other eggs, and nothing from the egg index; adding the bundled Minecraft eggs stays.
+    // Only Minecraft: no other eggs; adding the bundled Minecraft eggs stays.
     Settings::put(['eggs' => ['minecraft']]);
-    if (! Access::minecraft() || OtherGames::query()->count() !== 0 || EggIndex::canInstall() || ! Access::mayImportEggs()) {
+    if (! Access::minecraft() || OtherGames::query()->count() !== 0 || ! Access::mayImportEggs()) {
         throw new RuntimeException('Minecraft only lets more through');
     }
     // One other egg and no Minecraft.

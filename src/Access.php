@@ -116,12 +116,6 @@ final class Access
         return (bool) user()?->can('create', Egg::class) || (self::selfService() && (bool) Settings::get('import_eggs', false));
     }
 
-    /** Whether a game from the Pelican egg index may be added: only when every egg is allowed. */
-    public static function mayImportIndexEggs(): bool
-    {
-        return (bool) user()?->can('create', Egg::class) || (self::mayImportEggs() && self::allowedEggs() === []);
-    }
-
     /** @return array{max_servers: int, max_ram: int, max_disk: int, max_cpu: int, max_backups: int, max_ports: int} */
     public static function limits(): array
     {

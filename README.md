@@ -30,8 +30,8 @@ Turn on **Users can make servers** in the settings and choose:
 
 - which roles, which nodes and which eggs. Leave a list empty for all of them. **Minecraft (all types)** in the egg
   list gives the Server Maker's own Minecraft choices: Vanilla, Plugins, Mods, Modpack, Bedrock and Proxy;
-- whether missing eggs may be added: Minecraft from the bundled eggs, other games from the official Pelican egg index
-  (only while every egg is allowed). Off by default;
+- whether missing Minecraft eggs may be added from the bundled eggs. Off by default; games from the Pelican egg index
+  are only added by administrators;
 - the allowance per person: servers, RAM and disk over all their servers, CPU and backups per server.
 
 Those people find the Server Maker in the normal panel. They only see the chosen nodes and eggs, and cannot go over

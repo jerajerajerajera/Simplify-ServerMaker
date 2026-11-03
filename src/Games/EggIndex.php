@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\ValidationException;
 use RuntimeException;
-use Simplify\ServerMaker\Access;
 use Throwable;
 
 /**
@@ -45,10 +44,10 @@ final class EggIndex
         }
     }
 
-    /** Only people who may add eggs see the games that are not on the panel yet (see Access::mayImportIndexEggs). */
+    /** Only people who may add eggs to the panel see the games that are not on it yet. */
     public static function canInstall(): bool
     {
-        return Access::mayImportIndexEggs();
+        return (bool) user()?->can('create', Egg::class);
     }
 
     /** Higher is more popular: the place on the list above, 0 for the rest. */
