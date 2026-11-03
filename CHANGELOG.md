@@ -1,13 +1,11 @@
 # Changelog
 
-## Unreleased
+## 1.5.0
 
-- The repository download (what the Pelican Hub packs) holds only the plugin: no docs, tests, scripts or workflows.
 - The Server Maker follows the width it gets instead of the window: in a narrow card (an admin page next to the menu
   on a tablet) the step bar takes the compact phone form instead of cutting steps off.
 - Nothing saves itself: the Steam switch waits for Save, and Steam, Performance and the settings show "Changes made"
   with Save and Discard and ask before you leave with changes.
-- Checks: a change to docs or Markdown only skips the panel smoke; tests and pint still run.
 - Extra ports per server: the Performance page lists a server's ports, the main one first, and gives it extra ports
   (for a voice chat, a map or a query port) from the free ports of its machine, right after the main port when it can.
   Fewer ports removes the newest ones; the main port never changes. Administrators up to 10; owners who may make
