@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 2.0.0-beta.3
 
 - Clearer settings for who may make servers. The switch is now **Users can make servers**, and an empty list of roles,
   nodes or eggs means all of them (nodes no longer have to be chosen). Minecraft is one entry in the list of eggs,
