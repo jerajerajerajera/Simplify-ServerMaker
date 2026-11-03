@@ -23,6 +23,7 @@ use Illuminate\Support\Str;
 use Illuminate\Testing\TestResponse;
 use Illuminate\Validation\ValidationException;
 use Simplify\Core\Addons\Addon;
+use Simplify\ServerMaker\Access;
 use Simplify\ServerMaker\Creation\ApplyFirstSettings;
 use Simplify\ServerMaker\Creation\ApplySteamArt;
 use Simplify\ServerMaker\Creation\ExtraPorts;
@@ -35,6 +36,7 @@ use Simplify\ServerMaker\Filament\Server\Pages\Performance;
 use Simplify\ServerMaker\Filament\Server\Pages\ServerSoftware;
 use Simplify\ServerMaker\Games\BundledEggs;
 use Simplify\ServerMaker\Games\EggIndex;
+use Simplify\ServerMaker\Games\Minecraft;
 use Simplify\ServerMaker\Games\MinecraftEggs;
 use Simplify\ServerMaker\Games\OtherGames;
 use Simplify\ServerMaker\Games\SteamArt;
@@ -695,21 +697,21 @@ step('an empty list of nodes or eggs means all of them; adding eggs from the ind
     Settings::put(['self_service' => true, 'role_ids' => [], 'node_ids' => [], 'eggs' => [], 'max_servers' => null, 'import_eggs' => true]);
     Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('app'));
     auth()->setUser($user);
-    if (! Simplify\ServerMaker\Access::canUse($user) || ! in_array($node->id, Ports::nodes()->pluck('id')->all(), true)) {
+    if (! Access::canUse($user) || ! in_array($node->id, Ports::nodes()->pluck('id')->all(), true)) {
         throw new RuntimeException('with no nodes chosen the user cannot make a server on every node');
     }
-    if (! Simplify\ServerMaker\Access::minecraft() || OtherGames::query()->count() !== Egg::query()->count() || ! EggIndex::canInstall()) {
+    if (! Access::minecraft() || OtherGames::query()->count() !== Egg::query()->count() || ! EggIndex::canInstall()) {
         throw new RuntimeException('with no eggs chosen the user does not get every egg');
     }
     // Only Minecraft: no other eggs, and nothing from the egg index; adding the bundled Minecraft eggs stays.
     Settings::put(['eggs' => ['minecraft']]);
-    if (! Simplify\ServerMaker\Access::minecraft() || OtherGames::query()->count() !== 0 || EggIndex::canInstall() || ! Simplify\ServerMaker\Access::mayImportEggs()) {
+    if (! Access::minecraft() || OtherGames::query()->count() !== 0 || EggIndex::canInstall() || ! Access::mayImportEggs()) {
         throw new RuntimeException('Minecraft only lets more through');
     }
     // One other egg and no Minecraft.
-    $egg = Egg::query()->get()->first(fn (Egg $egg) => ! Simplify\ServerMaker\Games\Minecraft::isMinecraftEgg((string) $egg->name));
+    $egg = Egg::query()->get()->first(fn (Egg $egg) => ! Minecraft::isMinecraftEgg((string) $egg->name));
     Settings::put(['eggs' => [$egg->id]]);
-    if (Simplify\ServerMaker\Access::minecraft() || OtherGames::query()->pluck('id')->all() !== [$egg->id]) {
+    if (Access::minecraft() || OtherGames::query()->pluck('id')->all() !== [$egg->id]) {
         throw new RuntimeException('one chosen egg does not limit the choice to that egg');
     }
     Settings::put(['node_ids' => [$node->id], 'eggs' => ['minecraft'], 'import_eggs' => null]);
