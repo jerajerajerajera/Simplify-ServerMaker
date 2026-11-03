@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+- Clearer settings for who may make servers. The switch is now **Users can make servers**, and an empty list of roles,
+  nodes or eggs means all of them (nodes no longer have to be chosen). Minecraft is one entry in the list of eggs,
+  **Minecraft (all types)**, instead of its own switch next to "Other games".
+- **Add missing eggs** also adds other games from the official Pelican egg index, not only the Minecraft eggs, when
+  every egg is allowed.
+- Updating keeps the old choice: Minecraft and the other games chosen before end up in the one list, and a setup that
+  let nobody make a server (no nodes, or no game at all) has the switch turned off.
+
 ## 2.0.0-beta.1
 
 - First version on the Hub. The same as 1.5.0; a download of the repository holds the plugin only, without its docs,

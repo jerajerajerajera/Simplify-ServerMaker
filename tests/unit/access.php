@@ -22,4 +22,9 @@ check('too much disk', failsOn(fn () => Access::check(['disk' => 40960] + $serve
 check('too much CPU', failsOn(fn () => Access::check(['cpu' => 300] + $server, $left)) === 'data.cpu');
 check('too many backups', failsOn(fn () => Access::check(['backup_limit' => 5] + $server, $left)) === 'data.backups');
 
+// One list of eggs: "minecraft" for the Minecraft types plus egg ids, as the settings form sends them.
+check('the egg list keeps Minecraft and egg ids', Access::eggList(['minecraft', '12', 7]) === ['minecraft', 12, 7]);
+check('the egg list drops junk and doubles', Access::eggList(['minecraft', 'x', '0', -3, '12', 12, 'minecraft']) === ['minecraft', 12]);
+check('an empty egg list stays empty (every egg)', Access::eggList([]) === []);
+
 echo "PASS access\n";
