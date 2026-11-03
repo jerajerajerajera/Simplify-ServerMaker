@@ -634,7 +634,8 @@ step('the Steam row saves only from its popup: keep the key, switch automatic to
         throw new RuntimeException('a row without a key does not say so');
     }
     $row->callAction('connect', data: ['key' => '', 'auto' => true])->assertHasActionErrors(['key' => 'required']);
-    $row->callAction('connect', data: ['key' => strtolower($key), 'auto' => true])->assertHasNoActionErrors();
+    // The popup stays open on the error: fill in the key there and save.
+    $row->set('mountedActions.0.data.key', strtolower($key))->callMountedAction()->assertHasNoActionErrors();
     if (! str_contains($row->html(), 'ending in 6789') || str_contains($row->html(), $key) || ! SteamKeys::autoTokens($admin)) {
         throw new RuntimeException('the row does not show the connected key by its last four characters');
     }
