@@ -10,6 +10,7 @@ use App\Models\Server;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Validation\ValidationException;
+use Simplify\Core\Support\PanelSettings;
 
 /**
  * Who may use the Server Maker, where and how much. Administrators (who may create servers in Pelican) may do
@@ -114,6 +115,21 @@ final class Access
     public static function mayImportEggs(): bool
     {
         return (bool) user()?->can('create', Egg::class) || (self::selfService() && (bool) Settings::get('import_eggs', false));
+    }
+
+    /**
+     * Whether a game from the Pelican egg index may be added: administrators who may add eggs, or people who may add
+     * the Minecraft eggs while every egg is allowed and Simplify's friends mode is on (people who know each other,
+     * never customers). Without Simplify, or with a Simplify that cannot tell, only administrators.
+     */
+    public static function mayImportIndexEggs(): bool
+    {
+        return (bool) user()?->can('create', Egg::class) || (self::mayImportEggs() && self::allowedEggs() === [] && self::friendsMode());
+    }
+
+    private static function friendsMode(): bool
+    {
+        return class_exists(PanelSettings::class) && method_exists(PanelSettings::class, 'friendsMode') && PanelSettings::friendsMode();
     }
 
     /** @return array{max_servers: int, max_ram: int, max_disk: int, max_cpu: int, max_backups: int, max_ports: int} */

@@ -23,6 +23,7 @@ use Illuminate\Support\Str;
 use Illuminate\Testing\TestResponse;
 use Illuminate\Validation\ValidationException;
 use Simplify\Core\Addons\Addon;
+use Simplify\Core\Support\PanelSettings;
 use Simplify\ServerMaker\Access;
 use Simplify\ServerMaker\Creation\ApplyFirstSettings;
 use Simplify\ServerMaker\Creation\ApplySteamArt;
@@ -714,6 +715,32 @@ step('an empty list of nodes or eggs means all of them; only administrators add 
     if (Access::minecraft() || OtherGames::query()->pluck('id')->all() !== [$egg->id]) {
         throw new RuntimeException('one chosen egg does not limit the choice to that egg');
     }
+    Settings::put(['node_ids' => [$node->id], 'eggs' => ['minecraft'], 'import_eggs' => null]);
+});
+
+step("in Simplify's friends mode users may add eggs from the index, while every egg is allowed", function () use ($user, $node) {
+    require_once dirname(__DIR__).'/stubs/panel-settings.php';
+    Settings::put(['self_service' => true, 'role_ids' => [], 'node_ids' => [], 'eggs' => [], 'import_eggs' => true]);
+    auth()->setUser($user);
+    $can = function (bool $friends): bool {
+        PanelSettings::$friends = $friends;
+
+        return EggIndex::canInstall();
+    };
+    if (! property_exists(PanelSettings::class, 'friends')) {
+        throw new RuntimeException('the real core is installed here; this step needs the stand-in');
+    }
+    if (! $can(true) || $can(false)) {
+        throw new RuntimeException('friends mode does not decide');
+    }
+    // Not with a limited egg list, and not without "Add missing eggs".
+    Settings::put(['eggs' => ['minecraft']]);
+    $limited = $can(true);
+    Settings::put(['eggs' => [], 'import_eggs' => false]);
+    if ($limited || $can(true)) {
+        throw new RuntimeException('index eggs are offered with a limited egg list or with Add missing eggs off');
+    }
+    PanelSettings::$friends = false;
     Settings::put(['node_ids' => [$node->id], 'eggs' => ['minecraft'], 'import_eggs' => null]);
 });
 

@@ -5,6 +5,8 @@
 - Clearer settings for who may make servers. The switch is now **Users can make servers**, and an empty list of roles,
   nodes or eggs means all of them (nodes no longer have to be chosen). Minecraft is one entry in the list of eggs,
   **Minecraft (all types)**, instead of its own switch next to "Other games".
+- **Add missing eggs**: in Simplify's friends mode, while every egg is allowed, people may also add games from the
+  official Pelican egg index. Otherwise only administrators add those.
 - Updating keeps the old choice: Minecraft and the other games chosen before end up in the one list, and a setup that
   let nobody make a server (no nodes, or no game at all) has the switch turned off.
 
