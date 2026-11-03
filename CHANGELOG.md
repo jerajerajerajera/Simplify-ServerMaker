@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.0-beta.1
+
+- First version on the Hub. The same as 1.5.0; a download of the repository holds the plugin only, without its docs,
+  tests and scripts (0.3 MB instead of 1.7 MB).
+
 ## 1.5.0
 
 - The Server Maker follows the width it gets instead of the window: in a narrow card (an admin page next to the menu
