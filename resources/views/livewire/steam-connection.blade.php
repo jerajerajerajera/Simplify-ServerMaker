@@ -1,4 +1,4 @@
-{{-- One row: icon, what is connected, the add-on it is for, and its buttons (Disconnect in the ⋯ menu). --}}
+{{-- One flat row (the page is the card; the lines between rows are the page's): icon, what is connected, the add-on it is for, and its buttons (Disconnect in the ⋯ menu). --}}
 <div class="smk-connection">
     <span class="smk-connection-icon"><x-filament::icon icon="tabler-brand-steam" /></span>
     <div class="smk-connection-text">
@@ -16,8 +16,7 @@
 
     <x-filament-actions::modals />
     <style>
-        .smk-connection { display: flex; align-items: center; gap: 16px; padding: 16px 18px; border: 1px solid var(--gray-200); border-radius: 12px; }
-        .dark .smk-connection { border-color: var(--gray-800); }
+        .smk-connection { display: flex; align-items: center; gap: 16px; padding: 14px 0; }
         .smk-connection-icon { display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: 10px; background: var(--gray-100); }
         .dark .smk-connection-icon { background: var(--gray-800); }
         .smk-connection-icon svg { width: 22px; height: 22px; }
