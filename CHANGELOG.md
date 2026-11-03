@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- The repository download (what the Pelican Hub packs) holds only the plugin: no docs, tests, scripts or workflows.
 - The Server Maker follows the width it gets instead of the window: in a narrow card (an admin page next to the menu
   on a tablet) the step bar takes the compact phone form instead of cutting steps off.
 - Nothing saves itself: the Steam switch waits for Save, and Steam, Performance and the settings show "Changes made"
