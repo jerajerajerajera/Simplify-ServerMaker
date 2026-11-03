@@ -22,6 +22,8 @@
         --smk-left: calc(16px + 104px + var(--smk-gap));
         --smk-right: calc(16px + 140px + var(--smk-gap));
         position: relative;
+        /* The layout follows the width the Server Maker gets (a card next to a menu, a popup), not the window. */
+        container: smk / inline-size;
         color: var(--smk-ink);
     }
     .dark .smk {
@@ -208,11 +210,11 @@
     html.smk-fit .smk .fi-sc-wizard-footer { flex: none; }
     html.smk-fit .smk .fi-sc-wizard-step { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
 
-    @media (max-width: 900px) {
+    @container smk (max-width: 900px) {
         .smk .smk-types, .smk .smk-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
-    @media (max-width: 600px) {
-        .smk { --smk-gap: 6px; --smk-bar: 60px; --smk-left: calc(10px + 72px + var(--smk-gap)); --smk-right: calc(10px + 118px + var(--smk-gap)); }
+    @container smk (max-width: 600px) {
+        .smk > * { --smk-gap: 6px; --smk-bar: 60px; --smk-left: calc(10px + 72px + var(--smk-gap)); --smk-right: calc(10px + 118px + var(--smk-gap)); }
         .smk .fi-sc-wizard-footer { padding: 0 10px env(safe-area-inset-bottom) !important; }
         .smk .fi-sc-wizard-footer button.smk-btn { min-width: 72px; padding: 0 12px; }
         .smk .fi-sc-wizard-footer button.smk-create { min-width: 118px; }

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The Server Maker follows the width it gets instead of the window: in a narrow card (an admin page next to the menu
+  on a tablet) the step bar takes the compact phone form instead of cutting steps off.
 - Nothing saves itself: the Steam switch waits for Save, and Steam, Performance and the settings show "Changes made"
   with Save and Discard and ask before you leave with changes.
 - Checks: a change to docs or Markdown only skips the panel smoke; tests and pint still run.
