@@ -76,8 +76,7 @@ class MakerSettings extends Page implements HasForms
             'self_service' => (bool) Settings::get('self_service', false),
             'role_ids' => array_map('intval', (array) Settings::get('role_ids', [])),
             'node_ids' => array_map('intval', (array) Settings::get('node_ids', [])),
-            'minecraft' => (bool) Settings::get('minecraft', true),
-            'egg_ids' => array_map('intval', (array) Settings::get('egg_ids', [])),
+            'eggs' => Access::allowedEggs(),
             'import_eggs' => (bool) Settings::get('import_eggs', false),
             'steam_art' => (bool) Settings::get('steam_art', true),
             'starting' => StartingResources::table(),
@@ -115,11 +114,17 @@ class MakerSettings extends Page implements HasForms
             ]);
     }
 
-    /** Who besides administrators may make servers, where and which games; also asked in Simplify's setup. */
+    /** Who besides administrators may make servers, where and which eggs; also asked in Simplify's setup. */
     public static function whoSection(): Section
     {
         $t = fn (string $key) => __('simplify-servermaker::maker.settings.'.$key);
         $on = fn (Get $get) => (bool) $get('self_service');
+        // Adding missing eggs only matters while Minecraft or every egg may be picked.
+        $import = function (Get $get) use ($on): bool {
+            $eggs = Access::eggList((array) $get('eggs'));
+
+            return $on($get) && ($eggs === [] || in_array(Access::MINECRAFT, $eggs, true));
+        };
 
         return Section::make($t('who'))
             ->description($t('who_help'))
@@ -128,26 +133,46 @@ class MakerSettings extends Page implements HasForms
                 Select::make('role_ids')
                     ->label($t('roles'))
                     ->helperText($t('roles_help'))
+                    ->placeholder($t('roles_all'))
                     ->multiple()
                     ->options(fn () => Role::query()->orderBy('name')->pluck('name', 'id')->all())
                     ->visible($on),
                 Select::make('node_ids')
                     ->label($t('nodes'))
                     ->helperText($t('nodes_help'))
+                    ->placeholder($t('nodes_all'))
                     ->multiple()
                     ->options(fn () => Node::query()->orderBy('name')->pluck('name', 'id')->all())
-                    ->required($on)
                     ->visible($on),
-                Toggle::make('minecraft')->label($t('minecraft'))->visible($on),
-                Select::make('egg_ids')
+                Select::make('eggs')
                     ->label($t('eggs'))
                     ->helperText($t('eggs_help'))
+                    ->placeholder($t('eggs_all'))
                     ->multiple()
                     ->searchable()
-                    ->options(fn () => Egg::query()->orderBy('name')->pluck('name', 'id')->all())
+                    ->options(fn () => self::eggOptions())
+                    ->live()
                     ->visible($on),
-                Toggle::make('import_eggs')->label($t('import_eggs'))->helperText($t('import_eggs_help'))->visible($on),
+                Toggle::make('import_eggs')->label($t('import_eggs'))->helperText($t('import_eggs_help'))->visible($import),
             ]);
+    }
+
+    /**
+     * The choices for the eggs people may pick: Minecraft as one entry (its eggs follow the server type), then every
+     * other egg on the panel.
+     *
+     * @return array<int|string, string>
+     */
+    public static function eggOptions(): array
+    {
+        $options = [Access::MINECRAFT => __('simplify-servermaker::maker.settings.minecraft_all')];
+        foreach (Egg::query()->orderBy('name')->get(['id', 'name']) as $egg) {
+            if (! Minecraft::isMinecraftEgg((string) $egg->name)) {
+                $options[$egg->id] = (string) $egg->name;
+            }
+        }
+
+        return $options;
     }
 
     /** How much one person may use over all their servers; also asked in Simplify's setup. */
@@ -240,8 +265,7 @@ class MakerSettings extends Page implements HasForms
             'self_service' => (bool) ($state['self_service'] ?? false),
             'role_ids' => array_values(array_map('intval', (array) ($state['role_ids'] ?? []))),
             'node_ids' => array_values(array_map('intval', (array) ($state['node_ids'] ?? []))),
-            'minecraft' => (bool) ($state['minecraft'] ?? true),
-            'egg_ids' => array_values(array_map('intval', (array) ($state['egg_ids'] ?? []))),
+            'eggs' => Access::eggList((array) ($state['eggs'] ?? [])),
             'import_eggs' => (bool) ($state['import_eggs'] ?? false),
         ];
         if (array_key_exists('starting', $state)) {

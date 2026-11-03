@@ -23,6 +23,8 @@ use Illuminate\Support\Str;
 use Illuminate\Testing\TestResponse;
 use Illuminate\Validation\ValidationException;
 use Simplify\Core\Addons\Addon;
+use Simplify\Core\Support\PanelSettings;
+use Simplify\ServerMaker\Access;
 use Simplify\ServerMaker\Creation\ApplyFirstSettings;
 use Simplify\ServerMaker\Creation\ApplySteamArt;
 use Simplify\ServerMaker\Creation\ExtraPorts;
@@ -35,6 +37,7 @@ use Simplify\ServerMaker\Filament\Server\Pages\Performance;
 use Simplify\ServerMaker\Filament\Server\Pages\ServerSoftware;
 use Simplify\ServerMaker\Games\BundledEggs;
 use Simplify\ServerMaker\Games\EggIndex;
+use Simplify\ServerMaker\Games\Minecraft;
 use Simplify\ServerMaker\Games\MinecraftEggs;
 use Simplify\ServerMaker\Games\OtherGames;
 use Simplify\ServerMaker\Games\SteamArt;
@@ -413,8 +416,7 @@ step('settings are saved and the CurseForge key stays encrypted', function () us
     Livewire\Livewire::actingAs($admin)->test(MakerSettings::class)
         ->set('data.self_service', true)
         ->set('data.node_ids', [$node->id])
-        ->set('data.minecraft', true)
-        ->set('data.egg_ids', [])
+        ->set('data.eggs', ['minecraft'])
         ->set('data.max_servers', 2)
         ->set('data.max_ram', 8)
         ->set('data.curseforge_key', 'smoke-secret-key')
@@ -690,6 +692,82 @@ step('a user without servers left is stopped', function () use ($user, $node) {
         ->set('data.eula', true)
         ->call('create')
         ->assertHasErrors(['data.name']);
+});
+
+step('an empty list of nodes or eggs means all of them; only administrators add eggs from the index', function () use ($user, $node) {
+    Settings::put(['self_service' => true, 'role_ids' => [], 'node_ids' => [], 'eggs' => [], 'max_servers' => null, 'import_eggs' => true]);
+    Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('app'));
+    auth()->setUser($user);
+    if (! Access::canUse($user) || ! in_array($node->id, Ports::nodes()->pluck('id')->all(), true)) {
+        throw new RuntimeException('with no nodes chosen the user cannot make a server on every node');
+    }
+    if (! Access::minecraft() || OtherGames::query()->count() !== Egg::query()->count() || EggIndex::canInstall()) {
+        throw new RuntimeException('with no eggs chosen the user does not get every egg, or may add eggs from the index');
+    }
+    // Only Minecraft: no other eggs; adding the bundled Minecraft eggs stays.
+    Settings::put(['eggs' => ['minecraft']]);
+    if (! Access::minecraft() || OtherGames::query()->count() !== 0 || ! Access::mayImportEggs()) {
+        throw new RuntimeException('Minecraft only lets more through');
+    }
+    // One other egg and no Minecraft.
+    $egg = Egg::query()->get()->first(fn (Egg $egg) => ! Minecraft::isMinecraftEgg((string) $egg->name));
+    Settings::put(['eggs' => [$egg->id]]);
+    if (Access::minecraft() || OtherGames::query()->pluck('id')->all() !== [$egg->id]) {
+        throw new RuntimeException('one chosen egg does not limit the choice to that egg');
+    }
+    Settings::put(['node_ids' => [$node->id], 'eggs' => ['minecraft'], 'import_eggs' => null]);
+});
+
+step("in Simplify's friends mode users may add eggs from the index, while every egg is allowed", function () use ($user, $node) {
+    require_once dirname(__DIR__).'/stubs/panel-settings.php';
+    Settings::put(['self_service' => true, 'role_ids' => [], 'node_ids' => [], 'eggs' => [], 'import_eggs' => true]);
+    auth()->setUser($user);
+    $can = function (bool $friends): bool {
+        PanelSettings::$friends = $friends;
+
+        return EggIndex::canInstall();
+    };
+    if (! property_exists(PanelSettings::class, 'friends')) {
+        throw new RuntimeException('the real core is installed here; this step needs the stand-in');
+    }
+    if (! $can(true) || $can(false)) {
+        throw new RuntimeException('friends mode does not decide');
+    }
+    // Not with a limited egg list, and not without "Add missing eggs".
+    Settings::put(['eggs' => ['minecraft']]);
+    $limited = $can(true);
+    Settings::put(['eggs' => [], 'import_eggs' => false]);
+    if ($limited || $can(true)) {
+        throw new RuntimeException('index eggs are offered with a limited egg list or with Add missing eggs off');
+    }
+    PanelSettings::$friends = false;
+    Settings::put(['node_ids' => [$node->id], 'eggs' => ['minecraft'], 'import_eggs' => null]);
+});
+
+step('updating from the switch for Minecraft and the list of other games keeps the old choice', function () use ($node) {
+    $migration = require dirname(__DIR__, 2).'/database/migrations/2026_11_03_000001_simplify_server_maker_one_egg_list.php';
+    $old = fn (array $values) => Settings::put([...$values, 'eggs' => null]);
+    // Minecraft on, two other games, a node: the same choice in the one list, self-service stays on.
+    $old(['self_service' => true, 'minecraft' => true, 'egg_ids' => [5, 9], 'node_ids' => [$node->id]]);
+    $migration->up();
+    if (Settings::get('eggs') !== ['minecraft', 5, 9] || Settings::get('self_service') !== true || Settings::get('minecraft') !== null || Settings::get('egg_ids') !== null) {
+        throw new RuntimeException('not carried over: '.json_encode([Settings::get('eggs'), Settings::get('self_service')]));
+    }
+    // Run again: nothing changes.
+    Settings::put(['eggs' => ['minecraft']]);
+    $migration->up();
+    if (Settings::get('eggs') !== ['minecraft']) {
+        throw new RuntimeException('the migration ran twice');
+    }
+    // Minecraft off and no other games, or no nodes: nobody could make a server, and that stays so.
+    foreach ([['minecraft' => false, 'egg_ids' => [], 'node_ids' => [$node->id]], ['minecraft' => true, 'egg_ids' => [], 'node_ids' => []]] as $values) {
+        $old(['self_service' => true, ...$values]);
+        $migration->up();
+        if (Settings::get('self_service') !== false || Settings::get('eggs') !== ['minecraft']) {
+            throw new RuntimeException('a setup that let nobody in opened up: '.json_encode($values));
+        }
+    }
+    Settings::put(['self_service' => true, 'node_ids' => [$node->id]]);
 });
 
 step('without self-service a user cannot open the Server Maker', function () use ($user) {

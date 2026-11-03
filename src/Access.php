@@ -10,14 +10,18 @@ use App\Models\Server;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Validation\ValidationException;
+use Simplify\Core\Support\PanelSettings;
 
 /**
  * Who may use the Server Maker, where and how much. Administrators (who may create servers in Pelican) may do
  * everything. Other people only when self-service is on in the settings, for their role, on the chosen nodes, with
- * the chosen games and within their allowance.
+ * the chosen eggs and within their allowance. An empty list of roles, nodes or eggs means all of them.
  */
 final class Access
 {
+    /** In the list of eggs: the Server Maker's own Minecraft types (Vanilla, Plugins, Mods, Modpack, Bedrock, Proxy). */
+    public const MINECRAFT = 'minecraft';
+
     public const LIMITS = [
         'max_servers' => 2,
         'max_ram' => 8,
@@ -37,10 +41,7 @@ final class Access
     public static function selfService(?User $user = null): bool
     {
         $user ??= user();
-        if ($user === null || ! Settings::get('self_service', false) || Settings::get('node_ids', []) === []) {
-            return false;
-        }
-        if (! Settings::get('minecraft', true) && Settings::get('egg_ids', []) === []) {
+        if ($user === null || ! Settings::get('self_service', false)) {
             return false;
         }
         $roles = array_map('intval', (array) Settings::get('role_ids', []));
@@ -61,27 +62,74 @@ final class Access
             return Node::query()->whereRaw('1 = 0');
         }
         $query = $user->accessibleNodes();
+        $ids = array_map('intval', (array) Settings::get('node_ids', []));
 
-        return self::admin() ? $query : $query->whereIn('id', array_map('intval', (array) Settings::get('node_ids', [])));
+        return self::admin() || $ids === [] ? $query : $query->whereIn('id', $ids);
+    }
+
+    /**
+     * The eggs people may pick, as saved: egg ids and MINECRAFT. Empty means every egg.
+     *
+     * @return list<int|string>
+     */
+    public static function allowedEggs(): array
+    {
+        return self::eggList((array) Settings::get('eggs', []));
+    }
+
+    /**
+     * Pure: a list of eggs as saved, egg ids and MINECRAFT; anything else is left out.
+     *
+     * @param  array<int, mixed>  $eggs
+     * @return list<int|string>
+     */
+    public static function eggList(array $eggs): array
+    {
+        $list = [];
+        foreach ($eggs as $egg) {
+            if ($egg === self::MINECRAFT || (is_numeric($egg) && (int) $egg > 0)) {
+                $list[] = $egg === self::MINECRAFT ? $egg : (int) $egg;
+            }
+        }
+
+        return array_values(array_unique($list, SORT_REGULAR));
     }
 
     /** @return Builder<Egg> */
     public static function eggs(): Builder
     {
         $query = Egg::query()->orderBy('name');
+        $allowed = self::allowedEggs();
 
-        return self::admin() ? $query : $query->whereIn('id', array_map('intval', (array) Settings::get('egg_ids', [])));
+        return self::admin() || $allowed === [] ? $query : $query->whereIn('id', array_filter($allowed, 'is_int'));
     }
 
     public static function minecraft(): bool
     {
-        return self::admin() || (bool) Settings::get('minecraft', true);
+        $allowed = self::allowedEggs();
+
+        return self::admin() || $allowed === [] || in_array(self::MINECRAFT, $allowed, true);
     }
 
     /** Whether a missing Minecraft or modpack egg may be added from the bundled eggs. */
     public static function mayImportEggs(): bool
     {
         return (bool) user()?->can('create', Egg::class) || (self::selfService() && (bool) Settings::get('import_eggs', false));
+    }
+
+    /**
+     * Whether a game from the Pelican egg index may be added: administrators who may add eggs, or people who may add
+     * the Minecraft eggs while every egg is allowed and Simplify's friends mode is on (people who know each other,
+     * never customers). Without Simplify, or with a Simplify that cannot tell, only administrators.
+     */
+    public static function mayImportIndexEggs(): bool
+    {
+        return (bool) user()?->can('create', Egg::class) || (self::mayImportEggs() && self::allowedEggs() === [] && self::friendsMode());
+    }
+
+    private static function friendsMode(): bool
+    {
+        return class_exists(PanelSettings::class) && method_exists(PanelSettings::class, 'friendsMode') && PanelSettings::friendsMode();
     }
 
     /** @return array{max_servers: int, max_ram: int, max_disk: int, max_cpu: int, max_backups: int, max_ports: int} */

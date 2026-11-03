@@ -26,12 +26,15 @@ admin area. The gear button on that page opens the settings; with Simplify insta
 
 ### Letting people make their own servers
 
-Turn on **Let people make their own servers** in the settings and choose:
+Turn on **Users can make servers** in the settings and choose:
 
-- which roles may do it (empty for everyone with an account), on which nodes, with Minecraft and which other games;
+- which roles, which nodes and which eggs. Leave a list empty for all of them. **Minecraft (all types)** in the egg
+  list gives the Server Maker's own Minecraft choices: Vanilla, Plugins, Mods, Modpack, Bedrock and Proxy;
+- whether missing eggs may be added: Minecraft from the bundled eggs and, only in Simplify's friends mode while every
+  egg is allowed, other games from the official Pelican egg index. Off by default;
 - the allowance per person: servers, RAM and disk over all their servers, CPU and backups per server.
 
-Those people find the Server Maker in the normal panel. They only see the chosen nodes and games, and cannot go over
+Those people find the Server Maker in the normal panel. They only see the chosen nodes and eggs, and cannot go over
 their allowance. Administrators who may create servers in Pelican can always use everything.
 
 ### CurseForge
