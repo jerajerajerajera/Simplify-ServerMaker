@@ -635,7 +635,7 @@ step('the Steam row saves only from its popup: keep the key, switch automatic to
     }
     $row->callAction('connect', data: ['key' => '', 'auto' => true])->assertHasActionErrors(['key' => 'required']);
     // The popup stays open on the error: fill in the key there and save.
-    $row->set('mountedActions.0.data.key', strtolower($key))->callMountedAction()->assertHasNoActionErrors();
+    $row->set('mountedActions.0.data.key', strtolower($key))->callMountedAction()->assertHasNoErrors();
     if (! str_contains($row->html(), 'ending in 6789') || str_contains($row->html(), $key) || ! SteamKeys::autoTokens($admin)) {
         throw new RuntimeException('the row does not show the connected key by its last four characters');
     }
@@ -644,7 +644,7 @@ step('the Steam row saves only from its popup: keep the key, switch automatic to
     if (! SteamKeys::autoTokens($admin)) {
         throw new RuntimeException('switching off automatic tokens saved itself');
     }
-    $row->callMountedAction()->assertHasNoActionErrors();
+    $row->callMountedAction()->assertHasNoErrors();
     if (SteamKeys::autoTokens($admin) || SteamKeys::status($admin)['hint'] !== '6789') {
         throw new RuntimeException('Save did not keep the key and switch off automatic tokens: '.json_encode(SteamKeys::status($admin)));
     }
@@ -653,7 +653,7 @@ step('the Steam row saves only from its popup: keep the key, switch automatic to
     if (! str_contains($page->getContent(), 'smk-connection') || ! str_contains($page->getContent(), 'ending in 6789')) {
         throw new RuntimeException('the Steam page does not show the Steam row');
     }
-    $row->callAction('disconnect')->assertHasNoActionErrors();
+    $row->callAction('disconnect')->assertHasNoErrors();
     if (SteamKeys::connected($admin)) {
         throw new RuntimeException('Disconnect kept the key');
     }
