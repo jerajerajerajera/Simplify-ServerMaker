@@ -18,4 +18,9 @@ jobs:
           if gh release view "v$version" >/dev/null 2>&1; then echo "Release v$version already exists."; exit 1; fi
           zip=$(python3 scripts/build-package.py)
           awk -v head="## $version" 'index($0, head) == 1 {on = 1; next} on && /^## / {exit} on' CHANGELOG.md > notes.md
-          gh release create "v$version" "$zip" --target "$GITHUB_SHA" --title "Simplify Server Maker $version" --notes-file notes.md --latest
+          # A version with a hyphen (2.0.0-beta.1) is a prerelease: never "latest", so the stable line keeps its place.
+          case "$version" in
+            *-*) kind=(--prerelease --latest=false) ;;
+            *) kind=(--latest) ;;
+          esac
+          gh release create "v$version" "$zip" --target "$GITHUB_SHA" --title "Simplify Server Maker $version" --notes-file notes.md "${kind[@]}"
