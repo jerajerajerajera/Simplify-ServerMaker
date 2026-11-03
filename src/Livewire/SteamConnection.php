@@ -33,7 +33,8 @@ final class SteamConnection extends Component implements HasActions, HasSchemas
 
         return Action::make('connect')
             ->label(fn () => SteamKeys::connected(user()) ? $t('change') : $t('connect'))
-            ->color(fn () => SteamKeys::connected(user()) ? 'gray' : 'primary')
+            ->button()
+            ->color('gray')
             ->icon('tabler-key')
             ->modalHeading($t('connect_heading'))
             ->modalDescription($t('help').' '.$t('connect_help'))
