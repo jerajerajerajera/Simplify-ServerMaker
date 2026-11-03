@@ -47,6 +47,7 @@ use Simplify\ServerMaker\ServerMakerAddon;
 use Simplify\ServerMaker\Settings;
 use Simplify\ServerMaker\Software\ChangeSoftware;
 use Simplify\ServerMaker\Software\Startup;
+use Simplify\ServerMaker\Livewire\SteamConnection;
 use Simplify\ServerMaker\Steam\SteamKeys;
 use Simplify\Subdomains\Subdomains;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -622,25 +623,43 @@ step('a Steam key is checked, stored encrypted, never shown again, and makes log
     }
 });
 
-step('nothing saves itself: the Steam switch and the settings wait for Save', function () use ($admin) {
+step('the Steam row saves only from its popup: keep the key, switch automatic tokens, disconnect from the menu', function () use ($admin) {
+    $key = 'ABCDEF0123456789ABCDEF0123456789';
     SteamKeys::$transport = fn (string $method, string $url, array $params): array => [200, ['response' => ['actor' => '76561190000000001']]];
-    SteamKeys::save($admin, 'ABCDEF0123456789ABCDEF0123456789');
-    Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('app'));
-    $test = Livewire\Livewire::actingAs($admin)->test(Steam::class);
-    if (! str_contains($test->html(), 'data-simplify-unsaved')) {
-        throw new RuntimeException('the Steam page does not ask Save or Discard before leaving with changes');
-    }
-    $test->set('data.auto', false);
-    if (! SteamKeys::status($admin)['auto']) {
-        throw new RuntimeException('turning the Steam switch off saved it without Save');
-    }
-    $test->call('save');
-    if ($test->errors()->isNotEmpty() || SteamKeys::status($admin)['auto']) {
-        throw new RuntimeException('Save did not save the Steam switch: '.json_encode($test->errors()->toArray()));
-    }
     SteamKeys::remove($admin);
+    Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('app'));
+    $row = Livewire\Livewire::actingAs($admin)->test(SteamConnection::class);
+    $row->assertActionHidden('disconnect');
+    if (! str_contains($row->html(), 'No key connected')) {
+        throw new RuntimeException('a row without a key does not say so');
+    }
+    $row->callAction('connect', data: ['key' => '', 'auto' => true])->assertHasActionErrors(['key' => 'required']);
+    $row->callAction('connect', data: ['key' => strtolower($key), 'auto' => true])->assertHasNoActionErrors();
+    if (! str_contains($row->html(), 'ending in 6789') || str_contains($row->html(), $key) || ! SteamKeys::autoTokens($admin)) {
+        throw new RuntimeException('the row does not show the connected key by its last four characters');
+    }
+    // A connected key: an empty field keeps it, and the switch is saved with the popup's Save only.
+    $row->mountAction('connect')->set('mountedActions.0.data.auto', false);
+    if (! SteamKeys::autoTokens($admin)) {
+        throw new RuntimeException('switching off automatic tokens saved itself');
+    }
+    $row->callMountedAction()->assertHasNoActionErrors();
+    if (SteamKeys::autoTokens($admin) || SteamKeys::status($admin)['hint'] !== '6789') {
+        throw new RuntimeException('Save did not keep the key and switch off automatic tokens: '.json_encode(SteamKeys::status($admin)));
+    }
+    $page = http($admin, Steam::getUrl(panel: 'app'));
+    expectOk($page, 'Steam');
+    if (! str_contains($page->getContent(), 'smk-connection') || ! str_contains($page->getContent(), 'ending in 6789')) {
+        throw new RuntimeException('the Steam page does not show the Steam row');
+    }
+    $row->callAction('disconnect')->assertHasNoActionErrors();
+    if (SteamKeys::connected($admin)) {
+        throw new RuntimeException('Disconnect kept the key');
+    }
     SteamKeys::$transport = null;
+});
 
+step('nothing saves itself: the settings wait for Save', function () use ($admin) {
     Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('admin'));
     if (! str_contains(Livewire\Livewire::actingAs($admin)->test(MakerSettings::class)->html(), 'data-simplify-unsaved')) {
         throw new RuntimeException('the settings do not ask Save or Discard before leaving with changes');
@@ -788,6 +807,10 @@ step('Simplify shows a Create server button to those who may use it', function (
     $buttons = $addon->dashboardActions();
     if (count($buttons) !== 1 || ! str_ends_with($buttons[0]->url, '/server-maker') || $addon->settingsUrl() === null) {
         throw new RuntimeException('admin: '.json_encode($buttons));
+    }
+    // Steam is a row on Connections (add-on API 6); a Simplify before that (this stub) links the Steam page instead.
+    if ($addon->connections($admin) !== [SteamConnection::class] || count($addon->accountPages($admin)) !== 1) {
+        throw new RuntimeException('Steam is not a Connections row, or a Simplify before Connections has no Steam page');
     }
     auth()->setUser($user);
     if ($addon->dashboardActions() !== [] || $addon->settingsUrl() !== null) {

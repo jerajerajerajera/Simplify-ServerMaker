@@ -9,6 +9,10 @@
   official Pelican egg index. Otherwise only administrators add those.
 - Updating keeps the old choice: Minecraft and the other games chosen before end up in the one list, and a setup that
   let nobody make a server (no nodes, or no game at all) has the switch turned off.
+- Steam is a row on Simplify's **Connections** page in the account menu (Simplify 2.0 and later) instead of its own
+  icon. **Connect key** or **Change** opens a popup with the key and **Create tokens automatically**, saved with its
+  Save button only; an empty key field keeps the current key. **Disconnect** is in the ⋯ menu. Without Connections
+  the same row is on the Steam page.
 
 ## 2.0.0-beta.1
 
