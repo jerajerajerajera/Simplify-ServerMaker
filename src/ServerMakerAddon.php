@@ -10,6 +10,7 @@ use Simplify\Core\Addons\Button;
 use Simplify\ServerMaker\Filament\Admin\Pages\MakerSettings;
 use Simplify\ServerMaker\Filament\App\Pages\ServerMaker as AppServerMaker;
 use Simplify\ServerMaker\Filament\App\Pages\Steam;
+use Simplify\ServerMaker\Livewire\SteamConnection;
 
 /** How the Server Maker shows up in Simplify (plugin id pelican-simplify), when that is installed. */
 final class ServerMakerAddon extends Addon
@@ -44,10 +45,20 @@ final class ServerMakerAddon extends Addon
         return [new Button(__('simplify-servermaker::maker.addon.create'), AppServerMaker::getUrl(panel: 'app'), 'tabler-plus', true)];
     }
 
-    /** Steam in Simplify's account menu (add-on API 4): the person's own key for game server login tokens. */
+    /** Steam in Simplify's account menu (add-on API 4 and 5); since API 6 it is a row on Connections instead. */
     public function accountPages(User $user): array
     {
+        if (defined(Addon::class.'::API') && constant(Addon::class.'::API') >= 6) {
+            return [];
+        }
+
         return [new Button(__('simplify-servermaker::maker.steam.title'), Steam::getUrl(panel: 'app'), 'tabler-brand-steam')];
+    }
+
+    /** The Steam row on Simplify's Connections page (add-on API 6): the person's own key for game server login tokens. */
+    public function connections(User $user): array
+    {
+        return [SteamConnection::class];
     }
 
     public function settingsUrl(): ?string
