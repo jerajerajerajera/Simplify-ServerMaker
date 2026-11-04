@@ -44,6 +44,8 @@ use Simplify\ServerMaker\Games\SteamArt;
 use Simplify\ServerMaker\Livewire\SteamConnection;
 use Simplify\ServerMaker\Models\Draft;
 use Simplify\ServerMaker\Modpacks\Remote;
+use Simplify\ServerMaker\Problems\ProblemLog;
+use Simplify\ServerMaker\Problems\ServerMakerProblems;
 use Simplify\ServerMaker\ServerMakerAddon;
 use Simplify\ServerMaker\Settings;
 use Simplify\ServerMaker\Software\ChangeSoftware;
@@ -215,6 +217,43 @@ step('the first settings are queued for after the installation', function () {
 step('the egg is imported only once', function () {
     if (Egg::query()->whereRaw('LOWER(name) = ?', ['paper'])->count() !== 1) {
         throw new RuntimeException('Paper is on the panel more than once');
+    }
+});
+
+step('a required variable the egg leaves empty, as in the real Paper egg, does not stop or silently fail the Server Maker', function () use ($admin, $node) {
+    // Pelican's own Paper egg (pelican-eggs/minecraft) has a User Agent: required, no default, hidden from users. The
+    // bundled egg does not, so the panel's egg gets one here, as after an update with Egg Updates.
+    $paper = Egg::query()->where('name', 'Paper')->firstOrFail();
+    $variable = fn (string $env) => $paper->variables()->create(['name' => Str::headline(strtolower($env)), 'description' => 'Smoke', 'env_variable' => $env, 'default_value' => '', 'user_viewable' => false, 'user_editable' => false, 'rules' => ['required', 'string'], 'sort' => 9]);
+    $agent = $variable('USER_AGENT');
+    $make = function (string $name) use ($admin, $node) {
+        Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('admin'));
+        session()->forget('filament.notifications');
+
+        return Livewire\Livewire::actingAs($admin)->test(ServerMaker::class)
+            ->call('pickGame', 'minecraft', 'plugins')->set('data.version', '1.21.1')->call('prepareEgg')
+            ->set('data.name', $name)->set('data.node_id', $node->id)->set('data.allocation_id', Ports::first($node->id))
+            ->call('create');
+    };
+    try {
+        // Without Wings Pelican removes the server again after the daemon call fails; passing its checks is enough.
+        $test = $make('smoke-agent');
+        if ($test->errors()->isNotEmpty()) {
+            throw new RuntimeException('the empty User Agent stopped the server: '.json_encode($test->errors()->toArray()));
+        }
+        // Another required variable without a value cannot be guessed: Pelican's message shows, not nothing at all.
+        $secret = $variable('SMOKE_SECRET');
+        try {
+            $make('smoke-secret')->assertNotified(__('simplify-servermaker::maker.review.failed'));
+        } finally {
+            $secret->delete();
+        }
+        if (Server::query()->where('name', 'smoke-secret')->exists()) {
+            throw new RuntimeException('a server was made without its required variable');
+        }
+    } finally {
+        Server::query()->whereIn('name', ['smoke-agent', 'smoke-secret'])->get()->each->delete();
+        $agent->delete();
     }
 });
 
@@ -796,6 +835,38 @@ step('updating from the switch for Minecraft and the list of other games keeps t
         }
     }
     Settings::put(['self_service' => true, 'node_ids' => [$node->id]]);
+});
+
+step('an error the Server Maker shows can be explained by its own user and root admins only, the trace by root admins', function () use ($admin, $user) {
+    $other = User::where('email', 'smoke-maker-other@example.com')->first()
+        ?? User::factory()->create(['email' => 'smoke-maker-other@example.com']);
+    $problems = new ServerMakerProblems;
+    $id = ProblemLog::record('create', $user, 'The node did not answer', new RuntimeException('Wings said no'));
+    if (! preg_match('/^simplify-servermaker:create:[A-Za-z0-9]{24}$/', $id)) {
+        throw new RuntimeException('not a problem id: '.$id);
+    }
+    if (! $problems->canExplainProblem($id, $user) || ! $problems->canExplainProblem($id, $admin) || $problems->canExplainProblem($id, $other)) {
+        throw new RuntimeException('the wrong people may explain the error');
+    }
+    $mine = $problems->explainProblem($id, $user);
+    $root = $problems->explainProblem($id, $admin);
+    if ($mine === null || $mine['lines'] !== ['The node did not answer'] || $mine['title'] !== 'The server could not be created') {
+        throw new RuntimeException('the user does not get only the message: '.json_encode($mine));
+    }
+    if ($root === null || ! str_contains(implode("\n", $root['lines']), 'RuntimeException: Wings said no') || count($root['lines']) > 100) {
+        throw new RuntimeException('a root admin does not get the trace: '.json_encode($root));
+    }
+    foreach (['simplify-servermaker:create:short', 'simplify-servermaker:delete:'.substr($id, -24), 'simplify:create:'.substr($id, -24), str_replace(':create:', ':token:', $id)] as $wrong) {
+        if ($problems->canExplainProblem($wrong, $admin) || $problems->explainProblem($wrong, $admin) !== null) {
+            throw new RuntimeException('a wrong id is accepted: '.$wrong);
+        }
+    }
+    if (! class_exists('Simplify\\Explain\\Problems\\Problems') && ProblemLog::explainActions($id) !== []) {
+        throw new RuntimeException('without Explain the error notification still gets an Explain button');
+    }
+    if (! in_array(ServerMakerProblems::class, array_map(fn ($source) => $source::class, iterator_to_array(app()->tagged('simplify.problems'))), true)) {
+        throw new RuntimeException('the problem source is not tagged for Simplify-Explain');
+    }
 });
 
 step('without self-service a user cannot open the Server Maker', function () use ($user) {

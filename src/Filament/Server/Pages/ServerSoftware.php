@@ -21,12 +21,14 @@ use Filament\Schemas\Schema;
 use Illuminate\Validation\ValidationException;
 use Simplify\ServerMaker\Creation\EggData;
 use Simplify\ServerMaker\Creation\Payload;
+use Simplify\ServerMaker\Creation\RequiredValues;
 use Simplify\ServerMaker\Filament\Wizard\SetupStep;
 use Simplify\ServerMaker\Games\Java;
 use Simplify\ServerMaker\Games\Minecraft;
 use Simplify\ServerMaker\Games\MinecraftEggs;
 use Simplify\ServerMaker\Games\MinecraftVersions;
 use Simplify\ServerMaker\Modpacks\Sources;
+use Simplify\ServerMaker\Problems\ProblemLog;
 use Simplify\ServerMaker\Software\ChangeSoftware;
 use Simplify\ServerMaker\Software\CurrentSoftware;
 use Simplify\ServerMaker\Software\Startup;
@@ -162,12 +164,13 @@ final class ServerSoftware extends Page implements HasForms
 
             return;
         }
-        $startup = self::startup(MinecraftEggs::forChoice($data), $data);
+        $startup = self::startup(MinecraftEggs::forChoice($data), $data, Startup::of($server)['environment']);
         try {
             ChangeSoftware::apply($server, $startup);
         } catch (Throwable $exception) {
             report($exception);
-            Notification::make()->title(__('simplify-servermaker::maker.software.failed'))->danger()->send();
+            $problem = ProblemLog::record('software', user(), __('simplify-servermaker::maker.software.failed'), $exception);
+            Notification::make()->title(__('simplify-servermaker::maker.software.failed'))->actions(ProblemLog::explainActions($problem))->danger()->send();
 
             return;
         }
@@ -177,11 +180,13 @@ final class ServerSoftware extends Page implements HasForms
 
     /**
      * The egg's own defaults with the chosen version or pack, its startup command and the image for the Java it needs.
+     * A variable the egg needs but leaves empty keeps the server's own value (such as Paper's User Agent).
      *
      * @param  array<string, mixed>  $data
+     * @param  array<string, string>  $own  the server's values now
      * @return array{egg_id: int, image: string, startup: string, environment: array<string, string>}
      */
-    private static function startup(Egg $egg, array $data): array
+    private static function startup(Egg $egg, array $data, array $own = []): array
     {
         $egg = EggData::from($egg);
         $java = MinecraftVersions::javaFor($data);
@@ -189,6 +194,7 @@ final class ServerSoftware extends Page implements HasForms
         if ($data['type'] === 'modpack') {
             $environment = Sources::environment((string) $data['modpack'], (string) $data['modpack_version'], $environment);
         }
+        $environment = RequiredValues::fill($environment, $egg, $own);
         $image = $java !== null ? Java::image($egg->images, $java) : $egg->firstImage();
         if ($image === null || $image === '') {
             throw ValidationException::withMessages(['data.type' => __('simplify-servermaker::maker.review.no_image')]);

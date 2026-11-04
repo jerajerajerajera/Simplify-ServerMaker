@@ -47,6 +47,7 @@ use Simplify\ServerMaker\Games\OtherGames;
 use Simplify\ServerMaker\Games\SteamArt;
 use Simplify\ServerMaker\Models\Draft;
 use Simplify\ServerMaker\Modpacks\Sources;
+use Simplify\ServerMaker\Problems\ProblemLog;
 use Simplify\ServerMaker\Steam\SteamKeys;
 use Throwable;
 
@@ -429,12 +430,27 @@ class ServerMaker extends Page implements HasForms
         try {
             $server = Creator::create($payload, $admin ? null : fn () => Access::check($payload, Access::remaining(user())));
         } catch (ValidationException $exception) {
-            throw $exception;
+            // Pelican's own check of the egg's variables names no field of this form: show its message, not nothing.
+            $variables = array_filter($exception->errors(), fn ($key) => str_starts_with((string) $key, 'environment.'), ARRAY_FILTER_USE_KEY);
+            if ($variables === []) {
+                throw $exception;
+            }
+            $message = implode(' ', array_merge(...array_values($variables)));
+            Notification::make()
+                ->title(__('simplify-servermaker::maker.review.failed'))
+                ->body($message)
+                ->actions(ProblemLog::explainActions(ProblemLog::record('create', user(), $message)))
+                ->danger()
+                ->send();
+
+            return;
         } catch (Throwable $exception) {
             report($exception);
+            $problem = ProblemLog::record('create', user(), $exception->getMessage(), $exception);
             Notification::make()
                 ->title(__('simplify-servermaker::maker.review.failed'))
                 ->body($exception->getMessage())
+                ->actions(ProblemLog::explainActions($problem))
                 ->danger()
                 ->send();
 

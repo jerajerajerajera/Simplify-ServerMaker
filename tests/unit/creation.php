@@ -10,6 +10,7 @@ use Simplify\ServerMaker\Creation\BackupSchedule;
 use Simplify\ServerMaker\Creation\EggData;
 use Simplify\ServerMaker\Creation\FirstSettings;
 use Simplify\ServerMaker\Creation\Payload;
+use Simplify\ServerMaker\Creation\RequiredValues;
 use Simplify\ServerMaker\Creation\Resources;
 use Simplify\ServerMaker\Creation\ServerColor;
 
@@ -46,6 +47,20 @@ check('admins can override a variable', Payload::build([...$state, 'environment'
 check('an unknown override is refused', failsOn(fn () => Payload::build([...$state, 'environment' => ['NOPE' => '1']], $paper, $resources, 3, 1, 9, 17, true)) === 'data.environment');
 check('an empty name is refused', failsOn(fn () => Payload::build([...$state, 'name' => '  '], $paper, $resources, 3, 1, 9, 17, false)) === 'data.name');
 check('a broken version is refused', failsOn(fn () => Payload::build([...$state, 'version' => 'latest; rm'], $paper, $resources, 3, 1, 9, 17, false)) === 'data.version');
+
+// Pelican's own Paper egg: a User Agent that is required, has no default and is hidden from users (Egg Updates, 4-11).
+$realPaper = new EggData(8, 'Paper', [
+    'MINECRAFT_VERSION' => ['default' => 'latest', 'user' => true, 'required' => false],
+    'USER_AGENT' => ['default' => '', 'user' => false, 'required' => true],
+    'DL_PATH' => ['default' => '', 'user' => false, 'required' => false],
+], ['Java 21' => 'ghcr.io/pelican-eggs/yolks:java_21'], 'java -jar server.jar');
+$environment = Payload::build($state, $realPaper, $resources, 3, 1, 9, 21, false)['environment'];
+check('an empty required User Agent gets Server Maker\'s name', $environment['USER_AGENT'] === RequiredValues::USER_AGENT, json_encode($environment));
+check('an empty variable that is not required stays empty', $environment['DL_PATH'] === '');
+check('an admin\'s own User Agent is kept', Payload::build([...$state, 'environment' => ['USER_AGENT' => 'Deck']], $realPaper, $resources, 3, 1, 9, 21, true)['environment']['USER_AGENT'] === 'Deck');
+check('a change of software keeps the server\'s own value', RequiredValues::fill(['USER_AGENT' => ''], $realPaper, ['USER_AGENT' => 'mine'])['USER_AGENT'] === 'mine');
+$secret = new EggData(9, 'Bot', ['TOKEN' => ['default' => '', 'user' => false, 'required' => true]], [], '');
+check('another empty required variable is not guessed', RequiredValues::fill(['TOKEN' => ''], $secret) === ['TOKEN' => '']);
 
 $valheim = new EggData(12, 'Valheim', [
     'SERVER_NAME' => ['default' => 'My server', 'user' => true],
