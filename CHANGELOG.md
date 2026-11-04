@@ -6,6 +6,9 @@
   Agent is required, has no default and is hidden; it now gets Server Maker's name, or keeps the server's own value on
   a change of software. When another required value is missing, the Server Maker shows Pelican's message instead of
   doing nothing.
+- With Simplify-Explain, the errors **The server could not be created**, **The software could not be changed** and
+  **No token created** get an Explain button. Only the person who got the error and root admins can explain it; the
+  technical details go to root admins only.
 
 ## 2.0.0-beta.4
 

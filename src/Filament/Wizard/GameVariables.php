@@ -15,6 +15,7 @@ use Filament\Notifications\Notification;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Illuminate\Validation\ValidationException;
+use Simplify\ServerMaker\Problems\ProblemLog;
 use Simplify\ServerMaker\Steam\SteamKeys;
 
 /**
@@ -122,7 +123,9 @@ final class GameVariables
                         $set($field->getName(), SteamKeys::createForGame(user(), (string) $variable->egg?->name, (string) ($get('name') ?: $variable->egg?->name)));
                         Notification::make()->title($t('token_created'))->success()->send();
                     } catch (ValidationException $exception) {
-                        Notification::make()->title($t('token_failed'))->body(collect($exception->errors())->flatten()->first())->danger()->send();
+                        $message = (string) collect($exception->errors())->flatten()->first();
+                        $problem = ProblemLog::record('token', user(), $message);
+                        Notification::make()->title($t('token_failed'))->body($message)->actions(ProblemLog::explainActions($problem))->danger()->send();
                     }
                 }));
     }
