@@ -78,7 +78,7 @@ final class CurseForge implements Source
         return $minecraft === null ? [] : ['minecraft' => $minecraft];
     }
 
-    public function eggFile(string $id): ?string
+    public function eggFile(string $id): string
     {
         return 'egg-curseforge-generic.json';
     }

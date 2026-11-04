@@ -129,6 +129,6 @@ final class ServerStep
             ? rescue(fn () => route('filament.admin.resources.nodes.edit', ['record' => $node, 'tab' => 'allocations::data::tab']), null, false)
             : null;
 
-        return ['node' => (string) ($node?->name ?? ''), 'url' => $url];
+        return ['node' => (string) ($node->name ?? ''), 'url' => $url];
     }
 }
