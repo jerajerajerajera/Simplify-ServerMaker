@@ -12,6 +12,7 @@ use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithAuthentication;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithSession;
 use Illuminate\Foundation\Testing\Concerns\MakesHttpRequests;
+use Simplify\ServerMaker\Access;
 use Simplify\ServerMaker\Settings;
 
 define('LARAVEL_START', microtime(true));
@@ -57,7 +58,7 @@ $check = function (string $what, bool $ok) use (&$failed): void {
 switch ($argv[1] ?? '') {
     case 'fill':
         // Until 2.0.0-beta.2 Minecraft had its own switch next to a list of other eggs; since then one list.
-        $eggs = defined(Simplify\ServerMaker\Access::class.'::MINECRAFT')
+        $eggs = defined(Access::class.'::MINECRAFT')
             ? ['eggs' => ['minecraft', 2]]
             : ['minecraft' => true, 'egg_ids' => [2]];
         Settings::put([
