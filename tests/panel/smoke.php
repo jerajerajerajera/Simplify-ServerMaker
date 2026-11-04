@@ -135,9 +135,10 @@ step('the Server Maker page renders, with Simplify buttons instead of bare Filam
     if (! str_contains($response->getContent(), 'smk-next')) {
         throw new RuntimeException('no Next button');
     }
-    // Without Simplify the settings open from this page.
+    // Without Simplify the settings open from this page; with Simplify from Simplify's settings.
     Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('admin'));
-    Livewire\Livewire::actingAs($admin)->test(ServerMaker::class)->assertActionVisible('settings');
+    $page = Livewire\Livewire::actingAs($admin)->test(ServerMaker::class);
+    class_exists(Addon::class) ? $page->assertActionHidden('settings') : $page->assertActionVisible('settings');
 });
 
 // A node with free ports, so the wizard can run to the end. Wings is not there, so Create stops at Wings.
@@ -745,12 +746,15 @@ step("in Simplify's friends mode users may add eggs from the index, while every 
     Settings::put(['self_service' => true, 'role_ids' => [], 'node_ids' => [], 'eggs' => [], 'import_eggs' => true]);
     auth()->setUser($user);
     // The real core keeps friends mode as a setting; the stand-in (without the core) as a static flag.
-    $can = function (bool $friends): bool {
+    $friends = function (bool $on): void {
         if (property_exists(PanelSettings::class, 'friends')) {
-            PanelSettings::$friends = $friends;
+            PanelSettings::$friends = $on;
         } else {
-            PanelSettings::save(['friends_mode' => $friends]);
+            PanelSettings::save(['friends_mode' => $on]);
         }
+    };
+    $can = function (bool $on) use ($friends): bool {
+        $friends($on);
 
         return EggIndex::canInstall();
     };
@@ -764,7 +768,7 @@ step("in Simplify's friends mode users may add eggs from the index, while every 
     if ($limited || $can(true)) {
         throw new RuntimeException('index eggs are offered with a limited egg list or with Add missing eggs off');
     }
-    PanelSettings::$friends = false;
+    $friends(false);
     Settings::put(['node_ids' => [$node->id], 'eggs' => ['minecraft'], 'import_eggs' => null]);
 });
 
