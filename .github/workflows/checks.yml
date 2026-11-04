@@ -116,9 +116,17 @@ jobs:
           test ! -e plugins/simplify-server-maker || { echo 'The old simplify-server-maker folder is still there'; exit 1; }
           test "$(grep -c 'Simplify Server Maker' plugins.txt)" = 1 || { echo 'Simplify Server Maker is listed twice'; exit 1; }
           php -r '$db = new PDO("sqlite:database/database.sqlite"); $kept = $db->query("SELECT value FROM simplify_server_maker_settings WHERE key = \"ci_takeover\"")->fetchColumn(); $db->exec("DELETE FROM simplify_server_maker_settings WHERE key = \"ci_takeover\""); exit($kept === "kept" ? 0 : 1);' || { echo 'The old settings were lost'; exit 1; }
+      - name: Open the pages
+        working-directory: panel
+        run: |
+          # Laravel can end a crashed script with exit code 0, so the job also needs the closing line.
+          php plugins/simplify-servermaker/tests/panel/smoke.php | tee smoke.txt
+          grep -q '^All steps passed$' smoke.txt
+      # Toolkit changes the wizard (MOTD maker, backup schedule): install it after the steps above and check those.
       - name: PHPStan (level 5, in the panel)
         if: matrix.simplify == 'main' # the add-on's classes extend the core's
         working-directory: panel
+        # After the smoke: installing larastan brings PHPUnit into the panel, which changes how Livewire's test helpers behave.
         run: |
           composer require --dev larastan/larastan --no-interaction --no-progress --quiet
           # Without a baseline yet: the first run writes one and prints it, to commit as the starting point (every
@@ -129,13 +137,6 @@ jobs:
             vendor/bin/phpstan analyse --configuration plugins/simplify-servermaker/phpstan.neon --memory-limit 1G --no-progress --generate-baseline=plugins/simplify-servermaker/phpstan-baseline.neon --allow-empty-baseline
             echo '::group::phpstan-baseline.neon'; cat plugins/simplify-servermaker/phpstan-baseline.neon; echo '::endgroup::'
           fi
-      - name: Open the pages
-        working-directory: panel
-        run: |
-          # Laravel can end a crashed script with exit code 0, so the job also needs the closing line.
-          php plugins/simplify-servermaker/tests/panel/smoke.php | tee smoke.txt
-          grep -q '^All steps passed$' smoke.txt
-      # Toolkit changes the wizard (MOTD maker, backup schedule): install it after the steps above and check those.
       - name: Install Simplify Toolkit and open the pages again
         working-directory: panel
         run: |

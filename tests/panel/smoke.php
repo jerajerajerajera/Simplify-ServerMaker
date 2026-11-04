@@ -739,17 +739,21 @@ step('an empty list of nodes or eggs means all of them; only administrators add 
 });
 
 step("in Simplify's friends mode users may add eggs from the index, while every egg is allowed", function () use ($user, $node) {
-    require_once dirname(__DIR__).'/stubs/panel-settings.php';
+    if (! class_exists(PanelSettings::class)) {
+        require_once dirname(__DIR__).'/stubs/panel-settings.php';
+    }
     Settings::put(['self_service' => true, 'role_ids' => [], 'node_ids' => [], 'eggs' => [], 'import_eggs' => true]);
     auth()->setUser($user);
+    // The real core keeps friends mode as a setting; the stand-in (without the core) as a static flag.
     $can = function (bool $friends): bool {
-        PanelSettings::$friends = $friends;
+        if (property_exists(PanelSettings::class, 'friends')) {
+            PanelSettings::$friends = $friends;
+        } else {
+            PanelSettings::save(['friends_mode' => $friends]);
+        }
 
         return EggIndex::canInstall();
     };
-    if (! property_exists(PanelSettings::class, 'friends')) {
-        throw new RuntimeException('the real core is installed here; this step needs the stand-in');
-    }
     if (! $can(true) || $can(false)) {
         throw new RuntimeException('friends mode does not decide');
     }
@@ -809,8 +813,8 @@ step('Simplify shows a Create server button to those who may use it', function (
     if (count($buttons) !== 1 || ! str_ends_with($buttons[0]->url, '/server-maker') || $addon->settingsUrl() === null) {
         throw new RuntimeException('admin: '.json_encode($buttons));
     }
-    // Steam is a row on Connections (add-on API 6); a Simplify before that (this stub) links the Steam page instead.
-    if ($addon->connections($admin) !== [SteamConnection::class] || count($addon->accountPages($admin)) !== 1) {
+    // Steam is a row on Connections (add-on API 6); a Simplify before that (the stub is API 5) links the Steam page instead.
+    if ($addon->connections($admin) !== [SteamConnection::class] || count($addon->accountPages($admin)) !== (defined(Addon::class.'::API') && Addon::API >= 6 ? 0 : 1)) {
         throw new RuntimeException('Steam is not a Connections row, or a Simplify before Connections has no Steam page');
     }
     auth()->setUser($user);
