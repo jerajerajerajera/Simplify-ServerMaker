@@ -63,7 +63,7 @@ final class ServerMakerAddon extends Addon
     }
 
     /** The settings in Simplify settings › Add-ons (add-on API 8), the same form as on the settings page. */
-    public function settingsForm(): ?string
+    public function settingsForm(): string
     {
         return MakerSettingsForm::class;
     }
