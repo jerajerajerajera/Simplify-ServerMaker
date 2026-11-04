@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 2.0.0-beta.5
 
 - A Paper server can be made, and a server switched to Paper, on a panel with Pelican's own Paper egg. Its User
   Agent is required, has no default and is hidden; it now gets Server Maker's name, or keeps the server's own value on
