@@ -18,6 +18,8 @@
   the old version back over the new tables to see its pages still open.
 - Server software and Performance have a title and subtitle in the card head like the other server pages. On Server
   software the warning is a quiet line under the name you type to confirm, and Install is a button with its name.
+- With Simplify's Connections page (add-on API 6 and later) the separate Steam page no longer opens: the key is on
+  Connections only. Checks: with Simplify 2.0 the admin menu no longer links the Server Maker.
 
 ## 2.0.0-beta.4
 
