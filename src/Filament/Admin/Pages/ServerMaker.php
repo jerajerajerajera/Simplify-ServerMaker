@@ -399,6 +399,7 @@ class ServerMaker extends Page implements HasForms
     public function create(): void
     {
         abort_unless(static::canAccess(), 403);
+        /** @var array<string, mixed> $state the fields shown, so no subdomain without Simplify's subdomains */
         $state = $this->form->getState();
         $egg = $this->egg();
         if (! $egg) {
