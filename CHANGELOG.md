@@ -16,6 +16,8 @@
   uninstall removed them.
 - Checks: CI updates from 1.4.2 (the Hub's stable version) and from 2.0.0-beta.4 with every setting filled in, and puts
   the old version back over the new tables to see its pages still open.
+- Server software and Performance have a title and subtitle in the card head like the other server pages. On Server
+  software the warning is a quiet line under the name you type to confirm, and Install is a button with its name.
 
 ## 2.0.0-beta.4
 

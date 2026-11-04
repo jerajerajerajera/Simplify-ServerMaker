@@ -270,7 +270,7 @@ step('Server software is offered for Minecraft Java, checked before it reinstall
     // Plain checks instead of Livewire's assertions: a failing PHPUnit assertion cannot report outside PHPUnit.
     $test = Livewire\Livewire::actingAs($admin)->test(ServerSoftware::class);
     $html = $test->html();
-    foreach (['Server software', 'Paper 1.21.1', 'Type smoke-software to confirm'] as $text) {
+    foreach (['Server software', 'Now: Paper 1.21.1', 'Type smoke-software to confirm', 'Installing other software reinstalls the server.'] as $text) {
         if (! str_contains($html, $text)) {
             throw new RuntimeException("the page does not show: $text");
         }
@@ -511,7 +511,7 @@ step('Performance shows the limits; administrators change them freely, owners wi
     Filament\Facades\Filament::setTenant($server);
     // An administrator: any amount, no allowance. Plain checks: a failing PHPUnit assertion cannot report here.
     $test = Livewire\Livewire::actingAs($admin)->test(Performance::class);
-    foreach (['100 %', '4 GB', '10 GB'] as $text) {
+    foreach (['Performance', 'New limits apply after the next restart.', '100 %', '4 GB', '10 GB'] as $text) {
         if (! str_contains($test->html(), $text)) {
             throw new RuntimeException("the limits do not show $text");
         }

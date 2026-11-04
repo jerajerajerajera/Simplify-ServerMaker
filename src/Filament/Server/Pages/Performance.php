@@ -13,6 +13,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Text;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\View;
@@ -105,26 +106,31 @@ final class Performance extends Page implements HasForms
         $t = fn (string $key, array $replace = []) => __('simplify-servermaker::maker.'.$key, $replace);
         $limits = fn () => Access::resourceLimits($this->server());
 
+        // The page head: when new limits apply, as the subtitle.
         return $schema->statePath('data')->components([
-            View::make('simplify-servermaker::wizard.limits')->viewData(['server' => $this->server()]),
-            Group::make(ResourcesStep::amountFields(
-                fn (Get $get, string $resource): int => $this->current()[$resource],
-                fn (string $resource): ?int => $limits()[$resource] ?? null,
-                $t,
-            ))->visible(fn () => self::canChange()),
-            Text::make(fn () => trim(ResourcesStep::left($limits(), $t).' '.$t('performance.restart')))
-                ->color('gray')
-                ->visible(fn () => self::canChange()),
-            View::make('simplify-servermaker::wizard.ports')->viewData(['ports' => fn () => ExtraPorts::of($this->server())]),
-            TextInput::make('extra_ports')
-                ->label($t('performance.extra_ports'))
-                ->helperText(fn () => $t('performance.ports_help', ['count' => self::maxPorts()]))
-                ->integer()
-                ->minValue(0)
-                ->maxValue(fn () => self::maxPorts())
-                ->required()
-                ->visible(fn () => self::canChange()),
-            Text::make($t('performance.ask_admin'))->color('gray')->visible(fn () => ! self::canChange()),
+            Section::make($t('performance.title'))
+                ->description($t('performance.restart'))
+                ->schema([
+                    View::make('simplify-servermaker::wizard.limits')->viewData(['server' => $this->server()]),
+                    Group::make(ResourcesStep::amountFields(
+                        fn (Get $get, string $resource): int => $this->current()[$resource],
+                        fn (string $resource): ?int => $limits()[$resource] ?? null,
+                        $t,
+                    ))->visible(fn () => self::canChange()),
+                    Text::make(fn () => ResourcesStep::left($limits(), $t))
+                        ->color('gray')
+                        ->visible(fn () => self::canChange() && ResourcesStep::left($limits(), $t) !== ''),
+                    View::make('simplify-servermaker::wizard.ports')->viewData(['ports' => fn () => ExtraPorts::of($this->server())]),
+                    TextInput::make('extra_ports')
+                        ->label($t('performance.extra_ports'))
+                        ->helperText(fn () => $t('performance.ports_help', ['count' => self::maxPorts()]))
+                        ->integer()
+                        ->minValue(0)
+                        ->maxValue(fn () => self::maxPorts())
+                        ->required()
+                        ->visible(fn () => self::canChange()),
+                    Text::make($t('performance.ask_admin'))->color('gray')->visible(fn () => ! self::canChange()),
+                ]),
         ]);
     }
 
