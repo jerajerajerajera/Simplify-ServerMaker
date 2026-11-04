@@ -219,6 +219,43 @@ step('the egg is imported only once', function () {
     }
 });
 
+step('a required variable the egg leaves empty, as in the real Paper egg, does not stop or silently fail the Server Maker', function () use ($admin, $node) {
+    // Pelican's own Paper egg (pelican-eggs/minecraft) has a User Agent: required, no default, hidden from users. The
+    // bundled egg does not, so the panel's egg gets one here, as after an update with Egg Updates.
+    $paper = Egg::query()->where('name', 'Paper')->firstOrFail();
+    $variable = fn (string $env) => $paper->variables()->create(['name' => Str::headline(strtolower($env)), 'description' => 'Smoke', 'env_variable' => $env, 'default_value' => '', 'user_viewable' => false, 'user_editable' => false, 'rules' => ['required', 'string'], 'sort' => 9]);
+    $agent = $variable('USER_AGENT');
+    $make = function (string $name) use ($admin, $node) {
+        Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('admin'));
+        session()->forget('filament.notifications');
+
+        return Livewire\Livewire::actingAs($admin)->test(ServerMaker::class)
+            ->call('pickGame', 'minecraft', 'plugins')->set('data.version', '1.21.1')->call('prepareEgg')
+            ->set('data.name', $name)->set('data.node_id', $node->id)->set('data.allocation_id', Ports::first($node->id))
+            ->call('create');
+    };
+    try {
+        // Without Wings Pelican removes the server again after the daemon call fails; passing its checks is enough.
+        $test = $make('smoke-agent');
+        if ($test->errors()->isNotEmpty()) {
+            throw new RuntimeException('the empty User Agent stopped the server: '.json_encode($test->errors()->toArray()));
+        }
+        // Another required variable without a value cannot be guessed: Pelican's message shows, not nothing at all.
+        $secret = $variable('SMOKE_SECRET');
+        try {
+            $make('smoke-secret')->assertNotified(__('simplify-servermaker::maker.review.failed'));
+        } finally {
+            $secret->delete();
+        }
+        if (Server::query()->where('name', 'smoke-secret')->exists()) {
+            throw new RuntimeException('a server was made without its required variable');
+        }
+    } finally {
+        Server::query()->whereIn('name', ['smoke-agent', 'smoke-secret'])->get()->each->delete();
+        $agent->delete();
+    }
+});
+
 step('Server software is offered for Minecraft Java, checked before it reinstalls, and undone when the reinstall fails', function () use ($admin) {
     $paper = Egg::query()->where('name', 'Paper')->firstOrFail();
     $server = Server::factory()->create(['owner_id' => $admin->id, 'egg_id' => $paper->id, 'name' => 'smoke-software', 'installed_at' => now()]);
