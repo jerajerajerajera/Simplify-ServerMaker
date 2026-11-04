@@ -59,7 +59,15 @@ jobs:
           - pelican: '1.0.0-rc.2'
             php: '8.4'
             simplify: 'main'
-    name: panel-smoke (Pelican ${{ matrix.pelican }}${{ matrix.simplify && format(', Simplify {0}', matrix.simplify) || '' }})
+          # The update path with settings filled in: from the version on the Hub's stable channel, and from the
+          # latest release. Both are also put back over the new tables at the end.
+          - pelican: '1.0.0-rc.2'
+            php: '8.4'
+            from: '1.4.2'
+          - pelican: '1.0.0-rc.2'
+            php: '8.4'
+            from: '2.0.0-beta.4'
+    name: panel-smoke (Pelican ${{ matrix.pelican }}${{ matrix.simplify && format(', Simplify {0}', matrix.simplify) || '' }}${{ matrix.from && format(', from {0}', matrix.from) || '' }})
     steps:
       - uses: actions/checkout@v4
         with:
@@ -97,14 +105,26 @@ jobs:
           php artisan p:plugin:install simplify
           php artisan p:plugin:list | grep -E '\| Simplify .*\| enabled' || { echo 'Simplify did not install'; exit 1; }
       - name: Install the old simplify-server-maker 1.0.5
+        if: ${{ !matrix.from }}
         run: |
           git clone --quiet --depth 1 --branch v1.0.5 "https://github.com/${{ github.repository }}.git" panel/plugins/simplify-server-maker
           rm -rf panel/plugins/simplify-server-maker/.git
           cd panel
           php artisan p:plugin:install simplify-server-maker
           php -r '$db = new PDO("sqlite:database/database.sqlite"); $db->exec("INSERT INTO simplify_server_maker_settings (key, value) VALUES (\"ci_takeover\", \"kept\")");'
+      - name: Install Server Maker ${{ matrix.from }} with its settings filled in
+        if: matrix.from
+        run: |
+          git clone --quiet --depth 1 --branch "v${{ matrix.from }}" "https://github.com/${{ github.repository }}.git" panel/plugins/simplify-servermaker
+          rm -rf panel/plugins/simplify-servermaker/.git
+          cd panel
+          php artisan p:plugin:install simplify-servermaker
+          php ../plugin/tests/panel/upgrade.php fill | tee fill.txt
+          grep -q '^All steps passed$' fill.txt
       - name: Install Simplify Server Maker
         run: |
+          # An update swaps the files, as the Hub does.
+          rm -rf panel/plugins/simplify-servermaker
           mkdir -p panel/plugins/simplify-servermaker
           tar -C plugin --exclude=.git --exclude=dist -cf - . | tar -C panel/plugins/simplify-servermaker -xf -
           cd panel
@@ -113,9 +133,14 @@ jobs:
           php artisan queue:work --max-jobs=1 --stop-when-empty
           php artisan p:plugin:list | tee plugins.txt
           grep -E 'Simplify Server Maker .*\| enabled' plugins.txt || { echo 'Simplify Server Maker did not install'; exit 1; }
-          test ! -e plugins/simplify-server-maker || { echo 'The old simplify-server-maker folder is still there'; exit 1; }
           test "$(grep -c 'Simplify Server Maker' plugins.txt)" = 1 || { echo 'Simplify Server Maker is listed twice'; exit 1; }
-          php -r '$db = new PDO("sqlite:database/database.sqlite"); $kept = $db->query("SELECT value FROM simplify_server_maker_settings WHERE key = \"ci_takeover\"")->fetchColumn(); $db->exec("DELETE FROM simplify_server_maker_settings WHERE key = \"ci_takeover\""); exit($kept === "kept" ? 0 : 1);' || { echo 'The old settings were lost'; exit 1; }
+          if [ -n "${{ matrix.from }}" ]; then
+            php plugins/simplify-servermaker/tests/panel/upgrade.php check | tee check.txt
+            grep -q '^All steps passed$' check.txt
+          else
+            test ! -e plugins/simplify-server-maker || { echo 'The old simplify-server-maker folder is still there'; exit 1; }
+            php -r '$db = new PDO("sqlite:database/database.sqlite"); $kept = $db->query("SELECT value FROM simplify_server_maker_settings WHERE key = \"ci_takeover\"")->fetchColumn(); $db->exec("DELETE FROM simplify_server_maker_settings WHERE key = \"ci_takeover\""); exit($kept === "kept" ? 0 : 1);' || { echo 'The old settings were lost'; exit 1; }
+          fi
       - name: Open the pages
         working-directory: panel
         run: |
@@ -158,6 +183,20 @@ jobs:
           php artisan queue:work --stop-when-empty
           php artisan p:plugin:list | grep -E 'Simplify Server Maker .*\| enabled' || { echo 'Simplify Server Maker did not install again'; exit 1; }
           php -r '$db = new PDO("sqlite:database/database.sqlite"); $kept = $db->query("SELECT value FROM simplify_server_maker_settings WHERE key = \"ci_uninstall\"")->fetchColumn(); $db->exec("DELETE FROM simplify_server_maker_settings WHERE key = \"ci_uninstall\""); exit($kept === "kept" ? 0 : 1);' || { echo 'The settings were lost'; exit 1; }
+      # Someone who goes back (or a folder backup put back) must not get a broken panel from the newer tables.
+      - name: Put ${{ matrix.from }} back over the new version
+        if: matrix.from
+        working-directory: panel
+        run: |
+          rm -rf plugins/simplify-servermaker
+          git clone --quiet --depth 1 --branch "v${{ matrix.from }}" "https://github.com/${{ github.repository }}.git" plugins/simplify-servermaker
+          rm -rf plugins/simplify-servermaker/.git
+          # Pelican keeps a plugin's status in its plugin.json, so the old files come back as not installed: install
+          # them, as putting an older zip back in Admin → Plugins does. Its migrations find the newer tables.
+          php artisan p:plugin:install simplify-servermaker
+          php artisan p:plugin:list | grep -E 'Simplify Server Maker .*\| enabled .*\| ${{ matrix.from }} ' || { echo 'The old version did not come back'; exit 1; }
+          php ../plugin/tests/panel/upgrade.php pages | tee back.txt
+          grep -q '^All steps passed$' back.txt
       - name: Laravel log
         if: failure()
         run: grep -h -E '^\[[0-9-]+ [0-9:]+\]' panel/storage/logs/*.log | cut -c1-600 | tail -n 12 || true

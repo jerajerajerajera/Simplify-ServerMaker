@@ -337,6 +337,8 @@ step('another game shows its own settings', function () use ($admin) {
 step('another game offers its Steam banner and icon, copied once after creation', function () use ($admin) {
     // The store search for the smoke egg answers Valheim; its images come from Steam's real CDN.
     $art = SteamArt::pick([['id' => 892970, 'name' => 'Smoke Valheim']], 'Smoke Valheim');
+    // On by default; an updated panel may have it off from before.
+    Settings::put(['steam_art' => true]);
     Cache::put('simplify-servermaker.steam.'.md5('smoke valheim'), $art, 60);
     $egg = Egg::query()->where('name', 'Smoke Valheim')->firstOrFail();
     Livewire\Livewire::actingAs($admin)->test(ServerMaker::class)
