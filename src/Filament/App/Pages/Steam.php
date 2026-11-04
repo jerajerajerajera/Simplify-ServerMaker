@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Simplify\ServerMaker\Filament\App\Pages;
 
 use Filament\Pages\Page;
+use Simplify\ServerMaker\CoreApi;
 
 /**
  * Steam: the Steam row (SteamConnection) on a page of its own, for Simplify before Connections (add-on API 6) and for
@@ -20,9 +21,10 @@ final class Steam extends Page
 
     protected string $view = 'simplify-servermaker::pages.steam';
 
+    /** Since Connections (add-on API 6) the Steam row is there, so the page is gone: one place for the key. */
     public static function canAccess(): bool
     {
-        return user() !== null;
+        return user() !== null && ! CoreApi::atLeast(6);
     }
 
     public function getTitle(): string

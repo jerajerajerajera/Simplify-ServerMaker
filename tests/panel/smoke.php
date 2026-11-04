@@ -25,6 +25,7 @@ use Illuminate\Validation\ValidationException;
 use Simplify\Core\Addons\Addon;
 use Simplify\Core\Support\PanelSettings;
 use Simplify\ServerMaker\Access;
+use Simplify\ServerMaker\CoreApi;
 use Simplify\ServerMaker\Creation\ApplyFirstSettings;
 use Simplify\ServerMaker\Creation\ApplySteamArt;
 use Simplify\ServerMaker\Creation\ExtraPorts;
@@ -142,6 +143,13 @@ step('the Server Maker page renders, with Simplify buttons instead of bare Filam
     Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('admin'));
     $page = Livewire\Livewire::actingAs($admin)->test(ServerMaker::class);
     class_exists(Addon::class) ? $page->assertActionHidden('settings') : $page->assertActionVisible('settings');
+    // With Simplify 2.0 (add-on API 8) Create server opens it everywhere, so it leaves the admin menu; without, it stays.
+    $users = http($admin, '/admin/users');
+    expectOk($users, '/admin/users');
+    $inMenu = (bool) preg_match('#href="[^"]*/admin/server-maker"#', $users->getContent());
+    if ($inMenu === CoreApi::atLeast(8)) {
+        throw new RuntimeException(CoreApi::atLeast(8) ? 'the admin menu still links the Server Maker' : 'the admin menu does not link the Server Maker');
+    }
 });
 
 // A node with free ports, so the wizard can run to the end. Wings is not there, so Create stops at Wings.
@@ -641,11 +649,17 @@ step('a Steam key is checked, stored encrypted, never shown again, and makes log
         throw new RuntimeException('the key is stored readable');
     }
 
-    // The page shows only the last four characters.
+    // The page shows only the last four characters. Since Connections (add-on API 6) there is no Steam page.
     $response = http($admin, Steam::getUrl(panel: 'app'));
-    expectOk($response, 'Steam');
-    if (! str_contains($response->getContent(), 'ending in 6789') || str_contains($response->getContent(), $key)) {
-        throw new RuntimeException('the Steam page does not show the hint, or shows the key');
+    if (CoreApi::atLeast(6)) {
+        if ($response->getStatusCode() === 200) {
+            throw new RuntimeException('the Steam page opens next to the Steam row on Connections');
+        }
+    } else {
+        expectOk($response, 'Steam');
+        if (! str_contains($response->getContent(), 'ending in 6789') || str_contains($response->getContent(), $key)) {
+            throw new RuntimeException('the Steam page does not show the hint, or shows the key');
+        }
     }
 
     // A token for the game of an egg: Steam's own app of the game (CS2 is 730), the server name as memo.
@@ -691,10 +705,12 @@ step('the Steam row saves only from its popup: keep the key, switch automatic to
     if (SteamKeys::autoTokens($admin) || SteamKeys::status($admin)['hint'] !== '6789') {
         throw new RuntimeException('Save did not keep the key and switch off automatic tokens: '.json_encode(SteamKeys::status($admin)));
     }
-    $page = http($admin, Steam::getUrl(panel: 'app'));
-    expectOk($page, 'Steam');
-    if (! str_contains($page->getContent(), 'smk-connection') || ! str_contains($page->getContent(), 'ending in 6789')) {
-        throw new RuntimeException('the Steam page does not show the Steam row');
+    if (! CoreApi::atLeast(6)) {
+        $page = http($admin, Steam::getUrl(panel: 'app'));
+        expectOk($page, 'Steam');
+        if (! str_contains($page->getContent(), 'smk-connection') || ! str_contains($page->getContent(), 'ending in 6789')) {
+            throw new RuntimeException('the Steam page does not show the Steam row');
+        }
     }
     $row->callAction('disconnect')->assertHasNoErrors();
     if (SteamKeys::connected($admin)) {
