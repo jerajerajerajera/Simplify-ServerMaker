@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.0-beta.4
+
+- Version aligned with Simplify 2.0.0-beta.4.
+
 ## 2.0.0-beta.3
 
 - Clearer settings for who may make servers. The switch is now **Users can make servers**, and an empty list of roles,
