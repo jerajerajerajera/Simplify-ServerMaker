@@ -9,6 +9,7 @@
 - With Simplify-Explain, the errors **The server could not be created**, **The software could not be changed** and
   **No token created** get an Explain button. Only the person who got the error and root admins can explain it; the
   technical details go to root admins only.
+- Checks: PHPStan (level 5) runs in CI, and the panel smoke also runs with the real Simplify core (main) instead of a stub.
 
 ## 2.0.0-beta.4
 

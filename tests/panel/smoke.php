@@ -137,9 +137,10 @@ step('the Server Maker page renders, with Simplify buttons instead of bare Filam
     if (! str_contains($response->getContent(), 'smk-next')) {
         throw new RuntimeException('no Next button');
     }
-    // Without Simplify the settings open from this page.
+    // Without Simplify the settings open from this page; with Simplify from Simplify's settings.
     Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('admin'));
-    Livewire\Livewire::actingAs($admin)->test(ServerMaker::class)->assertActionVisible('settings');
+    $page = Livewire\Livewire::actingAs($admin)->test(ServerMaker::class);
+    class_exists(Addon::class) ? $page->assertActionHidden('settings') : $page->assertActionVisible('settings');
 });
 
 // A node with free ports, so the wizard can run to the end. Wings is not there, so Create stops at Wings.
@@ -778,17 +779,24 @@ step('an empty list of nodes or eggs means all of them; only administrators add 
 });
 
 step("in Simplify's friends mode users may add eggs from the index, while every egg is allowed", function () use ($user, $node) {
-    require_once dirname(__DIR__).'/stubs/panel-settings.php';
+    if (! class_exists(PanelSettings::class)) {
+        require_once dirname(__DIR__).'/stubs/panel-settings.php';
+    }
     Settings::put(['self_service' => true, 'role_ids' => [], 'node_ids' => [], 'eggs' => [], 'import_eggs' => true]);
     auth()->setUser($user);
-    $can = function (bool $friends): bool {
-        PanelSettings::$friends = $friends;
+    // The real core keeps friends mode as a setting; the stand-in (without the core) as a static flag.
+    $friends = function (bool $on): void {
+        if (property_exists(PanelSettings::class, 'friends')) {
+            PanelSettings::$friends = $on;
+        } else {
+            PanelSettings::save(['friends_mode' => $on]);
+        }
+    };
+    $can = function (bool $on) use ($friends): bool {
+        $friends($on);
 
         return EggIndex::canInstall();
     };
-    if (! property_exists(PanelSettings::class, 'friends')) {
-        throw new RuntimeException('the real core is installed here; this step needs the stand-in');
-    }
     if (! $can(true) || $can(false)) {
         throw new RuntimeException('friends mode does not decide');
     }
@@ -799,7 +807,7 @@ step("in Simplify's friends mode users may add eggs from the index, while every 
     if ($limited || $can(true)) {
         throw new RuntimeException('index eggs are offered with a limited egg list or with Add missing eggs off');
     }
-    PanelSettings::$friends = false;
+    $friends(false);
     Settings::put(['node_ids' => [$node->id], 'eggs' => ['minecraft'], 'import_eggs' => null]);
 });
 
@@ -880,8 +888,8 @@ step('Simplify shows a Create server button to those who may use it', function (
     if (count($buttons) !== 1 || ! str_ends_with($buttons[0]->url, '/server-maker') || $addon->settingsUrl() === null) {
         throw new RuntimeException('admin: '.json_encode($buttons));
     }
-    // Steam is a row on Connections (add-on API 6); a Simplify before that (this stub) links the Steam page instead.
-    if ($addon->connections($admin) !== [SteamConnection::class] || count($addon->accountPages($admin)) !== 1) {
+    // Steam is a row on Connections (add-on API 6); a Simplify before that (the stub is API 5) links the Steam page instead.
+    if ($addon->connections($admin) !== [SteamConnection::class] || count($addon->accountPages($admin)) !== (defined(Addon::class.'::API') && Addon::API >= 6 ? 0 : 1)) {
         throw new RuntimeException('Steam is not a Connections row, or a Simplify before Connections has no Steam page');
     }
     auth()->setUser($user);
