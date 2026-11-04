@@ -145,6 +145,18 @@ jobs:
           php artisan p:plugin:install simplify-toolkit
           php plugins/simplify-servermaker/tests/panel/toolkit.php | tee toolkit.txt
           grep -q '^All steps passed$' toolkit.txt
+      # Uninstalling keeps the settings and drafts, so installing again brings them back (decision 4 Nov).
+      - name: Uninstall and install again, the settings stay
+        working-directory: panel
+        run: |
+          php -r '$db = new PDO("sqlite:database/database.sqlite"); $db->exec("INSERT INTO simplify_server_maker_settings (key, value) VALUES (\"ci_uninstall\", \"kept\")");'
+          php artisan p:plugin:uninstall simplify-servermaker --no-interaction
+          php plugins/simplify-servermaker/tests/panel/uninstall.php | tee uninstall.txt
+          grep -q '^All steps passed$' uninstall.txt
+          php artisan tinker --execute="App\Jobs\Plugin\InstallPlugin::dispatch(App\Models\User::factory()->create(), 'simplify-servermaker');"
+          php artisan queue:work --max-jobs=1 --stop-when-empty
+          php artisan p:plugin:list | grep -E 'Simplify Server Maker .*\| enabled' || { echo 'Simplify Server Maker did not install again'; exit 1; }
+          php -r '$db = new PDO("sqlite:database/database.sqlite"); $kept = $db->query("SELECT value FROM simplify_server_maker_settings WHERE key = \"ci_uninstall\"")->fetchColumn(); $db->exec("DELETE FROM simplify_server_maker_settings WHERE key = \"ci_uninstall\""); exit($kept === "kept" ? 0 : 1);' || { echo 'The settings were lost'; exit 1; }
       - name: Laravel log
         if: failure()
         run: grep -h -E '^\[[0-9-]+ [0-9:]+\]' panel/storage/logs/*.log | cut -c1-600 | tail -n 12 || true
