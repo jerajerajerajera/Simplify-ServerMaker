@@ -17,6 +17,7 @@ use Simplify\ServerMaker\Filament\Server\Pages\Performance;
 use Simplify\ServerMaker\Filament\Server\Pages\ServerSoftware;
 use Simplify\ServerMaker\ServerSettings\ToolkitSections;
 use Simplify\ServerMaker\Software\Startup;
+use Simplify\Toolkit\Filament\Server\Pages\ServerSettings;
 use Simplify\Toolkit\Services\AutomaticBackups;
 use Simplify\Toolkit\Services\SettingsSections;
 
@@ -77,6 +78,13 @@ step('Server software and Performance are sections of Toolkit\'s server settings
     $headings = array_map(fn ($section) => (string) $section->getHeading(), $sections->serverSettingsSections($server));
     if ($headings !== ['Server software', 'Performance']) {
         throw new RuntimeException('the sections are not Server software and Performance: '.json_encode($headings));
+    }
+    // On Toolkit's page, after its own sections: the head with what runs now, the limits.
+    $html = Livewire::actingAs($admin)->test(ServerSettings::class)->html();
+    foreach (['Server software', 'Now: Paper 1.21.1', 'Type smoke-settings to confirm', 'Performance', 'New limits apply after the next restart.'] as $text) {
+        if (! str_contains($html, $text)) {
+            throw new RuntimeException("Toolkit's server settings do not show: $text");
+        }
     }
     $state = $sections->serverSettingsFill($server);
     if ([$state['type'], $state['software'], $state['version'], $state['ram']] !== ['plugins', 'paper', '1.21.1', '4']) {
