@@ -47,6 +47,7 @@ use Simplify\ServerMaker\Games\OtherGames;
 use Simplify\ServerMaker\Games\SteamArt;
 use Simplify\ServerMaker\Models\Draft;
 use Simplify\ServerMaker\Modpacks\Sources;
+use Simplify\ServerMaker\Problems\ProblemLog;
 use Simplify\ServerMaker\Steam\SteamKeys;
 use Throwable;
 
@@ -432,9 +433,11 @@ class ServerMaker extends Page implements HasForms
             throw $exception;
         } catch (Throwable $exception) {
             report($exception);
+            $problem = ProblemLog::record('create', user(), $exception->getMessage(), $exception);
             Notification::make()
                 ->title(__('simplify-servermaker::maker.review.failed'))
                 ->body($exception->getMessage())
+                ->actions(ProblemLog::explainActions($problem))
                 ->danger()
                 ->send();
 

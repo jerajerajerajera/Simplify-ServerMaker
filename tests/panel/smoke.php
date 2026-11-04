@@ -44,6 +44,8 @@ use Simplify\ServerMaker\Games\SteamArt;
 use Simplify\ServerMaker\Livewire\SteamConnection;
 use Simplify\ServerMaker\Models\Draft;
 use Simplify\ServerMaker\Modpacks\Remote;
+use Simplify\ServerMaker\Problems\ProblemLog;
+use Simplify\ServerMaker\Problems\ServerMakerProblems;
 use Simplify\ServerMaker\ServerMakerAddon;
 use Simplify\ServerMaker\Settings;
 use Simplify\ServerMaker\Software\ChangeSoftware;
@@ -788,6 +790,38 @@ step('updating from the switch for Minecraft and the list of other games keeps t
         }
     }
     Settings::put(['self_service' => true, 'node_ids' => [$node->id]]);
+});
+
+step('an error the Server Maker shows can be explained by its own user and root admins only, the trace by root admins', function () use ($admin, $user) {
+    $other = User::where('email', 'smoke-maker-other@example.com')->first()
+        ?? User::factory()->create(['email' => 'smoke-maker-other@example.com']);
+    $problems = new ServerMakerProblems;
+    $id = ProblemLog::record('create', $user, 'The node did not answer', new RuntimeException('Wings said no'));
+    if (! preg_match('/^simplify-servermaker:create:[A-Za-z0-9]{24}$/', $id)) {
+        throw new RuntimeException('not a problem id: '.$id);
+    }
+    if (! $problems->canExplainProblem($id, $user) || ! $problems->canExplainProblem($id, $admin) || $problems->canExplainProblem($id, $other)) {
+        throw new RuntimeException('the wrong people may explain the error');
+    }
+    $mine = $problems->explainProblem($id, $user);
+    $root = $problems->explainProblem($id, $admin);
+    if ($mine === null || $mine['lines'] !== ['The node did not answer'] || $mine['title'] !== 'The server could not be created') {
+        throw new RuntimeException('the user does not get only the message: '.json_encode($mine));
+    }
+    if ($root === null || ! str_contains(implode("\n", $root['lines']), 'RuntimeException: Wings said no') || count($root['lines']) > 100) {
+        throw new RuntimeException('a root admin does not get the trace: '.json_encode($root));
+    }
+    foreach (['simplify-servermaker:create:short', 'simplify-servermaker:delete:'.substr($id, -24), 'simplify:create:'.substr($id, -24), str_replace(':create:', ':token:', $id)] as $wrong) {
+        if ($problems->canExplainProblem($wrong, $admin) || $problems->explainProblem($wrong, $admin) !== null) {
+            throw new RuntimeException('a wrong id is accepted: '.$wrong);
+        }
+    }
+    if (! class_exists('Simplify\\Explain\\Problems\\Problems') && ProblemLog::explainActions($id) !== []) {
+        throw new RuntimeException('without Explain the error notification still gets an Explain button');
+    }
+    if (! in_array(ServerMakerProblems::class, array_map(fn ($source) => $source::class, iterator_to_array(app()->tagged('simplify.problems'))), true)) {
+        throw new RuntimeException('the problem source is not tagged for Simplify-Explain');
+    }
 });
 
 step('without self-service a user cannot open the Server Maker', function () use ($user) {

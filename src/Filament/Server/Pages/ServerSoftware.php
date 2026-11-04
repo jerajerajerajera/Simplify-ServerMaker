@@ -27,6 +27,7 @@ use Simplify\ServerMaker\Games\Minecraft;
 use Simplify\ServerMaker\Games\MinecraftEggs;
 use Simplify\ServerMaker\Games\MinecraftVersions;
 use Simplify\ServerMaker\Modpacks\Sources;
+use Simplify\ServerMaker\Problems\ProblemLog;
 use Simplify\ServerMaker\Software\ChangeSoftware;
 use Simplify\ServerMaker\Software\CurrentSoftware;
 use Simplify\ServerMaker\Software\Startup;
@@ -167,7 +168,8 @@ final class ServerSoftware extends Page implements HasForms
             ChangeSoftware::apply($server, $startup);
         } catch (Throwable $exception) {
             report($exception);
-            Notification::make()->title(__('simplify-servermaker::maker.software.failed'))->danger()->send();
+            $problem = ProblemLog::record('software', user(), __('simplify-servermaker::maker.software.failed'), $exception);
+            Notification::make()->title(__('simplify-servermaker::maker.software.failed'))->actions(ProblemLog::explainActions($problem))->danger()->send();
 
             return;
         }
