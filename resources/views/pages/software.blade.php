@@ -1,8 +1,5 @@
 <x-filament-panels::page>
-    @include('simplify-servermaker::wizard.styles')
-    <div class="smk">
-        <form wire:submit="install">
-            {{ $this->form }}
-        </form>
-    </div>
+    <form wire:submit="install">
+        {{ $this->form }}
+    </form>
 </x-filament-panels::page>

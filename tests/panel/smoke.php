@@ -290,7 +290,7 @@ step('Server software is offered for Minecraft Java, checked before it reinstall
     if (! $test->instance()->getAction('install')->isDisabled()) {
         throw new RuntimeException('Install works before the name is typed');
     }
-    $test->call('pickGame', 'minecraft', 'vanilla')->set('data.confirm', 'smoke')->call('install');
+    $test->set('data.type', 'vanilla')->set('data.confirm', 'smoke')->call('install');
     if ($test->get('data.type') !== 'vanilla' || ! array_key_exists('data.confirm', $test->errors()->toArray())) {
         throw new RuntimeException('a wrong name was accepted: '.json_encode($test->errors()->toArray()));
     }

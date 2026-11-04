@@ -4,48 +4,25 @@ declare(strict_types=1);
 
 namespace Simplify\ServerMaker\Filament\Server\Pages;
 
-use App\Enums\SubuserPermission;
 use App\Filament\Server\Pages\Console;
-use App\Models\Egg;
 use App\Models\Server;
 use Filament\Actions\Action;
 use Filament\Facades\Filament;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Notifications\Notification;
 use Filament\Pages\Page;
-use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\View;
 use Filament\Schemas\Schema;
-use Illuminate\Validation\ValidationException;
-use Simplify\ServerMaker\Creation\EggData;
-use Simplify\ServerMaker\Creation\Payload;
-use Simplify\ServerMaker\Creation\RequiredValues;
-use Simplify\ServerMaker\Filament\Wizard\SetupStep;
-use Simplify\ServerMaker\Games\Java;
-use Simplify\ServerMaker\Games\Minecraft;
-use Simplify\ServerMaker\Games\MinecraftEggs;
-use Simplify\ServerMaker\Games\MinecraftVersions;
-use Simplify\ServerMaker\Modpacks\Sources;
-use Simplify\ServerMaker\Problems\ProblemLog;
-use Simplify\ServerMaker\Software\ChangeSoftware;
-use Simplify\ServerMaker\Software\CurrentSoftware;
-use Simplify\ServerMaker\Software\Startup;
-use Throwable;
+use Simplify\ServerMaker\ServerSettings\SoftwareSection;
+use Simplify\ServerMaker\ServerSettings\ToolkitSections;
 
 /**
- * Server software: other Minecraft Java software, version or modpack for an existing server, as in Simplify 0.7.0.
- * The same choices as the Server Maker's Minecraft step; the server is reinstalled, its worlds and files stay.
+ * Server software as a page of its own, without Simplify Toolkit; with Toolkit it is a section of its server settings.
  *
  * @property Schema $form
  */
 final class ServerSoftware extends Page implements HasForms
 {
     use InteractsWithForms;
-
-    /** The types a server can switch between; Bedrock and proxies have other files. */
-    public const TYPES = ['vanilla', 'plugins', 'mods', 'modpack'];
 
     protected static string|\BackedEnum|null $navigationIcon = 'tabler-packages';
 
@@ -58,20 +35,11 @@ final class ServerSoftware extends Page implements HasForms
     /** @var array<string, mixed>|null */
     public ?array $data = [];
 
-    /** What the server runs now, as shown above the choices. */
-    public string $now = '';
-
-    /** The owner or an administrator, with the permission to reinstall. */
     public static function canAccess(): bool
     {
         $server = Filament::getTenant();
-        $user = user();
 
-        return $server instanceof Server
-            && $user !== null
-            && ($user->isRootAdmin() || (int) $server->owner_id === (int) $user->id)
-            && $user->can(SubuserPermission::SettingsReinstall, $server)
-            && CurrentSoftware::of((string) $server->egg?->name) !== null;
+        return $server instanceof Server && ! ToolkitSections::available() && SoftwareSection::canUse($server);
     }
 
     public static function getNavigationLabel(): string
@@ -95,48 +63,12 @@ final class ServerSoftware extends Page implements HasForms
     public function mount(): void
     {
         abort_unless(self::canAccess(), 403);
-        $server = $this->server();
-        $current = CurrentSoftware::of((string) $server->egg?->name);
-        $version = CurrentSoftware::version(Startup::of($server)['environment']);
-        $this->now = trim($server->egg?->name.' '.$version);
-        $type = in_array($current['type'] ?? null, self::TYPES, true) ? $current['type'] : 'plugins';
-        $this->form->fill([
-            'type' => $type,
-            'software' => Minecraft::software($type, $current['software'] ?? null),
-            'version' => $version ?? MinecraftVersions::newest(),
-            'confirm' => '',
-        ]);
-    }
-
-    /** Called by the type cards (shared with the Server Maker). */
-    public function pickGame(string $game, string $choice): void
-    {
-        abort_unless(self::canAccess() && $game === 'minecraft' && in_array($choice, self::TYPES, true), 403);
-        $this->data['type'] = $choice;
-        $this->data['software'] = Minecraft::software($choice, $this->data['software'] ?? null);
-        $this->data['version'] ??= MinecraftVersions::newest();
+        $this->form->fill(SoftwareSection::fill($this->server()));
     }
 
     public function form(Schema $schema): Schema
     {
-        $t = fn (string $key, array $replace = []) => __('simplify-servermaker::maker.'.$key, $replace);
-
-        // The page head: what runs now as the subtitle; the warning sits with the name that confirms it.
-        return $schema->statePath('data')->components([
-            Section::make($t('software.title'))
-                ->description(fn () => $t('software.now', ['software' => $this->now]))
-                ->schema([
-                    View::make('simplify-servermaker::wizard.types')->viewData(['types' => self::TYPES]),
-                    ...SetupStep::softwareFields($t),
-                    TextInput::make('confirm')
-                        ->label($t('software.confirm', ['name' => $this->server()->name]))
-                        ->helperText($t('software.warning'))
-                        ->placeholder($this->server()->name)
-                        ->autocomplete('off')
-                        ->dehydrated(false)
-                        ->live(debounce: 300),
-                ]),
-        ]);
+        return $schema->statePath('data')->components([SoftwareSection::make($this->server())]);
     }
 
     protected function getHeaderActions(): array
@@ -153,56 +85,8 @@ final class ServerSoftware extends Page implements HasForms
     {
         abort_unless(self::canAccess(), 403);
         $server = $this->server();
-        if (! hash_equals($server->name, (string) ($this->data['confirm'] ?? ''))) {
-            throw ValidationException::withMessages(['data.confirm' => __('simplify-servermaker::maker.software.wrong_name')]);
+        if (SoftwareSection::install($server, $this->form->getState())) {
+            $this->redirect(Console::getUrl(tenant: $server), navigate: true);
         }
-        // The type comes from the cards, which are no form field.
-        $data = [...$this->form->getState(), 'type' => $this->data['type'] ?? null];
-        if (! in_array($data['type'] ?? null, self::TYPES, true)) {
-            throw ValidationException::withMessages(['data.type' => __('simplify-servermaker::maker.minecraft.egg_missing')]);
-        }
-        $blocked = ChangeSoftware::blocked($server);
-        if ($blocked !== null) {
-            Notification::make()->title(__('simplify-servermaker::maker.software.blocked.'.$blocked))->warning()->send();
-
-            return;
-        }
-        $startup = self::startup(MinecraftEggs::forChoice($data), $data, Startup::of($server)['environment']);
-        try {
-            ChangeSoftware::apply($server, $startup);
-        } catch (Throwable $exception) {
-            report($exception);
-            $problem = ProblemLog::record('software', user(), __('simplify-servermaker::maker.software.failed'), $exception);
-            Notification::make()->title(__('simplify-servermaker::maker.software.failed'))->actions(ProblemLog::explainActions($problem))->danger()->send();
-
-            return;
-        }
-        Notification::make()->title(__('simplify-servermaker::maker.software.installing'))->success()->send();
-        $this->redirect(Console::getUrl(tenant: $server), navigate: true);
-    }
-
-    /**
-     * The egg's own defaults with the chosen version or pack, its startup command and the image for the Java it needs.
-     * A variable the egg needs but leaves empty keeps the server's own value (such as Paper's User Agent).
-     *
-     * @param  array<string, mixed>  $data
-     * @param  array<string, string>  $own  the server's values now
-     * @return array{egg_id: int, image: string, startup: string, environment: array<string, string>}
-     */
-    private static function startup(Egg $egg, array $data, array $own = []): array
-    {
-        $egg = EggData::from($egg);
-        $java = MinecraftVersions::javaFor($data);
-        $environment = Payload::minecraftEnvironment($data, $egg, $java);
-        if ($data['type'] === 'modpack') {
-            $environment = Sources::environment((string) $data['modpack'], (string) $data['modpack_version'], $environment);
-        }
-        $environment = RequiredValues::fill($environment, $egg, $own);
-        $image = $java !== null ? Java::image($egg->images, $java) : $egg->firstImage();
-        if ($image === null || $image === '') {
-            throw ValidationException::withMessages(['data.type' => __('simplify-servermaker::maker.review.no_image')]);
-        }
-
-        return ['egg_id' => $egg->id, 'image' => $image, 'startup' => $egg->startup, 'environment' => $environment];
     }
 }
