@@ -154,7 +154,8 @@ jobs:
           php plugins/simplify-servermaker/tests/panel/uninstall.php | tee uninstall.txt
           grep -q '^All steps passed$' uninstall.txt
           php artisan tinker --execute="App\Jobs\Plugin\InstallPlugin::dispatch(App\Models\User::factory()->create(), 'simplify-servermaker');"
-          php artisan queue:work --max-jobs=1 --stop-when-empty
+          # Other jobs may be queued by now (notifications from the steps above): work them all.
+          php artisan queue:work --stop-when-empty
           php artisan p:plugin:list | grep -E 'Simplify Server Maker .*\| enabled' || { echo 'Simplify Server Maker did not install again'; exit 1; }
           php -r '$db = new PDO("sqlite:database/database.sqlite"); $kept = $db->query("SELECT value FROM simplify_server_maker_settings WHERE key = \"ci_uninstall\"")->fetchColumn(); $db->exec("DELETE FROM simplify_server_maker_settings WHERE key = \"ci_uninstall\""); exit($kept === "kept" ? 0 : 1);' || { echo 'The settings were lost'; exit 1; }
       - name: Laravel log
