@@ -77,7 +77,7 @@ final class EggIndex
             if (blank($game['sha256'] ?? null) || blank($game['uuid'] ?? null)) {
                 continue;
             }
-            if (isset($uuids[$game['uuid'] ?? '']) || isset($names[mb_strtolower((string) $game['name'])]) || Minecraft::isMinecraftEgg((string) $game['name'])) {
+            if (isset($uuids[$game['uuid']]) || isset($names[mb_strtolower((string) $game['name'])]) || Minecraft::isMinecraftEgg((string) $game['name'])) {
                 continue;
             }
             $cards[] = [

@@ -20,6 +20,7 @@
   software the warning is a quiet line under the name you type to confirm, and Install is a button with its name.
 - With Simplify's Connections page (add-on API 6 and later) the separate Steam page no longer opens: the key is on
   Connections only. Checks: with Simplify 2.0 the admin menu no longer links the Server Maker.
+- Checks: the PHPStan clean-up list is down to the two Server software and Performance findings.
 
 ## 2.0.0-beta.4
 

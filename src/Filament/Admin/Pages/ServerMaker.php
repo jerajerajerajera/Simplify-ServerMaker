@@ -52,7 +52,11 @@ use Simplify\ServerMaker\Problems\ProblemLog;
 use Simplify\ServerMaker\Steam\SteamKeys;
 use Throwable;
 
-/** The Server Maker: a wizard that creates a game server in a few steps. */
+/**
+ * The Server Maker: a wizard that creates a game server in a few steps.
+ *
+ * @property Schema $form
+ */
 class ServerMaker extends Page implements HasForms
 {
     use InteractsWithForms;
@@ -467,7 +471,7 @@ class ServerMaker extends Page implements HasForms
             return;
         }
 
-        Subdomain::request($server, (string) ($state['subdomain'] ?? ''));
+        Subdomain::request($server, $subdomain);
         ApplyFirstSettings::afterInstall($server, $first);
         try {
             ServerColor::apply($server, $state['server_color'] ?? null);
