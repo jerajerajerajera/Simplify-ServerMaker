@@ -10,7 +10,8 @@ use App\Models\Egg;
 final readonly class EggData
 {
     /**
-     * @param  array<string, array{default: string, user: bool}>  $variables  env variable => default and whether users may set it
+     * @param  array<string, array{default: string, user: bool, required?: bool}>  $variables  env variable => default, whether users
+     *                                                                                    may set it and whether the egg needs a value
      * @param  array<string, string>  $images  label => Docker image
      */
     public function __construct(
@@ -28,6 +29,7 @@ final readonly class EggData
             $variables[(string) $variable->env_variable] = [
                 'default' => (string) ($variable->default_value ?? ''),
                 'user' => (bool) ($variable->user_editable && $variable->user_viewable),
+                'required' => in_array('required', self::rules($variable->rules), true),
             ];
         }
 
@@ -38,6 +40,14 @@ final readonly class EggData
             array_filter((array) $egg->docker_images, 'is_string'),
             (string) (collect($egg->startup_commands)->first() ?? ''),
         );
+    }
+
+    /** @return list<string> an egg variable's rules, saved as a list or (older eggs) as "required|string" */
+    private static function rules(mixed $rules): array
+    {
+        $rules = is_string($rules) ? explode('|', $rules) : (array) $rules;
+
+        return array_values(array_map(fn ($rule) => trim((string) $rule), array_filter($rules, 'is_string')));
     }
 
     /** @return array<string, string> */

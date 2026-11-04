@@ -429,7 +429,18 @@ class ServerMaker extends Page implements HasForms
         try {
             $server = Creator::create($payload, $admin ? null : fn () => Access::check($payload, Access::remaining(user())));
         } catch (ValidationException $exception) {
-            throw $exception;
+            // Pelican's own check of the egg's variables names no field of this form: show its message, not nothing.
+            $variables = array_filter($exception->errors(), fn ($key) => str_starts_with((string) $key, 'environment.'), ARRAY_FILTER_USE_KEY);
+            if ($variables === []) {
+                throw $exception;
+            }
+            Notification::make()
+                ->title(__('simplify-servermaker::maker.review.failed'))
+                ->body(implode(' ', array_merge(...array_values($variables))))
+                ->danger()
+                ->send();
+
+            return;
         } catch (Throwable $exception) {
             report($exception);
             Notification::make()

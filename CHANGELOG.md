@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- A Paper server can be made, and a server switched to Paper, on a panel with Pelican's own Paper egg. Its User
+  Agent is required, has no default and is hidden; it now gets Server Maker's name, or keeps the server's own value on
+  a change of software. When another required value is missing, the Server Maker shows Pelican's message instead of
+  doing nothing.
+
 ## 2.0.0-beta.4
 
 - Version aligned with Simplify 2.0.0-beta.4.
