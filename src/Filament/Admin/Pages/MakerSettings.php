@@ -85,7 +85,10 @@ class MakerSettings extends Page
                 ->schema([
                     Toggle::make('steam_art')->label($t('steam_art'))->helperText($t('steam_art_help')),
                 ]),
+            // With Simplify Toolkit the CurseForge key is in Toolkit's settings; a key saved here before stays visible
+            // until it is removed.
             Section::make($t('modpacks'))
+                ->visible(fn () => ! class_exists('Simplify\\Toolkit\\Services\\Keys') || Settings::has('curseforge_key'))
                 ->schema([
                     TextInput::make('curseforge_key')
                         ->label($t('curseforge_key'))
