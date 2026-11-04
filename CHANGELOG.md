@@ -14,6 +14,8 @@
 - Checks: PHPStan (level 5) runs in CI, and the panel smoke also runs with the real Simplify core (main) instead of a stub.
 - Uninstalling the Server Maker keeps its settings and drafts, so installing it again brings them back. Before, an
   uninstall removed them.
+- Checks: CI updates from 1.4.2 (the Hub's stable version) and from 2.0.0-beta.4 with every setting filled in, and puts
+  the old version back over the new tables to see its pages still open.
 
 ## 2.0.0-beta.4
 
