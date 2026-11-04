@@ -358,8 +358,8 @@ step('another game offers its Steam banner and icon, copied once after creation'
         throw new RuntimeException('the setting Offer Steam banners and icons is ignored');
     }
     Settings::put(['steam_art' => null]);
-    $server = new Server;
-    $server->uuid = (string) Str::uuid();
+    // A saved server, as after creation: Simplify stores the banner by the server's id.
+    $server = Server::factory()->create(['owner_id' => $admin->id, 'egg_id' => $egg->id, 'name' => 'smoke-steam-art']);
     ApplySteamArt::apply($server, $art);
     if (method_exists($server, 'writeIcon')) {
         $path = Server::getIconStoragePath().'/'.$server->uuid.'.png';
@@ -368,6 +368,7 @@ step('another game offers its Steam banner and icon, copied once after creation'
         }
         Storage::disk('public')->delete($path);
     }
+    $server->delete();
 });
 
 step('a game from the egg index is offered, checked and added on Next', function () use ($admin) {
