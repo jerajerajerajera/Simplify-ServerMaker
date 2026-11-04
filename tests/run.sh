@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Runs every check that needs no panel: php -l, the unit tests, the translations, the Pelican Hub checks and the step bar
+# Runs every check that needs no panel: php -l, the unit tests, the translations, the Pelican Hub checks, the secrets check and the step bar
 # in a browser.
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -9,6 +9,7 @@ for test in tests/unit/*.php; do
 done
 php tests/lang.php
 python3 tests/hub-check.py
+bash tests/secrets.sh
 node tests/steps.cjs
 # What a download of the repository holds (the Hub's zip): every file the plugin runs on, nothing of the tests or docs.
 archive="$(git archive HEAD 2>/dev/null | tar -t 2>/dev/null || true)"
