@@ -11,6 +11,7 @@
   technical details go to root admins only.
 - With Simplify 2.0 (add-on API 8), the Server Maker settings open in Simplify's settings › Add-ons, with its Save
   bar, and admin › Server Maker is no longer in the menu. Without Simplify the settings page stays as it was.
+- Checks: PHPStan (level 5) runs in CI, and the panel smoke also runs with the real Simplify core (main) instead of a stub.
 
 ## 2.0.0-beta.4
 
