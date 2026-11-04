@@ -191,7 +191,10 @@ jobs:
           rm -rf plugins/simplify-servermaker
           git clone --quiet --depth 1 --branch "v${{ matrix.from }}" "https://github.com/${{ github.repository }}.git" plugins/simplify-servermaker
           rm -rf plugins/simplify-servermaker/.git
-          php artisan optimize:clear
+          # Pelican keeps a plugin's status in its plugin.json, so the old files come back as not installed: install
+          # them, as putting an older zip back in Admin → Plugins does. Its migrations find the newer tables.
+          php artisan p:plugin:install simplify-servermaker
+          php artisan p:plugin:list | grep -E 'Simplify Server Maker .*\| enabled .*\| ${{ matrix.from }} ' || { echo 'The old version did not come back'; exit 1; }
           php ../plugin/tests/panel/upgrade.php pages | tee back.txt
           grep -q '^All steps passed$' back.txt
       - name: Laravel log
