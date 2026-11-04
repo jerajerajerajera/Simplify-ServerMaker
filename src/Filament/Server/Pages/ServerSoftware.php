@@ -15,7 +15,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
-use Filament\Schemas\Components\Text;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\View;
 use Filament\Schemas\Schema;
 use Illuminate\Validation\ValidationException;
@@ -121,17 +121,21 @@ final class ServerSoftware extends Page implements HasForms
     {
         $t = fn (string $key, array $replace = []) => __('simplify-servermaker::maker.'.$key, $replace);
 
+        // The page head: what runs now as the subtitle; the warning sits with the name that confirms it.
         return $schema->statePath('data')->components([
-            Text::make($t('software.warning'))->color('warning'),
-            Text::make(fn () => $t('software.now', ['software' => $this->now]))->color('gray'),
-            View::make('simplify-servermaker::wizard.types')->viewData(['types' => self::TYPES]),
-            ...SetupStep::softwareFields($t),
-            TextInput::make('confirm')
-                ->label($t('software.confirm', ['name' => $this->server()->name]))
-                ->placeholder($this->server()->name)
-                ->autocomplete('off')
-                ->dehydrated(false)
-                ->live(debounce: 300),
+            Section::make($t('software.title'))
+                ->description(fn () => $t('software.now', ['software' => $this->now]))
+                ->schema([
+                    View::make('simplify-servermaker::wizard.types')->viewData(['types' => self::TYPES]),
+                    ...SetupStep::softwareFields($t),
+                    TextInput::make('confirm')
+                        ->label($t('software.confirm', ['name' => $this->server()->name]))
+                        ->helperText($t('software.warning'))
+                        ->placeholder($this->server()->name)
+                        ->autocomplete('off')
+                        ->dehydrated(false)
+                        ->live(debounce: 300),
+                ]),
         ]);
     }
 
@@ -140,7 +144,6 @@ final class ServerSoftware extends Page implements HasForms
         return [
             Action::make('install')
                 ->label(__('simplify-servermaker::maker.software.install'))
-                ->icon('tabler-download')
                 ->disabled(fn () => ! hash_equals($this->server()->name, (string) ($this->data['confirm'] ?? '')))
                 ->action(fn () => $this->install()),
         ];
