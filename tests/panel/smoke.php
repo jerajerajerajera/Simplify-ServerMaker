@@ -41,6 +41,7 @@ use Simplify\ServerMaker\Games\Minecraft;
 use Simplify\ServerMaker\Games\MinecraftEggs;
 use Simplify\ServerMaker\Games\OtherGames;
 use Simplify\ServerMaker\Games\SteamArt;
+use Simplify\ServerMaker\Livewire\MakerSettingsForm;
 use Simplify\ServerMaker\Livewire\SteamConnection;
 use Simplify\ServerMaker\Models\Draft;
 use Simplify\ServerMaker\Modpacks\Remote;
@@ -454,7 +455,7 @@ step('the settings page renders and fits the window', function () use ($admin) {
 
 step('settings are saved and the CurseForge key stays encrypted', function () use ($admin, $node) {
     Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('admin'));
-    Livewire\Livewire::actingAs($admin)->test(MakerSettings::class)
+    Livewire\Livewire::actingAs($admin)->test(MakerSettingsForm::class)
         ->set('data.self_service', true)
         ->set('data.node_ids', [$node->id])
         ->set('data.eggs', ['minecraft'])
@@ -475,7 +476,7 @@ step('settings are saved and the CurseForge key stays encrypted', function () us
 
 step('the starting resources per Minecraft type are saved and used by the wizard', function () use ($admin) {
     Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('admin'));
-    Livewire\Livewire::actingAs($admin)->test(MakerSettings::class)
+    Livewire\Livewire::actingAs($admin)->test(MakerSettingsForm::class)
         ->assertSee('Starting resources')
         ->assertSet('data.starting.modpack.ram', 6)
         ->set('data.starting.mods.cpu', 300)
@@ -702,9 +703,12 @@ step('the Steam row saves only from its popup: keep the key, switch automatic to
 
 step('nothing saves itself: the settings wait for Save', function () use ($admin) {
     Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('admin'));
-    if (! str_contains(Livewire\Livewire::actingAs($admin)->test(MakerSettings::class)->html(), 'data-simplify-unsaved')) {
-        throw new RuntimeException('the settings do not ask Save or Discard before leaving with changes');
+    $html = Livewire\Livewire::actingAs($admin)->test(MakerSettingsForm::class)->html();
+    if (! str_contains($html, 'data-simplify-unsaved') || ! str_contains($html, 'data-simplify-save="save"') || str_contains($html, '<form')) {
+        throw new RuntimeException('the settings do not ask Save or Discard before leaving, or bring a form of their own into Simplify settings');
     }
+    // The settings page's Save goes to the form.
+    Livewire\Livewire::actingAs($admin)->test(MakerSettings::class)->callAction('save')->assertDispatchedTo(MakerSettingsForm::class, MakerSettingsForm::SAVE);
 });
 
 $user = User::where('email', 'smoke-maker-user@example.com')->first()
@@ -887,6 +891,9 @@ step('Simplify shows a Create server button to those who may use it', function (
     $buttons = $addon->dashboardActions();
     if (count($buttons) !== 1 || ! str_ends_with($buttons[0]->url, '/server-maker') || $addon->settingsUrl() === null) {
         throw new RuntimeException('admin: '.json_encode($buttons));
+    }
+    if ($addon->settingsForm() !== MakerSettingsForm::class) {
+        throw new RuntimeException('Simplify settings do not get the Server Maker settings form');
     }
     // Steam is a row on Connections (add-on API 6); a Simplify before that (the stub is API 5) links the Steam page instead.
     if ($addon->connections($admin) !== [SteamConnection::class] || count($addon->accountPages($admin)) !== (defined(Addon::class.'::API') && Addon::API >= 6 ? 0 : 1)) {

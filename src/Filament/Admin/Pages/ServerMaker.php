@@ -19,6 +19,7 @@ use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Locked;
 use Simplify\Core\Addons\Addon;
 use Simplify\ServerMaker\Access;
+use Simplify\ServerMaker\CoreApi;
 use Simplify\ServerMaker\Creation\ApplyFirstSettings;
 use Simplify\ServerMaker\Creation\ApplySteamArt;
 use Simplify\ServerMaker\Creation\BackupSchedule;
@@ -83,6 +84,15 @@ class ServerMaker extends Page implements HasForms
     public static function getNavigationLabel(): string
     {
         return __('simplify-servermaker::maker.title');
+    }
+
+    /**
+     * With Simplify 2.0+ (add-on API 8) not in the menu: Create server opens it everywhere, and the settings are in
+     * Simplify settings › Add-ons. Without Simplify it is the Server Maker's own menu item.
+     */
+    public static function shouldRegisterNavigation(): bool
+    {
+        return ! CoreApi::atLeast(8);
     }
 
     /** In the Simplify group of Pelican's menu, with the other Simplify add-ons (Simplify's ADDONS.md, "Admin menu"). */

@@ -6,6 +6,7 @@ namespace Simplify\ServerMaker\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
+use Simplify\ServerMaker\Livewire\MakerSettingsForm;
 use Simplify\ServerMaker\Livewire\SteamConnection;
 use Simplify\ServerMaker\Problems\ServerMakerProblems;
 use Simplify\ServerMaker\ServerMakerAddon;
@@ -23,5 +24,6 @@ final class ServerMakerProvider extends ServiceProvider
     public function boot(): void
     {
         Livewire::component('simplify-servermaker-steam-connection', SteamConnection::class);
+        Livewire::component('simplify-servermaker-settings-form', MakerSettingsForm::class);
     }
 }
