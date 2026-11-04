@@ -7,7 +7,6 @@ namespace Simplify\ServerMaker;
 use Filament\Actions\Action;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
-use Simplify\Core\Addons\Addon;
 use Simplify\ServerMaker\Filament\Admin\Pages\MakerSettings;
 use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
 use Simplify\ServerMaker\Filament\App\Pages\ServerMaker as AppServerMaker;
@@ -35,8 +34,7 @@ final class ServerMakerPlugin implements Plugin
     /** Without Simplify's account menu (add-on API 4) the Steam page is reached from Pelican's user menu. */
     private static function steamMenu(): array
     {
-        // Older Simplify versions have no API constant at all.
-        if (class_exists(Addon::class) && defined(Addon::class.'::API') && constant(Addon::class.'::API') >= 4) {
+        if (CoreApi::atLeast(4)) {
             return [];
         }
 

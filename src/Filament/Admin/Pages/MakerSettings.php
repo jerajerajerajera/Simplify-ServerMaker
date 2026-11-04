@@ -12,38 +12,31 @@ use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Text;
 use Filament\Schemas\Components\Utilities\Get;
-use Filament\Schemas\Schema;
 use Filament\Support\Enums\FontWeight;
 use Simplify\ServerMaker\Access;
 use Simplify\ServerMaker\Creation\ExtraPorts;
 use Simplify\ServerMaker\Creation\StartingResources;
 use Simplify\ServerMaker\Games\Minecraft;
+use Simplify\ServerMaker\Livewire\MakerSettingsForm;
 use Simplify\ServerMaker\Settings;
 
 /**
  * The Server Maker's settings: who besides administrators may make servers, where, which games and how much, what a
- * new Minecraft server starts with, and the CurseForge key. Opened from the Server Maker page (and from Simplify when it is installed), so it has no menu item.
+ * new Minecraft server starts with, and the CurseForge key. The form itself is MakerSettingsForm, which Simplify 2.0+
+ * also shows in its settings › Add-ons. Opened from the Server Maker page (without Simplify), so it has no menu item.
  */
-class MakerSettings extends Page implements HasForms
+class MakerSettings extends Page
 {
-    use InteractsWithForms;
-
     protected static ?string $slug = 'server-maker/settings';
 
     protected static bool $shouldRegisterNavigation = false;
 
     protected string $view = 'simplify-servermaker::pages.settings';
-
-    /** @var array<string, mixed> */
-    public ?array $data = [];
 
     public static function canAccess(): bool
     {
@@ -58,11 +51,6 @@ class MakerSettings extends Page implements HasForms
     public function getTitle(): string
     {
         return __('simplify-servermaker::maker.settings.title');
-    }
-
-    public function mount(): void
-    {
-        $this->form->fill([...self::current(), 'curseforge_key' => '', 'curseforge_forget' => false]);
     }
 
     /**
@@ -84,34 +72,32 @@ class MakerSettings extends Page implements HasForms
         ];
     }
 
-    public function form(Schema $schema): Schema
+    /** Everything on the settings, here and in Simplify settings › Add-ons (MakerSettingsForm). */
+    public static function formComponents(): array
     {
         $t = fn (string $key, array $replace = []) => __('simplify-servermaker::maker.settings.'.$key, $replace);
 
-        return $schema
-            ->statePath('data')
-            ->disabled(fn () => ! static::mayChange())
-            ->components([
-                self::whoSection(),
-                self::allowanceSection(),
-                self::startingSection(),
-                Section::make($t('steam'))
-                    ->schema([
-                        Toggle::make('steam_art')->label($t('steam_art'))->helperText($t('steam_art_help')),
-                    ]),
-                Section::make($t('modpacks'))
-                    ->schema([
-                        TextInput::make('curseforge_key')
-                            ->label($t('curseforge_key'))
-                            ->helperText(fn () => Settings::has('curseforge_key') ? $t('curseforge_saved') : $t('curseforge_help'))
-                            ->password()
-                            ->autocomplete('off')
-                            ->maxLength(200),
-                        Checkbox::make('curseforge_forget')
-                            ->label($t('curseforge_forget'))
-                            ->visible(fn () => Settings::has('curseforge_key')),
-                    ]),
-            ]);
+        return [
+            self::whoSection(),
+            self::allowanceSection(),
+            self::startingSection(),
+            Section::make($t('steam'))
+                ->schema([
+                    Toggle::make('steam_art')->label($t('steam_art'))->helperText($t('steam_art_help')),
+                ]),
+            Section::make($t('modpacks'))
+                ->schema([
+                    TextInput::make('curseforge_key')
+                        ->label($t('curseforge_key'))
+                        ->helperText(fn () => Settings::has('curseforge_key') ? $t('curseforge_saved') : $t('curseforge_help'))
+                        ->password()
+                        ->autocomplete('off')
+                        ->maxLength(200),
+                    Checkbox::make('curseforge_forget')
+                        ->label($t('curseforge_forget'))
+                        ->visible(fn () => Settings::has('curseforge_key')),
+                ]),
+        ];
     }
 
     /** Who besides administrators may make servers, where and which eggs; also asked in Simplify's setup. */
@@ -229,15 +215,19 @@ class MakerSettings extends Page implements HasForms
                 ->label(__('simplify-servermaker::maker.settings.save'))
                 ->icon('tabler-device-floppy')
                 ->visible(fn () => static::mayChange())
-                ->action(fn () => $this->save())
+                ->action(fn () => $this->dispatch(MakerSettingsForm::SAVE)->to(MakerSettingsForm::class))
                 ->keyBindings(['mod+s']),
         ];
     }
 
-    public function save(): void
+    /**
+     * Saves a form's state, the CurseForge key only when one was filled in (or Remove was ticked).
+     *
+     * @param  array<string, mixed>  $state
+     */
+    public static function save(array $state): void
     {
         abort_unless(static::mayChange(), 403);
-        $state = $this->form->getState();
         $values = self::values($state);
         $key = trim((string) ($state['curseforge_key'] ?? ''));
         if ($key !== '') {
@@ -246,11 +236,6 @@ class MakerSettings extends Page implements HasForms
             $values['curseforge_key'] = null;
         }
         Settings::put($values);
-
-        // The key is never sent back to the browser.
-        $this->data['curseforge_key'] = '';
-        $this->data['curseforge_forget'] = false;
-        Notification::make()->title(__('simplify-servermaker::maker.settings.saved'))->success()->send();
     }
 
     /**

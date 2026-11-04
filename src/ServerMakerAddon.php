@@ -10,6 +10,7 @@ use Simplify\Core\Addons\Button;
 use Simplify\ServerMaker\Filament\Admin\Pages\MakerSettings;
 use Simplify\ServerMaker\Filament\App\Pages\ServerMaker as AppServerMaker;
 use Simplify\ServerMaker\Filament\App\Pages\Steam;
+use Simplify\ServerMaker\Livewire\MakerSettingsForm;
 use Simplify\ServerMaker\Livewire\SteamConnection;
 
 /** How the Server Maker shows up in Simplify (plugin id pelican-simplify), when that is installed. */
@@ -48,7 +49,7 @@ final class ServerMakerAddon extends Addon
     /** Steam in Simplify's account menu (add-on API 4 and 5); since API 6 it is a row on Connections instead. */
     public function accountPages(User $user): array
     {
-        if (defined(Addon::class.'::API') && constant(Addon::class.'::API') >= 6) {
+        if (CoreApi::atLeast(6)) {
             return [];
         }
 
@@ -61,9 +62,22 @@ final class ServerMakerAddon extends Addon
         return [SteamConnection::class];
     }
 
+    /** The settings in Simplify settings › Add-ons (add-on API 8), the same form as on the settings page. */
+    public function settingsForm(): ?string
+    {
+        return MakerSettingsForm::class;
+    }
+
     public function settingsUrl(): ?string
     {
-        return MakerSettings::canAccess() ? MakerSettings::getUrl(panel: 'admin') : null;
+        if (! MakerSettings::canAccess()) {
+            return null;
+        }
+        $settings = 'Simplify\\Core\\Filament\\Admin\\Pages\\Settings';
+
+        return CoreApi::atLeast(8) && method_exists($settings, 'addonUrl')
+            ? $settings::addonUrl($this->id())
+            : MakerSettings::getUrl(panel: 'admin');
     }
 
     /** In Simplify's setup (Simplify 1.3+, add-on API 3): who may make servers and how much. */

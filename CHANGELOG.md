@@ -9,6 +9,8 @@
 - With Simplify-Explain, the errors **The server could not be created**, **The software could not be changed** and
   **No token created** get an Explain button. Only the person who got the error and root admins can explain it; the
   technical details go to root admins only.
+- With Simplify 2.0 (add-on API 8), the Server Maker settings open in Simplify's settings › Add-ons, with its Save
+  bar, and admin › Server Maker is no longer in the menu. Without Simplify the settings page stays as it was.
 
 ## 2.0.0-beta.4
 
