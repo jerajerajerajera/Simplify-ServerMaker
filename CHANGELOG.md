@@ -24,6 +24,8 @@
 - With Simplify Toolkit, Server software and Performance are sections of Toolkit's server settings, saved with its
   one Save (other software still needs the server name typed), instead of pages of their own in the server menu.
   Without Toolkit the two pages stay.
+- With Simplify Toolkit, CurseForge modpacks use Toolkit's CurseForge key, so the panel has one key. The Server
+  Maker's own key field is then gone from its settings; a key saved there before keeps working until it is removed.
 
 ## 2.0.0-beta.4
 

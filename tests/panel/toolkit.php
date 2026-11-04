@@ -16,10 +16,12 @@ use Simplify\ServerMaker\Creation\BackupSchedule;
 use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
 use Simplify\ServerMaker\Filament\Server\Pages\Performance;
 use Simplify\ServerMaker\Filament\Server\Pages\ServerSoftware;
+use Simplify\ServerMaker\Modpacks\CurseForge;
 use Simplify\ServerMaker\ServerSettings\ToolkitSections;
 use Simplify\ServerMaker\Software\Startup;
 use Simplify\Toolkit\Filament\Server\Pages\ServerSettings;
 use Simplify\Toolkit\Services\AutomaticBackups;
+use Simplify\Toolkit\Services\Keys;
 use Simplify\Toolkit\Services\SettingsSections;
 
 define('LARAVEL_START', microtime(true));
@@ -107,6 +109,15 @@ step('Server software and Performance are sections of Toolkit\'s server settings
         }
     }
     $server->delete();
+});
+
+step('CurseForge modpacks use Toolkit\'s CurseForge key, so the panel has one key', function () {
+    Keys::save(Keys::CURSEFORGE, null, 'ci-toolkit-curseforge-key');
+    $key = (new ReflectionMethod(CurseForge::class, 'key'))->invoke(new CurseForge);
+    Keys::forget(Keys::CURSEFORGE, null);
+    if ($key !== 'ci-toolkit-curseforge-key') {
+        throw new RuntimeException('the Server Maker does not use Toolkit\'s key');
+    }
 });
 
 if (! $failed) {
