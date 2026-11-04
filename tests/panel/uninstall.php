@@ -13,20 +13,27 @@ use Illuminate\Support\Facades\Schema;
 
 define('LARAVEL_START', microtime(true));
 require getcwd().'/vendor/autoload.php';
-$app = require getcwd().'/bootstrap/app.php';
-$app->make(Kernel::class)->bootstrap();
 
-$admin = User::where('email', 'smoke-maker@example.com')->first()
-    ?? User::factory()->create(['email' => 'smoke-maker@example.com']);
-$admin->syncRoles(Role::getRootAdmin());
-$client = new class(app())
+// A fresh application per page, like a real request: Filament keeps panel state for the whole process, so an admin
+// page and then an app page in one application can fail where a browser would not.
+function status(string $url): int
 {
-    use InteractsWithAuthentication;
-    use InteractsWithSession;
-    use MakesHttpRequests;
+    $app = require getcwd().'/bootstrap/app.php';
+    $app->make(Kernel::class)->bootstrap();
+    $admin = User::where('email', 'smoke-maker@example.com')->first()
+        ?? User::factory()->create(['email' => 'smoke-maker@example.com']);
+    $admin->syncRoles(Role::getRootAdmin());
+    $client = new class($app)
+    {
+        use InteractsWithAuthentication;
+        use InteractsWithSession;
+        use MakesHttpRequests;
 
-    public function __construct(public $app) {}
-};
+        public function __construct(public $app) {}
+    };
+
+    return $client->actingAs($admin)->get($url)->getStatusCode();
+}
 
 $failed = false;
 $check = function (string $what, bool $ok) use (&$failed): void {
@@ -35,9 +42,9 @@ $check = function (string $what, bool $ok) use (&$failed): void {
 };
 
 foreach (['/admin', '/'] as $url) {
-    $check("Pelican's page $url opens", $client->actingAs($admin)->get($url)->getStatusCode() === 200);
+    $check("Pelican's page $url opens", status($url) === 200);
 }
-$check('the Server Maker is gone from the admin', $client->actingAs($admin)->get('/admin/server-maker')->getStatusCode() !== 200);
+$check('the Server Maker is gone from the admin', status('/admin/server-maker') !== 200);
 foreach (['simplify_server_maker_settings', 'simplify_server_maker_drafts'] as $table) {
     $check("the table $table stays", Schema::hasTable($table));
 }
