@@ -4,6 +4,7 @@
 // and offers an own automatic backup schedule.
 
 use App\Models\Egg;
+use App\Models\Node;
 use App\Models\Role;
 use App\Models\Server;
 use App\Models\User;
@@ -67,7 +68,9 @@ step('Server software and Performance are sections of Toolkit\'s server settings
     }
     $sections = reset($ours);
     $paper = Egg::query()->where('name', 'Paper')->firstOrFail();
-    $server = Server::factory()->create(['owner_id' => $admin->id, 'egg_id' => $paper->id, 'name' => 'smoke-settings', 'installed_at' => now(), 'memory' => 4096, 'cpu' => 100, 'disk' => 10240]);
+    // The smoke's node has no memory limit, so new limits fit.
+    $node = Node::query()->where('name', 'smoke-maker')->firstOrFail();
+    $server = Server::factory()->create(['owner_id' => $admin->id, 'node_id' => $node->id, 'egg_id' => $paper->id, 'name' => 'smoke-settings', 'installed_at' => now(), 'memory' => 4096, 'cpu' => 100, 'disk' => 10240]);
     Startup::write($server, ['egg_id' => $paper->id, 'image' => (string) $server->image, 'startup' => (string) $server->startup, 'environment' => ['MINECRAFT_VERSION' => '1.21.1']]);
     Filament::setCurrentPanel(Filament::getPanel('server'));
     Filament::setTenant($server);
