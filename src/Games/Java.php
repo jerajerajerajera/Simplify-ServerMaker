@@ -39,7 +39,7 @@ final class Java
     /**
      * The egg's image for a Java version, matched on the image tag first (java_21) and the label second.
      *
-     * @param  array<string, string>  $images  label => image, as in an egg
+     * @param  array<string, mixed>  $images  label => image, as in an egg (a hand-made egg may hold something else)
      */
     public static function image(array $images, int $major): string
     {
