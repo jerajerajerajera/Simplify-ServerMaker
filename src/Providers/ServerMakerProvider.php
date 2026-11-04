@@ -10,6 +10,7 @@ use Simplify\ServerMaker\Livewire\MakerSettingsForm;
 use Simplify\ServerMaker\Livewire\SteamConnection;
 use Simplify\ServerMaker\Problems\ServerMakerProblems;
 use Simplify\ServerMaker\ServerMakerAddon;
+use Simplify\ServerMaker\ServerSettings\ToolkitSections;
 
 final class ServerMakerProvider extends ServiceProvider
 {
@@ -19,6 +20,8 @@ final class ServerMakerProvider extends ServiceProvider
         $this->app->tag([ServerMakerAddon::class], 'simplify.addons');
         // Simplify-Explain asks this for the lines behind an error the Server Maker showed.
         $this->app->tag([ServerMakerProblems::class], 'simplify.problems');
+        // Simplify Toolkit's server settings show Server software and Performance as their sections.
+        $this->app->tag([ToolkitSections::class], 'simplify.server-settings-sections');
     }
 
     public function boot(): void

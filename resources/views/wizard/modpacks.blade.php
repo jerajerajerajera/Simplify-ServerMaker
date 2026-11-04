@@ -1,6 +1,6 @@
 {{-- The modpacks found for the search, as cards with the pack's own icon and a link to its page. --}}
 @php
-    $packs = collect(\Simplify\ServerMaker\Modpacks\Sources::results((string) ($this->data['modpack_search'] ?? ''), $getState()))->keyBy('key');
+    $packs = collect(\Simplify\ServerMaker\Modpacks\Sources::results((string) data_get($this, \Illuminate\Support\Str::beforeLast($getStatePath(), '.') . '.modpack_search', ''), $getState()))->keyBy('key');
 @endphp
 <x-dynamic-component :component="$getFieldWrapperView()" :field="$field">
     @if ($packs->isEmpty())
