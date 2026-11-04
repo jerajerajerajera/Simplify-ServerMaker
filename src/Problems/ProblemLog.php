@@ -30,7 +30,7 @@ final class ProblemLog
             $trace[] = $exception::class.': '.$exception->getMessage();
             $trace[] = 'at '.$exception->getFile().':'.$exception->getLine();
             foreach (array_slice($exception->getTrace(), 0, 40) as $frame) {
-                $trace[] = '  '.($frame['class'] ?? '').($frame['type'] ?? '').($frame['function'] ?? '').'() '.($frame['file'] ?? '').':'.($frame['line'] ?? '');
+                $trace[] = '  '.($frame['class'] ?? '').($frame['type'] ?? '').$frame['function'].'() '.($frame['file'] ?? '').':'.($frame['line'] ?? '');
             }
         }
         Cache::put(self::key($ref), ['user_id' => (int) $user->id, 'kind' => $kind, 'message' => $message, 'trace' => $trace], now()->addDay());
