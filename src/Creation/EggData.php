@@ -10,8 +10,7 @@ use App\Models\Egg;
 final readonly class EggData
 {
     /**
-     * @param  array<string, array{default: string, user: bool, required?: bool}>  $variables  env variable => default, whether users
-     *                                                                                    may set it and whether the egg needs a value
+     * @param  array<string, array{default: string, user: bool, required?: bool}>  $variables  env variable => default, user may set it, egg needs a value
      * @param  array<string, string>  $images  label => Docker image
      */
     public function __construct(
