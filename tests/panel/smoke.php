@@ -708,9 +708,6 @@ step('nothing saves itself: the settings wait for Save', function () use ($admin
     }
     // The settings page's Save goes to the form.
     Livewire\Livewire::actingAs($admin)->test(MakerSettings::class)->callAction('save')->assertDispatchedTo(MakerSettingsForm::class, MakerSettingsForm::SAVE);
-    if ((new ServerMakerAddon)->settingsForm() !== MakerSettingsForm::class) {
-        throw new RuntimeException('Simplify settings do not get the Server Maker settings form');
-    }
 });
 
 $user = User::where('email', 'smoke-maker-user@example.com')->first()
@@ -886,6 +883,9 @@ step('Simplify shows a Create server button to those who may use it', function (
     $buttons = $addon->dashboardActions();
     if (count($buttons) !== 1 || ! str_ends_with($buttons[0]->url, '/server-maker') || $addon->settingsUrl() === null) {
         throw new RuntimeException('admin: '.json_encode($buttons));
+    }
+    if ($addon->settingsForm() !== MakerSettingsForm::class) {
+        throw new RuntimeException('Simplify settings do not get the Server Maker settings form');
     }
     // Steam is a row on Connections (add-on API 6); a Simplify before that (this stub) links the Steam page instead.
     if ($addon->connections($admin) !== [SteamConnection::class] || count($addon->accountPages($admin)) !== 1) {
