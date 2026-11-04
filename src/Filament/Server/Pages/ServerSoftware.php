@@ -21,6 +21,7 @@ use Filament\Schemas\Schema;
 use Illuminate\Validation\ValidationException;
 use Simplify\ServerMaker\Creation\EggData;
 use Simplify\ServerMaker\Creation\Payload;
+use Simplify\ServerMaker\Creation\RequiredValues;
 use Simplify\ServerMaker\Filament\Wizard\SetupStep;
 use Simplify\ServerMaker\Games\Java;
 use Simplify\ServerMaker\Games\Minecraft;
@@ -162,7 +163,7 @@ final class ServerSoftware extends Page implements HasForms
 
             return;
         }
-        $startup = self::startup(MinecraftEggs::forChoice($data), $data);
+        $startup = self::startup(MinecraftEggs::forChoice($data), $data, Startup::of($server)['environment']);
         try {
             ChangeSoftware::apply($server, $startup);
         } catch (Throwable $exception) {
@@ -177,11 +178,13 @@ final class ServerSoftware extends Page implements HasForms
 
     /**
      * The egg's own defaults with the chosen version or pack, its startup command and the image for the Java it needs.
+     * A variable the egg needs but leaves empty keeps the server's own value (such as Paper's User Agent).
      *
      * @param  array<string, mixed>  $data
+     * @param  array<string, string>  $own  the server's values now
      * @return array{egg_id: int, image: string, startup: string, environment: array<string, string>}
      */
-    private static function startup(Egg $egg, array $data): array
+    private static function startup(Egg $egg, array $data, array $own = []): array
     {
         $egg = EggData::from($egg);
         $java = MinecraftVersions::javaFor($data);
@@ -189,6 +192,7 @@ final class ServerSoftware extends Page implements HasForms
         if ($data['type'] === 'modpack') {
             $environment = Sources::environment((string) $data['modpack'], (string) $data['modpack_version'], $environment);
         }
+        $environment = RequiredValues::fill($environment, $egg, $own);
         $image = $java !== null ? Java::image($egg->images, $java) : $egg->firstImage();
         if ($image === null || $image === '') {
             throw ValidationException::withMessages(['data.type' => __('simplify-servermaker::maker.review.no_image')]);

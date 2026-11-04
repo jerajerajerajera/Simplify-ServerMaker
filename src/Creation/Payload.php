@@ -50,6 +50,7 @@ final class Payload
         if ($admin) {
             $environment = self::overrides($environment, (array) ($state['environment'] ?? []));
         }
+        $environment = RequiredValues::fill($environment, $egg);
 
         $image = $minecraft && $java !== null ? Java::image($egg->images, $java) : $egg->firstImage();
         $startup = $egg->startup;
