@@ -43,7 +43,7 @@ final class ServerMakerProblems
         return [
             'title' => (string) __(self::TITLES[$record['kind']]),
             'context' => self::CONTEXT[$record['kind']],
-            'lines' => array_values(array_slice(array_filter($lines, fn ($line) => $line !== ''), 0, 100)),
+            'lines' => array_slice(array_filter($lines, fn ($line) => $line !== ''), 0, 100),
         ];
     }
 }
