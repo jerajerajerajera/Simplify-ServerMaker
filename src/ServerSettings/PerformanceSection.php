@@ -120,8 +120,13 @@ final class PerformanceSection
     public static function save(Server $server, array $state): void
     {
         abort_unless(self::canChange($server), 403);
-        $check = fn () => Resources::payload($state, Access::resourceLimits($server));
-        ChangeResources::apply($server, $check(), Access::admin() ? null : $check);
+        $check = function () use ($state, $server): array {
+            return Resources::payload($state, Access::resourceLimits($server));
+        };
+        $recheck = function () use ($check): void {
+            $check();
+        };
+        ChangeResources::apply($server, $check(), Access::admin() ? null : $recheck);
         $ports = (int) $state['extra_ports'];
         if ($ports !== ExtraPorts::count($server)) {
             abort_unless($ports >= 0 && $ports <= self::maxPorts(), 422);

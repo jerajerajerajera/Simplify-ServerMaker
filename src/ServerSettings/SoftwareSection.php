@@ -51,13 +51,13 @@ final class SoftwareSection
         return $user !== null
             && ($user->isRootAdmin() || (int) $server->owner_id === (int) $user->id)
             && $user->can(SubuserPermission::SettingsReinstall, $server)
-            && CurrentSoftware::of((string) $server->egg?->name) !== null;
+            && CurrentSoftware::of((string) $server->egg->name) !== null;
     }
 
     /** What the server runs now, such as "Paper 1.21.1". */
     public static function now(Server $server): string
     {
-        return trim($server->egg?->name.' '.CurrentSoftware::version(Startup::of($server)['environment']));
+        return trim($server->egg->name.' '.CurrentSoftware::version(Startup::of($server)['environment']));
     }
 
     public static function make(Server $server): Section
@@ -93,7 +93,7 @@ final class SoftwareSection
     /** @return array<string, mixed> */
     public static function fill(Server $server): array
     {
-        $current = CurrentSoftware::of((string) $server->egg?->name);
+        $current = CurrentSoftware::of((string) $server->egg->name);
         $type = in_array($current['type'] ?? null, self::TYPES, true) ? $current['type'] : 'plugins';
 
         return [

@@ -1,13 +1,2 @@
 parameters:
-	ignoreErrors:
-		-
-			message: '#^Parameter \#3 \$checkAllowance of static method Simplify\\ServerMaker\\Creation\\ChangeResources\:\:apply\(\) expects \(callable\(\)\: void\)\|null, \(Closure\(\)\: array\{memory\: int, cpu\: int, disk\: int\}\)\|null given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Filament/Server/Pages/Performance.php
-
-		-
-			message: '#^Using nullsafe property access on non\-nullable type App\\Models\\Egg\. Use \-\> instead\.$#'
-			identifier: nullsafe.neverNull
-			count: 3
-			path: src/Filament/Server/Pages/ServerSoftware.php
+	ignoreErrors: []
