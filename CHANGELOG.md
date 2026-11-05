@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 2.0.0-beta.6
+
 - Browsers no longer fill the saved panel password into the CurseForge key, the Steam key or a game's password
   variable in the Server Maker.
 
