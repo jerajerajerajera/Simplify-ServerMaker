@@ -133,6 +133,7 @@ final class GameVariables
     /** @return list<string> */
     private static function rules(EggVariable $variable): array
     {
+        // @phpstan-ignore function.alreadyNarrowedType (older Pelican versions keep the rules as one string)
         $rules = is_array($variable->rules) ? $variable->rules : explode('|', (string) $variable->rules);
 
         return array_values(array_filter(array_map(fn ($rule) => trim((string) $rule), $rules)));

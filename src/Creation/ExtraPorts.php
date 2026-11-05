@@ -30,7 +30,11 @@ final class ExtraPorts
             ->all();
     }
 
-    /** In the server panel Filament scopes allocations to the server; free ports belong to no server, so no scopes. */
+    /**
+     * In the server panel Filament scopes allocations to the server; free ports belong to no server, so no scopes.
+     *
+     * @return Builder<Allocation>
+     */
     private static function allocations(): Builder
     {
         return Allocation::withoutGlobalScopes();

@@ -9,7 +9,23 @@
 - With Simplify-Explain, the errors **The server could not be created**, **The software could not be changed** and
   **No token created** get an Explain button. Only the person who got the error and root admins can explain it; the
   technical details go to root admins only.
+- With Simplify 2.0 (add-on API 8), the Server Maker settings open in Simplify's settings › Add-ons, with its Save
+  bar, and admin › Server Maker is no longer in the menu. Without Simplify the settings page stays as it was.
 - Checks: PHPStan (level 5) runs in CI, and the panel smoke also runs with the real Simplify core (main) instead of a stub.
+- Uninstalling the Server Maker keeps its settings and drafts, so installing it again brings them back. Before, an
+  uninstall removed them.
+- Checks: CI updates from 1.4.2 (the Hub's stable version) and from 2.0.0-beta.4 with every setting filled in, and puts
+  the old version back over the new tables to see its pages still open.
+- Server software and Performance have a title and subtitle in the card head like the other server pages. On Server
+  software the warning is a quiet line under the name you type to confirm, and Install is a button with its name.
+- With Simplify's Connections page (add-on API 6 and later) the separate Steam page no longer opens: the key is on
+  Connections only. Checks: with Simplify 2.0 the admin menu no longer links the Server Maker.
+- Checks: the PHPStan clean-up list is empty: new and old code pass level 5.
+- With Simplify Toolkit, Server software and Performance are sections of Toolkit's server settings, saved with its
+  one Save (other software still needs the server name typed), instead of pages of their own in the server menu.
+  Without Toolkit the two pages stay.
+- With Simplify Toolkit, CurseForge modpacks use Toolkit's CurseForge key, so the panel has one key. The Server
+  Maker's own key field is then gone from its settings; a key saved there before keeps working until it is removed.
 
 ## 2.0.0-beta.4
 

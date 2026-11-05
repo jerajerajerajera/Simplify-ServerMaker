@@ -110,7 +110,7 @@
     .smk .smk-type:hover:not(:disabled), .smk .smk-amount:hover { border-color: var(--smk-accent); }
     .smk :is(.smk-type, .smk-amount).is-picked, .smk .smk-amount:has(input:checked) { border-color: var(--smk-accent); background: color-mix(in srgb, var(--smk-accent) 7%, var(--smk-surface)); box-shadow: 0 0 0 1px var(--smk-accent); }
     .smk :is(.smk-type, .smk-amount).is-picked .smk-tile, .smk .smk-amount:has(input:checked) .smk-tile { color: var(--smk-ink); }
-    .smk .smk-amount:has(input:focus-visible), .smk .smk-type:focus-visible { outline: 2px solid var(--smk-accent); outline-offset: 2px; }
+    .smk :is(.smk-amount, .smk-type):has(input:focus-visible), .smk .smk-type:focus-visible { outline: 2px solid var(--smk-accent); outline-offset: 2px; }
     .smk .smk-type:disabled { cursor: progress; }
     .smk .smk-type-text { display: grid; gap: 2px; min-width: 0; }
     .smk .smk-type-text strong { font-size: 15px; font-weight: 650; }

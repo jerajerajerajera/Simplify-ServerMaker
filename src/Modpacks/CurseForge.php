@@ -9,6 +9,8 @@ use Simplify\ServerMaker\Settings;
 /** CurseForge (api.curseforge.com): only with an API key, set in the Server Maker settings. */
 final class CurseForge implements Source
 {
+    private const TOOLKIT_KEYS = 'Simplify\\Toolkit\\Services\\Keys';
+
     private const API = 'https://api.curseforge.com/v1';
 
     private const MINECRAFT = 432;
@@ -78,7 +80,7 @@ final class CurseForge implements Source
         return $minecraft === null ? [] : ['minecraft' => $minecraft];
     }
 
-    public function eggFile(string $id): ?string
+    public function eggFile(string $id): string
     {
         return 'egg-curseforge-generic.json';
     }
@@ -101,9 +103,16 @@ final class CurseForge implements Source
         );
     }
 
+    /**
+     * With Simplify Toolkit its key (the person's own, else the panel's; Toolkit's README, "For other Simplify
+     * add-ons"), so there is one CurseForge key on the panel. The Server Maker's own key from before stays as a fallback.
+     */
     private function key(): string
     {
-        return (string) Settings::get('curseforge_key', '');
+        $toolkit = self::TOOLKIT_KEYS;
+        $key = class_exists($toolkit) ? (string) $toolkit::curseForge(user()) : '';
+
+        return $key !== '' ? $key : (string) Settings::get('curseforge_key', '');
     }
 
     private function get(string $path, array $query = []): array

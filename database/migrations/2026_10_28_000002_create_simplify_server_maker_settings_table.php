@@ -20,8 +20,7 @@ return new class extends Migration
         });
     }
 
-    public function down(): void
-    {
-        Schema::dropIfExists('simplify_server_maker_settings');
-    }
+    // Uninstalling the plugin rolls its migrations back; the settings and drafts stay, so installing it again brings
+    // them back. Removing the data is a separate, deliberate step.
+    public function down(): void {}
 };

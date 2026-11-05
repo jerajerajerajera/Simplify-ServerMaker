@@ -34,7 +34,7 @@ final class Summary
             $rows[$t('review.game')] = 'Minecraft · '.$t('minecraft.types.'.$type.'.label')
                 .($software ? ' · '.Minecraft::SOFTWARE[$type][$software] : '');
             if ($type === 'modpack') {
-                $rows[$t('modpack.pack')] = Sources::pack($data['modpack'] ?? null)?->title ?? '—';
+                $rows[$t('modpack.pack')] = Sources::pack($data['modpack'] ?? null)->title ?? '—';
                 $rows[$t('modpack.version')] = Sources::versions($data['modpack'] ?? null)[(string) ($data['modpack_version'] ?? '')] ?? '—';
             }
             if (Minecraft::usesVersion($type)) {
@@ -49,10 +49,10 @@ final class Summary
                 $rows[$t('first.difficulty')] = $t('first.difficulties.'.($data['difficulty'] ?? FirstSettings::DEFAULTS['difficulty']));
             }
         } else {
-            $rows[$t('review.game')] = (string) ($egg?->name ?? '—');
+            $rows[$t('review.game')] = (string) ($egg->name ?? '—');
         }
         $allocation = Allocation::query()->find((int) ($data['allocation_id'] ?? 0));
-        $rows[$t('review.address')] = $allocation?->address ?? '—';
+        $rows[$t('review.address')] = $allocation->address ?? '—';
         $subdomain = trim((string) ($data['subdomain'] ?? ''));
         if ($subdomain !== '' && Subdomain::available()) {
             $rows[$t('server.subdomain')] = $subdomain.'.'.Subdomain::domain();
@@ -66,7 +66,7 @@ final class Summary
         if (($data['backup_schedule'] ?? false) && BackupSchedule::available()) {
             $rows[$t('resources.backup_schedule')] = (int) ($data['backup_every'] ?? 0).' min · '.(int) ($data['backup_keep'] ?? 0);
         }
-        $rows[$t('review.egg')] = (string) ($egg?->name ?? '—');
+        $rows[$t('review.egg')] = (string) ($egg->name ?? '—');
         $rows[$t('review.start')] = $t('review.start_manual');
 
         return $rows;

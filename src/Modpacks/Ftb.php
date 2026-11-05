@@ -95,7 +95,7 @@ final class Ftb implements Source
         return [];
     }
 
-    public function eggFile(string $id): ?string
+    public function eggFile(string $id): string
     {
         return 'egg-ftb-server.json';
     }

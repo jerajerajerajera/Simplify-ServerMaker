@@ -25,6 +25,7 @@ use Illuminate\Validation\ValidationException;
 use Simplify\Core\Addons\Addon;
 use Simplify\Core\Support\PanelSettings;
 use Simplify\ServerMaker\Access;
+use Simplify\ServerMaker\CoreApi;
 use Simplify\ServerMaker\Creation\ApplyFirstSettings;
 use Simplify\ServerMaker\Creation\ApplySteamArt;
 use Simplify\ServerMaker\Creation\ExtraPorts;
@@ -41,6 +42,7 @@ use Simplify\ServerMaker\Games\Minecraft;
 use Simplify\ServerMaker\Games\MinecraftEggs;
 use Simplify\ServerMaker\Games\OtherGames;
 use Simplify\ServerMaker\Games\SteamArt;
+use Simplify\ServerMaker\Livewire\MakerSettingsForm;
 use Simplify\ServerMaker\Livewire\SteamConnection;
 use Simplify\ServerMaker\Models\Draft;
 use Simplify\ServerMaker\Modpacks\Remote;
@@ -141,6 +143,13 @@ step('the Server Maker page renders, with Simplify buttons instead of bare Filam
     Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('admin'));
     $page = Livewire\Livewire::actingAs($admin)->test(ServerMaker::class);
     class_exists(Addon::class) ? $page->assertActionHidden('settings') : $page->assertActionVisible('settings');
+    // With Simplify 2.0 (add-on API 8) Create server opens it everywhere, so it leaves the admin menu; without, it stays.
+    $users = http($admin, '/admin/users');
+    expectOk($users, '/admin/users');
+    $inMenu = (bool) preg_match('#href="[^"]*/admin/server-maker"#', $users->getContent());
+    if ($inMenu === CoreApi::atLeast(8)) {
+        throw new RuntimeException(CoreApi::atLeast(8) ? 'the admin menu still links the Server Maker' : 'the admin menu does not link the Server Maker');
+    }
 });
 
 // A node with free ports, so the wizard can run to the end. Wings is not there, so Create stops at Wings.
@@ -269,7 +278,7 @@ step('Server software is offered for Minecraft Java, checked before it reinstall
     // Plain checks instead of Livewire's assertions: a failing PHPUnit assertion cannot report outside PHPUnit.
     $test = Livewire\Livewire::actingAs($admin)->test(ServerSoftware::class);
     $html = $test->html();
-    foreach (['Server software', 'Paper 1.21.1', 'Type smoke-software to confirm'] as $text) {
+    foreach (['Server software', 'Now: Paper 1.21.1', 'Type smoke-software to confirm', 'Installing other software reinstalls the server.'] as $text) {
         if (! str_contains($html, $text)) {
             throw new RuntimeException("the page does not show: $text");
         }
@@ -281,7 +290,7 @@ step('Server software is offered for Minecraft Java, checked before it reinstall
     if (! $test->instance()->getAction('install')->isDisabled()) {
         throw new RuntimeException('Install works before the name is typed');
     }
-    $test->call('pickGame', 'minecraft', 'vanilla')->set('data.confirm', 'smoke')->call('install');
+    $test->set('data.type', 'vanilla')->set('data.confirm', 'smoke')->call('install');
     if ($test->get('data.type') !== 'vanilla' || ! array_key_exists('data.confirm', $test->errors()->toArray())) {
         throw new RuntimeException('a wrong name was accepted: '.json_encode($test->errors()->toArray()));
     }
@@ -336,6 +345,8 @@ step('another game shows its own settings', function () use ($admin) {
 step('another game offers its Steam banner and icon, copied once after creation', function () use ($admin) {
     // The store search for the smoke egg answers Valheim; its images come from Steam's real CDN.
     $art = SteamArt::pick([['id' => 892970, 'name' => 'Smoke Valheim']], 'Smoke Valheim');
+    // On by default; an updated panel may have it off from before.
+    Settings::put(['steam_art' => true]);
     Cache::put('simplify-servermaker.steam.'.md5('smoke valheim'), $art, 60);
     $egg = Egg::query()->where('name', 'Smoke Valheim')->firstOrFail();
     Livewire\Livewire::actingAs($admin)->test(ServerMaker::class)
@@ -347,8 +358,8 @@ step('another game offers its Steam banner and icon, copied once after creation'
         throw new RuntimeException('the setting Offer Steam banners and icons is ignored');
     }
     Settings::put(['steam_art' => null]);
-    $server = new Server;
-    $server->uuid = (string) Str::uuid();
+    // A saved server, as after creation: Simplify stores the banner by the server's id.
+    $server = Server::factory()->create(['owner_id' => $admin->id, 'egg_id' => $egg->id, 'name' => 'smoke-steam-art']);
     ApplySteamArt::apply($server, $art);
     if (method_exists($server, 'writeIcon')) {
         $path = Server::getIconStoragePath().'/'.$server->uuid.'.png';
@@ -357,6 +368,7 @@ step('another game offers its Steam banner and icon, copied once after creation'
         }
         Storage::disk('public')->delete($path);
     }
+    $server->delete();
 });
 
 step('a game from the egg index is offered, checked and added on Next', function () use ($admin) {
@@ -454,7 +466,7 @@ step('the settings page renders and fits the window', function () use ($admin) {
 
 step('settings are saved and the CurseForge key stays encrypted', function () use ($admin, $node) {
     Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('admin'));
-    Livewire\Livewire::actingAs($admin)->test(MakerSettings::class)
+    Livewire\Livewire::actingAs($admin)->test(MakerSettingsForm::class)
         ->set('data.self_service', true)
         ->set('data.node_ids', [$node->id])
         ->set('data.eggs', ['minecraft'])
@@ -475,7 +487,7 @@ step('settings are saved and the CurseForge key stays encrypted', function () us
 
 step('the starting resources per Minecraft type are saved and used by the wizard', function () use ($admin) {
     Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('admin'));
-    Livewire\Livewire::actingAs($admin)->test(MakerSettings::class)
+    Livewire\Livewire::actingAs($admin)->test(MakerSettingsForm::class)
         ->assertSee('Starting resources')
         ->assertSet('data.starting.modpack.ram', 6)
         ->set('data.starting.mods.cpu', 300)
@@ -508,7 +520,7 @@ step('Performance shows the limits; administrators change them freely, owners wi
     Filament\Facades\Filament::setTenant($server);
     // An administrator: any amount, no allowance. Plain checks: a failing PHPUnit assertion cannot report here.
     $test = Livewire\Livewire::actingAs($admin)->test(Performance::class);
-    foreach (['100 %', '4 GB', '10 GB'] as $text) {
+    foreach (['Performance', 'New limits apply after the next restart.', '100 %', '4 GB', '10 GB'] as $text) {
         if (! str_contains($test->html(), $text)) {
             throw new RuntimeException("the limits do not show $text");
         }
@@ -638,11 +650,17 @@ step('a Steam key is checked, stored encrypted, never shown again, and makes log
         throw new RuntimeException('the key is stored readable');
     }
 
-    // The page shows only the last four characters.
+    // The page shows only the last four characters. Since Connections (add-on API 6) there is no Steam page.
     $response = http($admin, Steam::getUrl(panel: 'app'));
-    expectOk($response, 'Steam');
-    if (! str_contains($response->getContent(), 'ending in 6789') || str_contains($response->getContent(), $key)) {
-        throw new RuntimeException('the Steam page does not show the hint, or shows the key');
+    if (CoreApi::atLeast(6)) {
+        if ($response->getStatusCode() === 200) {
+            throw new RuntimeException('the Steam page opens next to the Steam row on Connections');
+        }
+    } else {
+        expectOk($response, 'Steam');
+        if (! str_contains($response->getContent(), 'ending in 6789') || str_contains($response->getContent(), $key)) {
+            throw new RuntimeException('the Steam page does not show the hint, or shows the key');
+        }
     }
 
     // A token for the game of an egg: Steam's own app of the game (CS2 is 730), the server name as memo.
@@ -688,10 +706,12 @@ step('the Steam row saves only from its popup: keep the key, switch automatic to
     if (SteamKeys::autoTokens($admin) || SteamKeys::status($admin)['hint'] !== '6789') {
         throw new RuntimeException('Save did not keep the key and switch off automatic tokens: '.json_encode(SteamKeys::status($admin)));
     }
-    $page = http($admin, Steam::getUrl(panel: 'app'));
-    expectOk($page, 'Steam');
-    if (! str_contains($page->getContent(), 'smk-connection') || ! str_contains($page->getContent(), 'ending in 6789')) {
-        throw new RuntimeException('the Steam page does not show the Steam row');
+    if (! CoreApi::atLeast(6)) {
+        $page = http($admin, Steam::getUrl(panel: 'app'));
+        expectOk($page, 'Steam');
+        if (! str_contains($page->getContent(), 'smk-connection') || ! str_contains($page->getContent(), 'ending in 6789')) {
+            throw new RuntimeException('the Steam page does not show the Steam row');
+        }
     }
     $row->callAction('disconnect')->assertHasNoErrors();
     if (SteamKeys::connected($admin)) {
@@ -702,9 +722,12 @@ step('the Steam row saves only from its popup: keep the key, switch automatic to
 
 step('nothing saves itself: the settings wait for Save', function () use ($admin) {
     Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('admin'));
-    if (! str_contains(Livewire\Livewire::actingAs($admin)->test(MakerSettings::class)->html(), 'data-simplify-unsaved')) {
-        throw new RuntimeException('the settings do not ask Save or Discard before leaving with changes');
+    $html = Livewire\Livewire::actingAs($admin)->test(MakerSettingsForm::class)->html();
+    if (! str_contains($html, 'data-simplify-unsaved') || ! str_contains($html, 'data-simplify-save="save"') || str_contains($html, '<form')) {
+        throw new RuntimeException('the settings do not ask Save or Discard before leaving, or bring a form of their own into Simplify settings');
     }
+    // The settings page's Save goes to the form.
+    Livewire\Livewire::actingAs($admin)->test(MakerSettings::class)->callAction('save')->assertDispatchedTo(MakerSettingsForm::class, MakerSettingsForm::SAVE);
 });
 
 $user = User::where('email', 'smoke-maker-user@example.com')->first()
@@ -887,6 +910,9 @@ step('Simplify shows a Create server button to those who may use it', function (
     $buttons = $addon->dashboardActions();
     if (count($buttons) !== 1 || ! str_ends_with($buttons[0]->url, '/server-maker') || $addon->settingsUrl() === null) {
         throw new RuntimeException('admin: '.json_encode($buttons));
+    }
+    if ($addon->settingsForm() !== MakerSettingsForm::class) {
+        throw new RuntimeException('Simplify settings do not get the Server Maker settings form');
     }
     // Steam is a row on Connections (add-on API 6); a Simplify before that (the stub is API 5) links the Steam page instead.
     if ($addon->connections($admin) !== [SteamConnection::class] || count($addon->accountPages($admin)) !== (defined(Addon::class.'::API') && Addon::API >= 6 ? 0 : 1)) {

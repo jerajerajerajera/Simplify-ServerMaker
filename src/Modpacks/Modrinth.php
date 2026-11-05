@@ -67,7 +67,7 @@ final class Modrinth implements Source
         return $minecraft === null ? [] : ['minecraft' => $minecraft];
     }
 
-    public function eggFile(string $id): ?string
+    public function eggFile(string $id): string
     {
         return 'egg-modrinth-generic.json';
     }
