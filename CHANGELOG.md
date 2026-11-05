@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 2.0.0-beta.10
+
+- Released together with Simplify 2.0.0-beta.10, which runs the new code right after an update (no "Unable to find component" error).
+
 ## 2.0.0-beta.6
 
 - Browsers no longer fill the saved panel password into the CurseForge key, the Steam key or a game's password
