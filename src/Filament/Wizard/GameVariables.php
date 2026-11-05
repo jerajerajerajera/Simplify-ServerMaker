@@ -87,7 +87,7 @@ final class GameVariables
                 $field->numeric();
             }
             if (preg_match('/PASS(WORD)?|SECRET|TOKEN/i', (string) $variable->env_variable)) {
-                $field->password()->revealable();
+                $field->password()->revealable()->autocomplete('new-password');
             }
         }
 

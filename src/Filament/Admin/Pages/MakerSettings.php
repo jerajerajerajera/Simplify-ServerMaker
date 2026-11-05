@@ -94,7 +94,7 @@ class MakerSettings extends Page
                         ->label($t('curseforge_key'))
                         ->helperText(fn () => Settings::has('curseforge_key') ? $t('curseforge_saved') : $t('curseforge_help'))
                         ->password()
-                        ->autocomplete('off')
+                        ->autocomplete('new-password')
                         ->maxLength(200),
                     Checkbox::make('curseforge_forget')
                         ->label($t('curseforge_forget'))
