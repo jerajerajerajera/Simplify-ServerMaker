@@ -46,7 +46,7 @@ final class SteamConnection extends Component implements HasActions, HasSchemas
                     ->password()
                     ->required(fn () => ! SteamKeys::connected(user()))
                     ->maxLength(32)
-                    ->autocomplete('off'),
+                    ->autocomplete('new-password'),
                 Toggle::make('auto')
                     ->label($t('auto'))
                     ->helperText($t('auto_help')),
