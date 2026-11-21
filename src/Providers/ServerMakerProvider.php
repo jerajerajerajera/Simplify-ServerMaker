@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Simplify\ServerMaker\Providers;
 
+use Illuminate\Support\Facades\Schedule;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 use Simplify\ServerMaker\Livewire\MakerSettingsForm;
@@ -28,5 +29,9 @@ final class ServerMakerProvider extends ServiceProvider
     {
         Livewire::component('simplify-servermaker-steam-connection', SteamConnection::class);
         Livewire::component('simplify-servermaker-settings-form', MakerSettingsForm::class);
+        // The first settings of a new server are written by Pelican's scheduler, so they need no queue worker.
+        $this->app->booted(function () {
+            Schedule::command('simplify-servermaker:first-settings')->everyMinute()->withoutOverlapping(10);
+        });
     }
 }

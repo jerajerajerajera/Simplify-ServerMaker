@@ -208,7 +208,9 @@
     /* The wizard is one box that fits the window (--smk-fit, measured below): only the step scrolls, never the page. */
     html.smk-fit .smk .fi-sc-wizard { display: flex; flex-direction: column; height: var(--smk-fit); }
     html.smk-fit .smk .fi-sc-wizard-footer { flex: none; }
-    html.smk-fit .smk .fi-sc-wizard-step { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+    /* The step is also what its absolutely placed parts (a file field, a hidden input) are placed against: only then
+       does it cut them off, and they no longer make the page itself scroll on a phone. */
+    html.smk-fit .smk .fi-sc-wizard-step { position: relative; flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
 
     @container smk (max-width: 900px) {
         .smk .smk-types, .smk .smk-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }

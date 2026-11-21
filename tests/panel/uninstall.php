@@ -47,7 +47,7 @@ foreach (['/admin', '/'] as $url) {
     $check("Pelican's page $url opens (HTTP $status)", $status < 400);
 }
 $check('the Server Maker is gone from the admin', status('/admin/server-maker') !== 200);
-foreach (['simplify_server_maker_settings', 'simplify_server_maker_drafts'] as $table) {
+foreach (['simplify_server_maker_settings', 'simplify_server_maker_drafts', 'simplify_server_maker_first_settings'] as $table) {
     $check("the table $table stays", Schema::hasTable($table));
 }
 

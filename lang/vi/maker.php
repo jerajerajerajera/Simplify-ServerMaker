@@ -150,12 +150,12 @@ return [
         'unit' => [
             'ram' => 'GB',
             'cpu' => '%',
-            'disk' => 'MB',
+            'disk' => 'GB',
         ],
         'custom_help' => [
             'ram' => 'Tính bằng GB.',
             'cpu' => '100% là một nhân CPU.',
-            'disk' => 'Tính bằng MB. 1024 MB là 1 GB.',
+            'disk' => 'Tính bằng GB.',
         ],
         'ram_range' => 'Nhập RAM từ 1 đến :max GB.',
         'cpu_range' => 'Nhập CPU từ 1 đến :max%.',
@@ -202,7 +202,7 @@ return [
         'icon_invalid' => 'Biểu tượng phải là PNG 64 × 64, tối đa 100 KB.',
         'number_between' => 'Nhập số từ :min đến :max.',
         'eula' => 'Tôi chấp nhận Thỏa thuận cấp phép người dùng cuối của Minecraft (EULA)',
-        'eula_help' => 'Máy chủ Minecraft chỉ khởi động khi EULA đã được chấp nhận. Đánh dấu ngay để khởi động luôn, hoặc để trống: máy chủ vẫn cài đặt và sẽ hỏi EULA khi bạn khởi động.',
+        'eula_help' => 'Máy chủ Minecraft chỉ khởi động khi EULA đã được chấp nhận. Đánh dấu ngay để không bị hỏi lại, hoặc để trống: máy chủ vẫn cài đặt và sẽ hỏi EULA khi bạn khởi động.',
         'eula_read' => 'Đọc EULA của Minecraft',
     ],
     'review' => [

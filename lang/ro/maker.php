@@ -150,12 +150,12 @@ return [
         'unit' => [
             'ram' => 'GB',
             'cpu' => '%',
-            'disk' => 'MB',
+            'disk' => 'GB',
         ],
         'custom_help' => [
             'ram' => 'În GB.',
             'cpu' => '100% înseamnă un nucleu CPU.',
-            'disk' => 'În MB. 1024 MB înseamnă 1 GB.',
+            'disk' => 'În GB.',
         ],
         'ram_range' => 'Introdu RAM între 1 și :max GB.',
         'cpu_range' => 'Introdu CPU între 1 și :max%.',
@@ -202,7 +202,7 @@ return [
         'icon_invalid' => 'Pictograma trebuie să fie un PNG de 64 × 64, până la 100 KB.',
         'number_between' => 'Introduceți un număr între :min și :max.',
         'eula' => 'Accept Acordul de licență pentru utilizatorul final Minecraft (EULA)',
-        'eula_help' => 'Un server Minecraft pornește doar după ce EULA este acceptat. Bifează acum și pornește imediat, sau lasă necompletat: serverul se instalează și cere EULA la pornire.',
+        'eula_help' => 'Un server Minecraft pornește doar după ce EULA este acceptat. Bifează acum și nu mai întreabă, sau lasă necompletat: serverul se instalează și cere EULA la pornire.',
         'eula_read' => 'Citește EULA Minecraft',
     ],
     'review' => [

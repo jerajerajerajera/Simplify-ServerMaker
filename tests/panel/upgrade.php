@@ -12,7 +12,13 @@ use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithAuthentication;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithSession;
 use Illuminate\Foundation\Testing\Concerns\MakesHttpRequests;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Simplify\ServerMaker\Access;
+use Simplify\ServerMaker\Creation\ApplyFirstSettings;
+use Simplify\ServerMaker\Creation\Resources;
+use Simplify\ServerMaker\Models\Draft;
+use Simplify\ServerMaker\Models\WaitingSettings;
 use Simplify\ServerMaker\Settings;
 
 define('LARAVEL_START', microtime(true));
@@ -24,6 +30,18 @@ $app->make(Kernel::class)->bootstrap();
 const CURSEFORGE = 'ci-upgrade-curseforge-key';
 const LIMITS = ['max_servers' => 5, 'max_ram' => 16, 'max_disk' => 80, 'max_cpu' => 400, 'max_backups' => 3];
 
+// The id of a server that does not exist: only its queued first settings travel through the update.
+const SERVER = 987654;
+
+function admin(): User
+{
+    $admin = User::where('email', 'smoke-maker@example.com')->first()
+        ?? User::factory()->create(['email' => 'smoke-maker@example.com']);
+    $admin->syncRoles(Role::getRootAdmin());
+
+    return $admin;
+}
+
 /**
  * A fresh application per page, like a real request: Filament keeps panel state for the whole process.
  *
@@ -33,9 +51,7 @@ function open_page(string $url): array
 {
     $app = require getcwd().'/bootstrap/app.php';
     $app->make(Kernel::class)->bootstrap();
-    $admin = User::where('email', 'smoke-maker@example.com')->first()
-        ?? User::factory()->create(['email' => 'smoke-maker@example.com']);
-    $admin->syncRoles(Role::getRootAdmin());
+    $admin = admin();
     $client = new class($app)
     {
         use InteractsWithAuthentication;
@@ -72,6 +88,12 @@ switch ($argv[1] ?? '') {
             ...LIMITS,
         ]);
         $check('the old version saved its settings', Settings::get('curseforge_key') === CURSEFORGE);
+        // A server made just before the update: its first settings wait in a queued job (until 2.0.0-beta.10), and a
+        // wizard left halfway with an own amount of disk, then in MB. The job waits, so the install job goes first.
+        config(['queue.default' => 'database']);
+        ApplyFirstSettings::dispatch(SERVER, ['eula' => true])->delay(now()->addHour());
+        $check('the old version queued the first settings', DB::table('jobs')->where('payload', 'like', '%ApplyFirstSettings%')->exists());
+        Draft::query()->updateOrCreate(['user_id' => admin()->id], ['data' => ['name' => 'upgrade-draft', 'disk' => 'custom', 'disk_custom' => 20480], 'step' => 4]);
         break;
     case 'check':
         $check('self-service stays on', Settings::get('self_service') === true);
@@ -83,6 +105,18 @@ switch ($argv[1] ?? '') {
             $check("the allowance $key stays", Settings::get($key) === $value);
         }
         $check('the CurseForge key stays, encrypted', Settings::get('curseforge_key') === CURSEFORGE);
+        // The queued job of the old version hands its settings to the scheduler (SM-B7), which drops them here: the
+        // server does not exist.
+        DB::table('jobs')->where('payload', 'like', '%ApplyFirstSettings%')->update(['available_at' => time() - 1]);
+        Artisan::call('queue:work', ['--stop-when-empty' => true]);
+        $check('the first settings a job of the old version held now wait for the scheduler', WaitingSettings::query()->where('server_id', SERVER)->value('settings') === ['eula' => true]
+            && ! DB::table('jobs')->where('payload', 'like', '%ApplyFirstSettings%')->exists() && ! DB::table('failed_jobs')->where('payload', 'like', '%ApplyFirstSettings%')->exists());
+        Artisan::call('simplify-servermaker:first-settings');
+        $check('the scheduler drops the first settings of a server that is gone', ! WaitingSettings::query()->where('server_id', SERVER)->exists());
+        // The draft's own amount of disk was in MB and is in GB now (SM-B9).
+        $draft = Resources::fromDraft(Draft::for((int) admin()->id)->data ?? []);
+        $check('a draft of the old version keeps its own amount of disk: 20480 MB is 20 GB', ($draft['disk_custom'] ?? null) === 20 && Resources::payload([...$draft, 'ram' => '4', 'cpu' => '100'])['disk'] === 20480);
+        Draft::query()->where('user_id', admin()->id)->delete();
         break;
     case 'pages':
         foreach (['/admin', '/admin/server-maker', '/admin/server-maker/settings', '/server-maker'] as $url) {

@@ -14,6 +14,7 @@ use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Schemas\Components\Wizard;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Arr;
 use Illuminate\Support\HtmlString;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Locked;
@@ -156,7 +157,7 @@ class ServerMaker extends Page implements HasForms
         $draft = Draft::for((int) user()->id);
         if ($draft) {
             try {
-                $fresh = array_replace($fresh, $draft->data);
+                $fresh = array_replace($fresh, Resources::fromDraft($draft->data));
                 $this->step = max(1, min(5, $draft->step));
                 $this->restored = true;
                 $this->hasDraft = true;
@@ -211,7 +212,7 @@ class ServerMaker extends Page implements HasForms
         abort_unless(static::canAccess(), 403);
         Draft::query()->updateOrCreate(
             ['user_id' => (int) user()->id],
-            ['data' => [...Draft::clean($this->data ?? []), 'eula' => false], 'step' => min(5, $step + 1)],
+            ['data' => [...Draft::clean($this->data ?? []), 'eula' => false, Resources::DRAFT_GB => true], 'step' => min(5, $step + 1)],
         );
         $this->hasDraft = true;
     }
@@ -332,7 +333,7 @@ class ServerMaker extends Page implements HasForms
                 $amount = max(1, min($amount, $limits[$resource]));
             }
             $values[$resource] = Resources::choice($amount, Resources::presets($resource, $amount, $limits[$resource] ?? null));
-            $values[$resource.'_custom'] = $amount;
+            $values[$resource.'_custom'] = Resources::custom($resource, $amount);
         }
 
         return $values;
@@ -397,6 +398,23 @@ class ServerMaker extends Page implements HasForms
     }
 
     public function create(): void
+    {
+        try {
+            $this->createServer();
+        } catch (ValidationException $exception) {
+            // The field with the error can stand on an earlier step (no room on the node, the allowance, a name): on
+            // Review nothing would show. The message says it here; the error stays at its field.
+            Notification::make()
+                ->title(__('simplify-servermaker::maker.review.failed'))
+                ->body(implode(' ', Arr::flatten($exception->errors())))
+                ->danger()
+                ->send();
+
+            throw $exception;
+        }
+    }
+
+    private function createServer(): void
     {
         abort_unless(static::canAccess(), 403);
         $state = $this->form->getState();

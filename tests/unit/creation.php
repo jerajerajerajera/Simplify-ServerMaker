@@ -25,7 +25,13 @@ check('a broken amount is zero', Resources::amount(['ram' => 'lots'], 'ram') ===
 check('the payload is in MB and %', Resources::payload(['ram' => '4', 'cpu' => '150', 'disk' => '10240']) === ['memory' => 4096, 'cpu' => 150, 'disk' => 10240]);
 check('no RAM is refused', failsOn(fn () => Resources::payload(['ram' => 'custom', 'ram_custom' => 0, 'cpu' => '100', 'disk' => '10240'])) === 'data.ram');
 check('a user over their limit is refused', failsOn(fn () => Resources::payload(['ram' => '8', 'cpu' => '100', 'disk' => '10240'], ['ram' => 4, 'cpu' => 200, 'disk' => 20480])) === 'data.ram');
-check('a tiny disk is refused', failsOn(fn () => Resources::payload(['ram' => '4', 'cpu' => '100', 'disk' => 'custom', 'disk_custom' => 100])) === 'data.disk');
+check('no disk is refused', failsOn(fn () => Resources::payload(['ram' => '4', 'cpu' => '100', 'disk' => 'custom', 'disk_custom' => 0])) === 'data.disk');
+// SM-B9: an own amount of disk is typed in GB, like RAM (it was MB next to RAM in GB).
+check('an own amount of disk is in GB', Resources::payload(['ram' => '4', 'cpu' => '100', 'disk' => 'custom', 'disk_custom' => 30])['disk'] === 30720);
+check('a disk over the limit is refused', failsOn(fn () => Resources::payload(['ram' => '4', 'cpu' => '100', 'disk' => 'custom', 'disk_custom' => 30], ['ram' => 4, 'cpu' => 200, 'disk' => 20480])) === 'data.disk');
+check('the own amount starts at the current one, disk in whole GB', Resources::custom('disk', 10240) === 10 && Resources::custom('disk', 1536) === 1 && Resources::custom('ram', 6) === 6);
+check('a draft from before keeps its disk: MB becomes GB', Resources::fromDraft(['disk' => 'custom', 'disk_custom' => 20480]) === ['disk' => 'custom', 'disk_custom' => 20]);
+check('a draft of now is read as it is', Resources::fromDraft(['disk' => 'custom', 'disk_custom' => 2048, Resources::DRAFT_GB => true]) === ['disk' => 'custom', 'disk_custom' => 2048]);
 check('disk in GB reads well', Resources::gb(10240) === '10' && Resources::gb(1536) === '1.5');
 
 $paper = new EggData(7, 'Paper', [

@@ -5,6 +5,7 @@
 // php plugins/simplify-servermaker/tests/panel/smoke.php
 
 use App\Enums\EggFormat;
+use App\Enums\ServerState;
 use App\Models\Allocation;
 use App\Models\Egg;
 use App\Models\Node;
@@ -12,12 +13,17 @@ use App\Models\Role;
 use App\Models\Server;
 use App\Models\User;
 use App\Services\Eggs\Sharing\EggImporterService;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithAuthentication;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithSession;
 use Illuminate\Foundation\Testing\Concerns\MakesHttpRequests;
+use Illuminate\Http\Client\Factory;
+use Illuminate\Http\Client\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Testing\TestResponse;
@@ -30,6 +36,7 @@ use Simplify\ServerMaker\Creation\ApplyFirstSettings;
 use Simplify\ServerMaker\Creation\ApplySteamArt;
 use Simplify\ServerMaker\Creation\ExtraPorts;
 use Simplify\ServerMaker\Creation\Ports;
+use Simplify\ServerMaker\Creation\Resources;
 use Simplify\ServerMaker\Filament\Admin\Pages\MakerSettings;
 use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
 use Simplify\ServerMaker\Filament\App\Pages\ServerMaker as AppServerMaker;
@@ -42,13 +49,16 @@ use Simplify\ServerMaker\Games\Minecraft;
 use Simplify\ServerMaker\Games\MinecraftEggs;
 use Simplify\ServerMaker\Games\OtherGames;
 use Simplify\ServerMaker\Games\SteamArt;
+use Simplify\ServerMaker\Http\Middleware\OpenServerMaker;
 use Simplify\ServerMaker\Livewire\MakerSettingsForm;
 use Simplify\ServerMaker\Livewire\SteamConnection;
 use Simplify\ServerMaker\Models\Draft;
+use Simplify\ServerMaker\Models\WaitingSettings;
 use Simplify\ServerMaker\Modpacks\Remote;
 use Simplify\ServerMaker\Problems\ProblemLog;
 use Simplify\ServerMaker\Problems\ServerMakerProblems;
 use Simplify\ServerMaker\ServerMakerAddon;
+use Simplify\ServerMaker\ServerMakerPlugin;
 use Simplify\ServerMaker\Settings;
 use Simplify\ServerMaker\Software\ChangeSoftware;
 use Simplify\ServerMaker\Software\Startup;
@@ -90,7 +100,8 @@ function step(string $what, callable $run): void
     }
 }
 
-function http(User $user, string $url): TestResponse
+/** @param  array<string, mixed>  $session */
+function http(User $user, string $url, array $session = []): TestResponse
 {
     $client = new class(app())
     {
@@ -101,7 +112,7 @@ function http(User $user, string $url): TestResponse
         public function __construct(public $app) {}
     };
 
-    return $client->actingAs($user)->get($url);
+    return $client->actingAs($user)->withSession($session)->get($url);
 }
 
 function expectOk(TestResponse $response, string $url): void
@@ -184,6 +195,8 @@ step('a Minecraft server goes through every step and imports its egg', function 
     if (! preg_match('/<input[^>]*data\.eula[^>]*>/', $test->html(), $box) || str_contains($box[0], 'required') || str_contains($box[0], 'checked')) {
         throw new RuntimeException('the EULA box is missing, required or ticked: '.($box[0] ?? ''));
     }
+    // Its help says what ticking does: the first start does not ask. The server never starts by itself (SM-B10).
+    $test->assertSee('Tick it now and it will not ask again')->assertDontSee('starts straight away');
     $test->set('data.eula', true);
     // Players, game mode and difficulty are checked before the server is made.
     $test->set('data.max_players', 5000)->call('create');
@@ -205,21 +218,61 @@ step('a Minecraft server goes through every step and imports its egg', function 
     $server?->delete();
 });
 
-step('the first settings are queued for after the installation', function () {
-    // Pelican runs a real queue; the dispatcher must accept the job (1.3.0 broke here with a method named queue()).
+step('the first settings wait for the installation and Pelican\'s scheduler writes them, without a queue worker (SM-B7)', function () use ($admin, $node) {
+    // The usual small panel: only the scheduler's cron runs, no queue worker (QUEUE_CONNECTION=sync).
     $before = config('queue.default');
-    config(['queue.default' => 'database']);
-    try {
-        $server = new Server;
-        $server->id = 987654;
-        ApplyFirstSettings::afterInstall($server, ['properties' => ['max-players' => '8']]);
-        $jobs = DB::table('jobs')->where('payload', 'like', '%ApplyFirstSettings%');
-        if (! $jobs->exists()) {
-            throw new RuntimeException('the job was not queued');
+    config(['queue.default' => 'sync']);
+    $written = [];
+    Http::fake(function (Request $request) use (&$written) {
+        if (str_contains($request->url(), '/files/write')) {
+            parse_str((string) parse_url($request->url(), PHP_URL_QUERY), $query);
+            $written[$query['file'] ?? '?'] = $request->body();
         }
-        $jobs->delete();
+
+        return Http::response("max-players=20\nmotd=Smoke\n");
+    });
+    $server = Server::factory()->create(['owner_id' => $admin->id, 'node_id' => $node->id, 'name' => 'smoke-first-settings', 'status' => ServerState::Installing]);
+    try {
+        ApplyFirstSettings::afterInstall($server, ['properties' => ['max-players' => '8'], 'eula' => true]);
+        Artisan::call('simplify-servermaker:first-settings');
+        if ($written !== []) {
+            throw new RuntimeException('written before the installation finished: '.implode(', ', array_keys($written)));
+        }
+        $server->forceFill(['installed_at' => now(), 'status' => null])->save();
+        Artisan::call('simplify-servermaker:first-settings');
+        if (! str_contains($written['server.properties'] ?? '', 'max-players=8') || ! str_contains($written['server.properties'], 'motd=Smoke') || ! str_contains($written['eula.txt'] ?? '', 'eula=true')) {
+            throw new RuntimeException('not written after the installation: '.json_encode($written));
+        }
+        $written = [];
+        Artisan::call('simplify-servermaker:first-settings');
+        if ($written !== [] || WaitingSettings::query()->where('server_id', $server->id)->exists()) {
+            throw new RuntimeException('the settings were written a second time');
+        }
+        // A job that 2.0.0-beta.10 or older left in the queue hands its settings to the scheduler.
+        (new ApplyFirstSettings((int) $server->id, ['eula' => true]))->handle();
+        if (WaitingSettings::query()->where('server_id', $server->id)->value('settings') === null) {
+            throw new RuntimeException('an older queued job lost its settings');
+        }
+        // Wings does not answer: the settings stay for the next minute; after two hours they are dropped.
+        Http::swap(new Factory);
+        Http::fake(fn () => Http::response('', 500));
+        Artisan::call('simplify-servermaker:first-settings');
+        if (! WaitingSettings::query()->where('server_id', $server->id)->exists()) {
+            throw new RuntimeException('the settings were dropped after one failed try');
+        }
+        WaitingSettings::query()->where('server_id', $server->id)->update(['created_at' => now()->subHours(3)]);
+        Artisan::call('simplify-servermaker:first-settings');
+        if (WaitingSettings::query()->where('server_id', $server->id)->exists()) {
+            throw new RuntimeException('the settings still wait after two hours');
+        }
+        $scheduled = array_filter(app(Schedule::class)->events(), fn ($event) => str_contains((string) $event->command, 'simplify-servermaker:first-settings'));
+        if (count($scheduled) !== 1) {
+            throw new RuntimeException('the command is not in Pelican\'s schedule');
+        }
     } finally {
         config(['queue.default' => $before]);
+        WaitingSettings::query()->where('server_id', $server->id)->delete();
+        $server->delete();
     }
 });
 
@@ -427,6 +480,28 @@ step('a draft is saved after a step and opened again', function () use ($admin) 
     }
 });
 
+step('an own amount of disk is typed in GB, like RAM, also in a draft from before that (SM-B9)', function () use ($admin) {
+    Draft::query()->where('user_id', $admin->id)->delete();
+    $test = Livewire\Livewire::actingAs($admin)->test(ServerMaker::class)
+        ->call('pickGame', 'minecraft', 'vanilla')
+        ->set('data.name', 'smoke-disk')
+        ->set('data.disk', 'custom')
+        ->set('data.disk_custom', 30);
+    if (Resources::payload($test->get('data'))['disk'] !== 30 * 1024) {
+        throw new RuntimeException('30 in the field is not 30 GB');
+    }
+    $test->call('stepDone', 4);
+    Livewire\Livewire::actingAs($admin)->test(ServerMaker::class)->assertSet('data.disk', 'custom')->assertSet('data.disk_custom', 30);
+    // Until 2.0.0-beta.10 the field was in MB: such a draft opens with the same amount, in GB.
+    $draft = Draft::for($admin->id);
+    $draft->update(['data' => [...array_diff_key($draft->data, [Resources::DRAFT_GB => true]), 'disk_custom' => 20480]]);
+    $test = Livewire\Livewire::actingAs($admin)->test(ServerMaker::class)->assertSet('data.disk_custom', 20);
+    if (Resources::payload($test->get('data'))['disk'] !== 20480) {
+        throw new RuntimeException('an older draft with 20480 MB is not 20 GB');
+    }
+    Draft::query()->where('user_id', $admin->id)->delete();
+});
+
 step('a Modrinth modpack is found and gets its egg', function () use ($admin) {
     // A fake Modrinth: one pack with one version for Minecraft 1.20.1.
     Remote::$transport = fn (string $url) => match (true) {
@@ -502,7 +577,7 @@ step('the starting resources per Minecraft type are saved and used by the wizard
         ->call('pickGame', 'minecraft', 'mods')
         ->assertSet('data.cpu_custom', 300)
         ->assertSet('data.ram_custom', 8)
-        ->assertSet('data.disk_custom', 40960)
+        ->assertSet('data.disk_custom', 40)
         ->call('pickGame', 'minecraft', 'vanilla')
         ->assertSet('data.ram_custom', 4);
     Settings::put(['starting_resources' => null]);
@@ -761,10 +836,11 @@ step('a user makes a server within their allowance, in the normal panel', functi
     Server::query()->where('name', 'smoke-user')->delete();
 });
 
-step('a user without servers left is stopped', function () use ($user, $node) {
+step('a user without servers left is stopped, and the Review step says why (SM-B4)', function () use ($user, $node) {
     Settings::put(['max_servers' => 0]);
     Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('app'));
-    Livewire\Livewire::actingAs($user)->test(AppServerMaker::class)
+    session()->forget('filament.notifications');
+    $test = Livewire\Livewire::actingAs($user)->test(AppServerMaker::class)
         ->call('pickGame', 'minecraft', 'plugins')
         ->set('data.version', '1.21.1')
         ->call('prepareEgg')
@@ -775,6 +851,68 @@ step('a user without servers left is stopped', function () use ($user, $node) {
         ->set('data.eula', true)
         ->call('create')
         ->assertHasErrors(['data.name']);
+    // The name is a field of another step: on Review its error is out of view, so a message says it as well.
+    try {
+        $test->assertNotified(__('simplify-servermaker::maker.review.failed'));
+    } catch (Throwable) {
+        throw new RuntimeException('Create stopped on a field of another step without a message on Review');
+    }
+});
+
+step('only the step of the wizard scrolls, also past a file field or a hidden input (SM-B5)', function () {
+    // A part that is placed absolutely is not cut off by the step it scrolls in, unless the step is what it is placed
+    // against: without that the popup itself scrolled on a phone, with its bar of buttons.
+    if (! preg_match('/html\.smk-fit \.smk \.fi-sc-wizard-step \{[^}]*position: relative;/', view('simplify-servermaker::wizard.styles')->render())) {
+        throw new RuntimeException('the step of the wizard is not what its absolutely placed parts are placed against');
+    }
+});
+
+step("without Simplify, Pelican's user menu has Create server for people who may make servers (SM-B6)", function () use ($user) {
+    // With Simplify the overview has the Create server button (a step below) and Pelican's user menu is not shown.
+    $core = class_exists(Addon::class);
+    $item = ServerMakerPlugin::makerMenu()['simplify-servermaker'];
+    auth()->setUser($user);
+    Settings::put(['self_service' => true]);
+    if ($item->isVisible() === $core) {
+        throw new RuntimeException($core ? "with Simplify, Pelican's user menu has Create server as well" : 'a user who may make servers has no way to the Server Maker');
+    }
+    if (! $core) {
+        $response = http($user, '/');
+        expectOk($response, '/');
+        if (! str_contains((string) $response->getContent(), AppServerMaker::getUrl(panel: 'app'))) {
+            throw new RuntimeException("Create server is not in the user menu on Pelican's page");
+        }
+    }
+    Settings::put(['self_service' => false]);
+    try {
+        if ($item->isVisible()) {
+            throw new RuntimeException('a user who may not make servers is offered Create server');
+        }
+    } finally {
+        Settings::put(['self_service' => true]);
+    }
+});
+
+step("with Simplify, Pelican's own form at admin › Servers › Create opens the Server Maker instead, also by its address (SM-B8)", function () use ($admin) {
+    $create = route('filament.admin.resources.servers.create');
+    $list = route('filament.admin.resources.servers.index');
+    $response = http($admin, $create);
+    if (! class_exists(Addon::class)) {
+        // Without Simplify Pelican's form stays: the Server Maker has its own place in the menus.
+        expectOk($response, $create);
+
+        return;
+    }
+    if (! $response->isRedirect($list) || $response->getSession()?->get(OpenServerMaker::OPEN) !== true) {
+        throw new RuntimeException('HTTP '.$response->getStatusCode().": Pelican's form opened by its address");
+    }
+    // The list of servers then asks Simplify for its Create server popup, once.
+    $opens = fn (array $session): bool => str_contains((string) http($admin, $list, $session)->getContent(), "CustomEvent('simplify:create')");
+    if (! $opens([OpenServerMaker::OPEN => true]) || $opens([])) {
+        throw new RuntimeException('the list of servers does not open Create server once');
+    }
+    // Simplify's legacy panel shows Pelican's own pages: there the form stays.
+    expectOk(http($admin, $create, ['simplify_legacy' => true]), $create);
 });
 
 step('an empty list of nodes or eggs means all of them; only administrators add eggs from the index', function () use ($user, $node) {

@@ -150,12 +150,12 @@ return [
         'unit' => [
             'ram' => 'GB',
             'cpu' => '%',
-            'disk' => 'MB',
+            'disk' => 'GB',
         ],
         'custom_help' => [
             'ram' => '单位为 GB。',
             'cpu' => '100% 等于一个 CPU 核心。',
-            'disk' => '单位为 MB。1024 MB 等于 1 GB。',
+            'disk' => '单位为 GB。',
         ],
         'ram_range' => '请输入 1 到 :max GB 的 RAM。',
         'cpu_range' => '请输入 1 到 :max% 的 CPU。',
@@ -202,7 +202,7 @@ return [
         'icon_invalid' => '图标必须是 64 × 64 的 PNG，最大 100 KB。',
         'number_between' => '请输入 :min 到 :max 之间的数字。',
         'eula' => '我接受 Minecraft 最终用户许可协议（EULA）',
-        'eula_help' => 'Minecraft 服务器只有在接受 EULA 后才能启动。现在勾选即可直接启动；不勾选也会先安装服务器，启动时再询问 EULA。',
+        'eula_help' => 'Minecraft 服务器只有在接受 EULA 后才能启动。现在勾选后将不再询问；不勾选也会先安装服务器，启动时再询问 EULA。',
         'eula_read' => '阅读 Minecraft EULA',
     ],
     'review' => [

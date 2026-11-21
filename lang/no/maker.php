@@ -150,12 +150,12 @@ return [
         'unit' => [
             'ram' => 'GB',
             'cpu' => '%',
-            'disk' => 'MB',
+            'disk' => 'GB',
         ],
         'custom_help' => [
             'ram' => 'I GB.',
             'cpu' => '100% er én CPU-kjerne.',
-            'disk' => 'I MB. 1024 MB er 1 GB.',
+            'disk' => 'I GB.',
         ],
         'ram_range' => 'Skriv inn RAM fra 1 til :max GB.',
         'cpu_range' => 'Skriv inn CPU fra 1 til :max%.',
@@ -202,7 +202,7 @@ return [
         'icon_invalid' => 'Ikonet må være en PNG på 64 × 64, opptil 100 KB.',
         'number_between' => 'Skriv inn et tall mellom :min og :max.',
         'eula' => 'Jeg godtar Minecrafts lisensavtale for sluttbrukere (EULA)',
-        'eula_help' => 'En Minecraft-server starter først når EULA-en er godtatt. Kryss av nå, så starter den med en gang, eller la være: serveren installeres og ber om EULA-en når du starter den.',
+        'eula_help' => 'En Minecraft-server starter først når EULA-en er godtatt. Kryss av nå, så spør den ikke igjen, eller la være: serveren installeres og ber om EULA-en når du starter den.',
         'eula_read' => 'Les Minecrafts EULA',
     ],
     'review' => [
