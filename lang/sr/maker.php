@@ -150,12 +150,12 @@ return [
         'unit' => [
             'ram' => 'GB',
             'cpu' => '%',
-            'disk' => 'MB',
+            'disk' => 'GB',
         ],
         'custom_help' => [
             'ram' => 'У GB.',
             'cpu' => '100% је једно CPU језгро.',
-            'disk' => 'У MB. 1024 MB је 1 GB.',
+            'disk' => 'У GB.',
         ],
         'ram_range' => 'Унесите RAM од 1 до :max GB.',
         'cpu_range' => 'Унесите CPU од 1 до :max%.',
@@ -202,7 +202,7 @@ return [
         'icon_invalid' => 'Икона мора бити PNG 64 × 64, до 100 KB.',
         'number_between' => 'Унесите број између :min и :max.',
         'eula' => 'Prihvatam Ugovor o licenci za krajnjeg korisnika Minecrafta (EULA)',
-        'eula_help' => 'Minecraft server se pokreće tek kada je EULA prihvaćena. Označite sada i odmah se pokreće, ili ostavite prazno: server se instalira i traži EULA kada ga pokrenete.',
+        'eula_help' => 'Minecraft server se pokreće tek kada je EULA prihvaćena. Označite sada i neće ponovo pitati, ili ostavite prazno: server se instalira i traži EULA kada ga pokrenete.',
         'eula_read' => 'Pročitajte Minecraft EULA',
     ],
     'review' => [

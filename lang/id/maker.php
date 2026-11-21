@@ -150,12 +150,12 @@ return [
         'unit' => [
             'ram' => 'GB',
             'cpu' => '%',
-            'disk' => 'MB',
+            'disk' => 'GB',
         ],
         'custom_help' => [
             'ram' => 'Dalam GB.',
             'cpu' => '100% adalah satu core CPU.',
-            'disk' => 'Dalam MB. 1024 MB adalah 1 GB.',
+            'disk' => 'Dalam GB.',
         ],
         'ram_range' => 'Masukkan RAM dari 1 sampai :max GB.',
         'cpu_range' => 'Masukkan CPU dari 1 sampai :max%.',
@@ -202,7 +202,7 @@ return [
         'icon_invalid' => 'Ikon harus berupa PNG 64 × 64, hingga 100 KB.',
         'number_between' => 'Masukkan angka antara :min dan :max.',
         'eula' => 'Saya menerima Perjanjian Lisensi Pengguna Akhir Minecraft (EULA)',
-        'eula_help' => 'Server Minecraft baru bisa berjalan setelah EULA diterima. Centang sekarang agar langsung berjalan, atau biarkan: server tetap terpasang dan meminta EULA saat Anda menjalankannya.',
+        'eula_help' => 'Server Minecraft baru bisa berjalan setelah EULA diterima. Centang sekarang agar tidak ditanya lagi, atau biarkan: server tetap terpasang dan meminta EULA saat Anda menjalankannya.',
         'eula_read' => 'Baca EULA Minecraft',
     ],
     'review' => [

@@ -157,7 +157,7 @@ class ServerMaker extends Page implements HasForms
         $draft = Draft::for((int) user()->id);
         if ($draft) {
             try {
-                $fresh = array_replace($fresh, $draft->data);
+                $fresh = array_replace($fresh, Resources::fromDraft($draft->data));
                 $this->step = max(1, min(5, $draft->step));
                 $this->restored = true;
                 $this->hasDraft = true;
@@ -212,7 +212,7 @@ class ServerMaker extends Page implements HasForms
         abort_unless(static::canAccess(), 403);
         Draft::query()->updateOrCreate(
             ['user_id' => (int) user()->id],
-            ['data' => [...Draft::clean($this->data ?? []), 'eula' => false], 'step' => min(5, $step + 1)],
+            ['data' => [...Draft::clean($this->data ?? []), 'eula' => false, Resources::DRAFT_GB => true], 'step' => min(5, $step + 1)],
         );
         $this->hasDraft = true;
     }
@@ -333,7 +333,7 @@ class ServerMaker extends Page implements HasForms
                 $amount = max(1, min($amount, $limits[$resource]));
             }
             $values[$resource] = Resources::choice($amount, Resources::presets($resource, $amount, $limits[$resource] ?? null));
-            $values[$resource.'_custom'] = $amount;
+            $values[$resource.'_custom'] = Resources::custom($resource, $amount);
         }
 
         return $values;

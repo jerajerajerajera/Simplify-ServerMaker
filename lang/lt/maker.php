@@ -150,12 +150,12 @@ return [
         'unit' => [
             'ram' => 'GB',
             'cpu' => '%',
-            'disk' => 'MB',
+            'disk' => 'GB',
         ],
         'custom_help' => [
             'ram' => 'Nurodykite GB.',
             'cpu' => '100% yra vienas CPU branduolys.',
-            'disk' => 'Nurodykite MB. 1024 MB yra 1 GB.',
+            'disk' => 'Nurodykite GB.',
         ],
         'ram_range' => 'Įveskite RAM nuo 1 iki :max GB.',
         'cpu_range' => 'Įveskite CPU nuo 1 iki :max%.',
@@ -202,7 +202,7 @@ return [
         'icon_invalid' => 'Piktograma turi būti 64 × 64 PNG, iki 100 KB.',
         'number_between' => 'Įveskite skaičių nuo :min iki :max.',
         'eula' => 'Sutinku su Minecraft galutinio naudotojo licencijos sutartimi (EULA)',
-        'eula_help' => 'Minecraft serveris pasileidžia tik priėmus EULA. Pažymėkite dabar ir jis pasileis iškart, arba palikite tuščią: serveris įsidiegs ir paprašys EULA paleidžiant.',
+        'eula_help' => 'Minecraft serveris pasileidžia tik priėmus EULA. Pažymėkite dabar ir jis daugiau neklaus, arba palikite tuščią: serveris įsidiegs ir paprašys EULA paleidžiant.',
         'eula_read' => 'Skaityti Minecraft EULA',
     ],
     'review' => [

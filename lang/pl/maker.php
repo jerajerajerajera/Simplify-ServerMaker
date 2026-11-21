@@ -150,12 +150,12 @@ return [
         'unit' => [
             'ram' => 'GB',
             'cpu' => '%',
-            'disk' => 'MB',
+            'disk' => 'GB',
         ],
         'custom_help' => [
             'ram' => 'W GB.',
             'cpu' => '100% to jeden rdzeń CPU.',
-            'disk' => 'W MB. 1024 MB to 1 GB.',
+            'disk' => 'W GB.',
         ],
         'ram_range' => 'Wpisz RAM od 1 do :max GB.',
         'cpu_range' => 'Wpisz CPU od 1 do :max%.',
@@ -202,7 +202,7 @@ return [
         'icon_invalid' => 'Ikona musi być plikiem PNG 64 × 64, do 100 KB.',
         'number_between' => 'Wpisz liczbę od :min do :max.',
         'eula' => 'Akceptuję Umowę licencyjną użytkownika końcowego Minecrafta (EULA)',
-        'eula_help' => 'Serwer Minecraft uruchomi się dopiero po zaakceptowaniu EULA. Zaznacz teraz, a ruszy od razu, albo zostaw puste: serwer się zainstaluje i poprosi o EULA przy uruchomieniu.',
+        'eula_help' => 'Serwer Minecraft uruchomi się dopiero po zaakceptowaniu EULA. Zaznacz teraz, a nie zapyta ponownie, albo zostaw puste: serwer się zainstaluje i poprosi o EULA przy uruchomieniu.',
         'eula_read' => 'Przeczytaj EULA Minecrafta',
     ],
     'review' => [

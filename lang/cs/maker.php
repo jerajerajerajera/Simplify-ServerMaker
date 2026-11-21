@@ -150,12 +150,12 @@ return [
         'unit' => [
             'ram' => 'GB',
             'cpu' => '%',
-            'disk' => 'MB',
+            'disk' => 'GB',
         ],
         'custom_help' => [
             'ram' => 'V GB.',
             'cpu' => '100% je jedno jádro CPU.',
-            'disk' => 'V MB. 1024 MB je 1 GB.',
+            'disk' => 'V GB.',
         ],
         'ram_range' => 'Zadej RAM od 1 do :max GB.',
         'cpu_range' => 'Zadej CPU od 1 do :max%.',
@@ -202,7 +202,7 @@ return [
         'icon_invalid' => 'Ikona musí být PNG 64 × 64, do 100 KB.',
         'number_between' => 'Zadejte číslo mezi :min a :max.',
         'eula' => 'Souhlasím s licenční smlouvou s koncovým uživatelem Minecraftu (EULA)',
-        'eula_help' => 'Server Minecraft se spustí až po přijetí EULA. Zaškrtněte teď a spustí se hned, nebo nechte prázdné: server se nainstaluje a o EULA požádá při spuštění.',
+        'eula_help' => 'Server Minecraft se spustí až po přijetí EULA. Zaškrtněte teď a už se nezeptá, nebo nechte prázdné: server se nainstaluje a o EULA požádá při spuštění.',
         'eula_read' => 'Přečíst EULA Minecraftu',
     ],
     'review' => [

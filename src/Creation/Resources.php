@@ -10,7 +10,7 @@ use Illuminate\Validation\ValidationException;
  * RAM, CPU and disk: the presets the Server Maker offers and the checks before a server is made. Pure.
  *
  * In the form RAM is in GB, CPU in % (100 = one core) and disk in MB. Each resource is a preset or "custom" with
- * its own number field.
+ * its own number field; the custom disk is typed in whole GB, like RAM.
  */
 final class Resources
 {
@@ -22,6 +22,9 @@ final class Resources
 
     /** Upper limits for administrators. Users get their allowance instead. */
     public const MAX = ['ram' => 128, 'cpu' => 1600, 'disk' => 10485760];
+
+    /** Marks a saved draft whose custom disk is in GB; a draft without it is older and holds MB. */
+    public const DRAFT_GB = 'disk_in_gb';
 
     /**
      * The presets up to a limit, with the starting value always among them.
@@ -74,13 +77,39 @@ final class Resources
         return ['memory' => $ram * 1024, 'cpu' => $cpu, 'disk' => $disk];
     }
 
-    /** The chosen amount: the preset, or the custom field when "custom" is picked. */
+    /** The chosen amount: the preset, or the custom field (disk: in GB, returned in MB) when "custom" is picked. */
     public static function amount(array $state, string $resource): int
     {
         $choice = (string) ($state[$resource] ?? '');
         $value = $choice === 'custom' ? ($state[$resource.'_custom'] ?? null) : $choice;
+        if (filter_var($value, FILTER_VALIDATE_INT) === false) {
+            return 0;
+        }
 
-        return filter_var($value, FILTER_VALIDATE_INT) === false ? 0 : (int) $value;
+        return $choice === 'custom' && $resource === 'disk' ? (int) $value * 1024 : (int) $value;
+    }
+
+    /** An amount as the custom field shows it: disk in whole GB, RAM and CPU as they are. */
+    public static function custom(string $resource, int $amount): int
+    {
+        return $resource === 'disk' ? max(1, intdiv($amount, 1024)) : $amount;
+    }
+
+    /**
+     * A saved draft's answers for the form: the custom disk of an older draft, in MB, becomes whole GB.
+     *
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
+    public static function fromDraft(array $data): array
+    {
+        $current = ($data[self::DRAFT_GB] ?? false) === true;
+        unset($data[self::DRAFT_GB]);
+        if (! $current && isset($data['disk_custom'])) {
+            $data['disk_custom'] = self::custom('disk', (int) $data['disk_custom']);
+        }
+
+        return $data;
     }
 
     public static function gb(int $megabytes): string

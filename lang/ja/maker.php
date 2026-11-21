@@ -150,12 +150,12 @@ return [
         'unit' => [
             'ram' => 'GB',
             'cpu' => '%',
-            'disk' => 'MB',
+            'disk' => 'GB',
         ],
         'custom_help' => [
             'ram' => 'GB 単位。',
             'cpu' => '100% で CPU 1コアです。',
-            'disk' => 'MB 単位。1024 MB で 1 GB です。',
+            'disk' => 'GB 単位。',
         ],
         'ram_range' => 'RAM は 1～:max GB で入力してください。',
         'cpu_range' => 'CPU は 1～:max% で入力してください。',
@@ -202,7 +202,7 @@ return [
         'icon_invalid' => 'アイコンは 100 KB 以下の 64 × 64 PNG にしてください。',
         'number_between' => ':min から :max の数値を入力してください。',
         'eula' => 'Minecraft エンドユーザー使用許諾契約（EULA）に同意します',
-        'eula_help' => 'Minecraft サーバーは EULA に同意するまで起動しません。今チェックするとすぐに起動します。空のままでもサーバーはインストールされ、起動時に EULA を確認します。',
+        'eula_help' => 'Minecraft サーバーは EULA に同意するまで起動しません。今チェックすると、あとで確認されません。空のままでもサーバーはインストールされ、起動時に EULA を確認します。',
         'eula_read' => 'Minecraft の EULA を読む',
     ],
     'review' => [

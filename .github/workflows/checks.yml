@@ -55,8 +55,13 @@ jobs:
             php: '8.3'
           - pelican: '1.0.0-rc.2'
             php: '8.4'
+          - pelican: '1.0.0-rc.4'
+            php: '8.4'
           # With the real Simplify core (main), not a stub: the add-on opens inside Simplify (P-1).
           - pelican: '1.0.0-rc.2'
+            php: '8.4'
+            simplify: 'main'
+          - pelican: '1.0.0-rc.4'
             php: '8.4'
             simplify: 'main'
           # The update path with settings filled in: from the version on the Hub's stable channel, and from the

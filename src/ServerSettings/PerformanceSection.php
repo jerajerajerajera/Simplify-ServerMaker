@@ -92,7 +92,7 @@ final class PerformanceSection
         $state = [];
         foreach (self::current($server) as $resource => $amount) {
             $state[$resource] = Resources::choice($amount, Resources::presets($resource, $amount));
-            $state[$resource.'_custom'] = $amount;
+            $state[$resource.'_custom'] = Resources::custom($resource, $amount);
         }
 
         return [...$state, 'extra_ports' => ExtraPorts::count($server)];

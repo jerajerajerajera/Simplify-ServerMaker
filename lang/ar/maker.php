@@ -150,12 +150,12 @@ return [
         'unit' => [
             'ram' => 'GB',
             'cpu' => '%',
-            'disk' => 'MB',
+            'disk' => 'GB',
         ],
         'custom_help' => [
             'ram' => 'بوحدة GB.',
             'cpu' => '100% تساوي نواة CPU واحدة.',
-            'disk' => 'بوحدة MB. 1024 MB تساوي 1 GB.',
+            'disk' => 'بوحدة GB.',
         ],
         'ram_range' => 'أدخل RAM من 1 إلى :max GB.',
         'cpu_range' => 'أدخل CPU من 1 إلى :max%.',
@@ -202,7 +202,7 @@ return [
         'icon_invalid' => 'يجب أن تكون الأيقونة PNG بحجم 64 × 64، حتى 100 KB.',
         'number_between' => 'أدخل رقمًا بين :min و:max.',
         'eula' => 'أوافق على اتفاقية ترخيص المستخدم النهائي لـ Minecraft (EULA)',
-        'eula_help' => 'لا يبدأ خادم Minecraft إلا بعد قبول EULA. حدّده الآن ليبدأ فورًا، أو اتركه: سيُثبَّت الخادم ويطلب EULA عند تشغيله.',
+        'eula_help' => 'لا يبدأ خادم Minecraft إلا بعد قبول EULA. حدّده الآن ولن يُطلب مرة أخرى، أو اتركه: سيُثبَّت الخادم ويطلب EULA عند تشغيله.',
         'eula_read' => 'اقرأ EULA الخاصة بـ Minecraft',
     ],
     'review' => [

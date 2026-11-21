@@ -7,12 +7,14 @@ namespace Simplify\ServerMaker;
 use Filament\Actions\Action;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
+use Filament\View\PanelsRenderHook;
 use Simplify\ServerMaker\Filament\Admin\Pages\MakerSettings;
 use Simplify\ServerMaker\Filament\Admin\Pages\ServerMaker;
 use Simplify\ServerMaker\Filament\App\Pages\ServerMaker as AppServerMaker;
 use Simplify\ServerMaker\Filament\App\Pages\Steam;
 use Simplify\ServerMaker\Filament\Server\Pages\Performance;
 use Simplify\ServerMaker\Filament\Server\Pages\ServerSoftware;
+use Simplify\ServerMaker\Http\Middleware\OpenServerMaker;
 
 final class ServerMakerPlugin implements Plugin
 {
@@ -24,7 +26,9 @@ final class ServerMakerPlugin implements Plugin
     public function register(Panel $panel): void
     {
         match ($panel->getId()) {
-            'admin' => $panel->pages([ServerMaker::class, MakerSettings::class]),
+            'admin' => $panel->pages([ServerMaker::class, MakerSettings::class])
+                ->authMiddleware([OpenServerMaker::class])
+                ->renderHook(PanelsRenderHook::BODY_END, fn (): string => session()->pull(OpenServerMaker::OPEN) ? view('simplify-servermaker::open-create')->render() : ''),
             'app' => $panel->pages([AppServerMaker::class, Steam::class])->userMenuItems([...self::makerMenu(), ...self::steamMenu()]),
             'server' => $panel->pages([ServerSoftware::class, Performance::class]),
             default => null,

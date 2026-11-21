@@ -5,6 +5,11 @@
 - Create on the Review step says why it stopped when the reason is a field of an earlier step: no room on the node, a port that was just taken, or an allowance that is used up. Before, nothing visible happened.
 - On a phone only the step of the wizard scrolls; at the Minecraft step the whole popup no longer scrolls with its bar of buttons.
 - Without Simplify, people who may make servers find **Create server** in Pelican's user menu. Before, they had no link to the Server Maker.
+- The first settings of a new server (players, game mode, MOTD, icon and the accepted EULA) are written by Pelican's scheduler once the server is installed. They no longer need a queue worker, so they are no longer skipped on a panel without one.
+- With Simplify, admin › Servers › Create opens the Server Maker also when its address is typed, reloaded or opened in a new tab. Before, that showed Pelican's own form.
+- An own amount of disk is typed in GB, like RAM. A draft from before opens with the same amount.
+- The help of the EULA box says what ticking it does: the first start does not ask again. The server does not start by itself.
+- Checks: the panel smoke also runs on Pelican 1.0.0-rc.4.
 
 ## 2.0.0-beta.10
 

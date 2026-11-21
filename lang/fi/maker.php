@@ -150,12 +150,12 @@ return [
         'unit' => [
             'ram' => 'GB',
             'cpu' => '%',
-            'disk' => 'MB',
+            'disk' => 'GB',
         ],
         'custom_help' => [
             'ram' => 'Yksikkö: GB.',
             'cpu' => '100% on yksi CPU-ydin.',
-            'disk' => 'Yksikkö: MB. 1024 MB on 1 GB.',
+            'disk' => 'Yksikkö: GB.',
         ],
         'ram_range' => 'Anna RAM väliltä 1–:max GB.',
         'cpu_range' => 'Anna CPU väliltä 1–:max%.',
@@ -202,7 +202,7 @@ return [
         'icon_invalid' => 'Kuvakkeen on oltava 64 × 64 PNG, enintään 100 kt.',
         'number_between' => 'Anna luku väliltä :min–:max.',
         'eula' => 'Hyväksyn Minecraftin käyttöoikeussopimuksen (EULA)',
-        'eula_help' => 'Minecraft-palvelin käynnistyy vasta, kun EULA on hyväksytty. Valitse nyt, niin se käynnistyy heti, tai jätä tyhjäksi: palvelin asennetaan ja kysyy EULAa käynnistettäessä.',
+        'eula_help' => 'Minecraft-palvelin käynnistyy vasta, kun EULA on hyväksytty. Valitse nyt, niin se ei kysy uudelleen, tai jätä tyhjäksi: palvelin asennetaan ja kysyy EULAa käynnistettäessä.',
         'eula_read' => 'Lue Minecraftin EULA',
     ],
     'review' => [

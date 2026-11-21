@@ -150,12 +150,12 @@ return [
         'unit' => [
             'ram' => 'GB',
             'cpu' => '%',
-            'disk' => 'MB',
+            'disk' => 'GB',
         ],
         'custom_help' => [
             'ram' => 'GB cinsinden.',
             'cpu' => '%100 bir CPU çekirdeğidir.',
-            'disk' => 'MB cinsinden. 1024 MB 1 GB\'dir.',
+            'disk' => 'GB cinsinden.',
         ],
         'ram_range' => '1 ile :max GB arasında RAM girin.',
         'cpu_range' => '1 ile %:max arasında CPU girin.',
@@ -202,7 +202,7 @@ return [
         'icon_invalid' => 'Simge 64 × 64 bir PNG olmalı, en fazla 100 KB.',
         'number_between' => ':min ile :max arasında bir sayı gir.',
         'eula' => 'Minecraft Son Kullanıcı Lisans Sözleşmesi\'ni (EULA) kabul ediyorum',
-        'eula_help' => 'Minecraft sunucusu ancak EULA kabul edildikten sonra başlar. Şimdi işaretlerseniz hemen başlar; boş bırakırsanız sunucu kurulur ve başlatırken EULA\'yı sorar.',
+        'eula_help' => 'Minecraft sunucusu ancak EULA kabul edildikten sonra başlar. Şimdi işaretlerseniz bir daha sormaz; boş bırakırsanız sunucu kurulur ve başlatırken EULA\'yı sorar.',
         'eula_read' => 'Minecraft EULA\'sını oku',
     ],
     'review' => [

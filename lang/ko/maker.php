@@ -150,12 +150,12 @@ return [
         'unit' => [
             'ram' => 'GB',
             'cpu' => '%',
-            'disk' => 'MB',
+            'disk' => 'GB',
         ],
         'custom_help' => [
             'ram' => 'GB 단위.',
             'cpu' => '100%는 CPU 코어 1개입니다.',
-            'disk' => 'MB 단위. 1024 MB는 1 GB입니다.',
+            'disk' => 'GB 단위.',
         ],
         'ram_range' => 'RAM을 1에서 :max GB 사이로 입력하세요.',
         'cpu_range' => 'CPU를 1에서 :max% 사이로 입력하세요.',
@@ -202,7 +202,7 @@ return [
         'icon_invalid' => '아이콘은 100 KB 이하의 64 × 64 PNG여야 합니다.',
         'number_between' => ':min 에서 :max 사이의 숫자를 입력하세요.',
         'eula' => 'Minecraft 최종 사용자 사용권 계약(EULA)에 동의합니다',
-        'eula_help' => 'Minecraft 서버는 EULA에 동의해야 시작됩니다. 지금 체크하면 바로 시작되고, 비워 두면 서버가 설치된 뒤 시작할 때 EULA를 묻습니다.',
+        'eula_help' => 'Minecraft 서버는 EULA에 동의해야 시작됩니다. 지금 체크하면 다시 묻지 않고, 비워 두면 서버가 설치된 뒤 시작할 때 EULA를 묻습니다.',
         'eula_read' => 'Minecraft EULA 읽기',
     ],
     'review' => [

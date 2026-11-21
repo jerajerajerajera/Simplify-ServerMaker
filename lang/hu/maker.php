@@ -150,12 +150,12 @@ return [
         'unit' => [
             'ram' => 'GB',
             'cpu' => '%',
-            'disk' => 'MB',
+            'disk' => 'GB',
         ],
         'custom_help' => [
             'ram' => 'GB-ban.',
             'cpu' => '100% egy CPU-mag.',
-            'disk' => 'MB-ban. 1024 MB = 1 GB.',
+            'disk' => 'GB-ban.',
         ],
         'ram_range' => 'Adj meg RAM-ot 1 és :max GB között.',
         'cpu_range' => 'Adj meg CPU-t 1 és :max% között.',
@@ -202,7 +202,7 @@ return [
         'icon_invalid' => 'Az ikonnak 64 × 64-es PNG-nek kell lennie, legfeljebb 100 KB.',
         'number_between' => 'Adj meg egy számot :min és :max között.',
         'eula' => 'Elfogadom a Minecraft végfelhasználói licencszerződését (EULA)',
-        'eula_help' => 'A Minecraft-szerver csak az EULA elfogadása után indul el. Pipáld be most, és rögtön indul, vagy hagyd üresen: a szerver települ, és indításkor kéri az EULA-t.',
+        'eula_help' => 'A Minecraft-szerver csak az EULA elfogadása után indul el. Pipáld be most, és többé nem kérdezi, vagy hagyd üresen: a szerver települ, és indításkor kéri az EULA-t.',
         'eula_read' => 'A Minecraft EULA elolvasása',
     ],
     'review' => [
