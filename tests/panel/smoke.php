@@ -49,6 +49,7 @@ use Simplify\ServerMaker\Modpacks\Remote;
 use Simplify\ServerMaker\Problems\ProblemLog;
 use Simplify\ServerMaker\Problems\ServerMakerProblems;
 use Simplify\ServerMaker\ServerMakerAddon;
+use Simplify\ServerMaker\ServerMakerPlugin;
 use Simplify\ServerMaker\Settings;
 use Simplify\ServerMaker\Software\ChangeSoftware;
 use Simplify\ServerMaker\Software\Startup;
@@ -761,10 +762,11 @@ step('a user makes a server within their allowance, in the normal panel', functi
     Server::query()->where('name', 'smoke-user')->delete();
 });
 
-step('a user without servers left is stopped', function () use ($user, $node) {
+step('a user without servers left is stopped, and the Review step says why (SM-B4)', function () use ($user, $node) {
     Settings::put(['max_servers' => 0]);
     Filament\Facades\Filament::setCurrentPanel(Filament\Facades\Filament::getPanel('app'));
-    Livewire\Livewire::actingAs($user)->test(AppServerMaker::class)
+    session()->forget('filament.notifications');
+    $test = Livewire\Livewire::actingAs($user)->test(AppServerMaker::class)
         ->call('pickGame', 'minecraft', 'plugins')
         ->set('data.version', '1.21.1')
         ->call('prepareEgg')
@@ -775,6 +777,46 @@ step('a user without servers left is stopped', function () use ($user, $node) {
         ->set('data.eula', true)
         ->call('create')
         ->assertHasErrors(['data.name']);
+    // The name is a field of another step: on Review its error is out of view, so a message says it as well.
+    try {
+        $test->assertNotified(__('simplify-servermaker::maker.review.failed'));
+    } catch (Throwable) {
+        throw new RuntimeException('Create stopped on a field of another step without a message on Review');
+    }
+});
+
+step('only the step of the wizard scrolls, also past a file field or a hidden input (SM-B5)', function () {
+    // A part that is placed absolutely is not cut off by the step it scrolls in, unless the step is what it is placed
+    // against: without that the popup itself scrolled on a phone, with its bar of buttons.
+    if (! preg_match('/html\.smk-fit \.smk \.fi-sc-wizard-step \{[^}]*position: relative;/', view('simplify-servermaker::wizard.styles')->render())) {
+        throw new RuntimeException('the step of the wizard is not what its absolutely placed parts are placed against');
+    }
+});
+
+step("without Simplify, Pelican's user menu has Create server for people who may make servers (SM-B6)", function () use ($user) {
+    // With Simplify the overview has the Create server button (a step below) and Pelican's user menu is not shown.
+    $core = class_exists(Addon::class);
+    $item = ServerMakerPlugin::makerMenu()['simplify-servermaker'];
+    auth()->setUser($user);
+    Settings::put(['self_service' => true]);
+    if ($item->isVisible() === $core) {
+        throw new RuntimeException($core ? "with Simplify, Pelican's user menu has Create server as well" : 'a user who may make servers has no way to the Server Maker');
+    }
+    if (! $core) {
+        $response = http($user, '/');
+        expectOk($response, '/');
+        if (! str_contains((string) $response->getContent(), AppServerMaker::getUrl(panel: 'app'))) {
+            throw new RuntimeException("Create server is not in the user menu on Pelican's page");
+        }
+    }
+    Settings::put(['self_service' => false]);
+    try {
+        if ($item->isVisible()) {
+            throw new RuntimeException('a user who may not make servers is offered Create server');
+        }
+    } finally {
+        Settings::put(['self_service' => true]);
+    }
 });
 
 step('an empty list of nodes or eggs means all of them; only administrators add eggs from the index', function () use ($user, $node) {

@@ -14,6 +14,7 @@ use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Schemas\Components\Wizard;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Arr;
 use Illuminate\Support\HtmlString;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Locked;
@@ -397,6 +398,23 @@ class ServerMaker extends Page implements HasForms
     }
 
     public function create(): void
+    {
+        try {
+            $this->createServer();
+        } catch (ValidationException $exception) {
+            // The field with the error can stand on an earlier step (no room on the node, the allowance, a name): on
+            // Review nothing would show. The message says it here; the error stays at its field.
+            Notification::make()
+                ->title(__('simplify-servermaker::maker.review.failed'))
+                ->body(implode(' ', Arr::flatten($exception->errors())))
+                ->danger()
+                ->send();
+
+            throw $exception;
+        }
+    }
+
+    private function createServer(): void
     {
         abort_unless(static::canAccess(), 403);
         $state = $this->form->getState();

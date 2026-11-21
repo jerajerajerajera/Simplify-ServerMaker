@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Create on the Review step says why it stopped when the reason is a field of an earlier step: no room on the node, a port that was just taken, or an allowance that is used up. Before, nothing visible happened.
+- On a phone only the step of the wizard scrolls; at the Minecraft step the whole popup no longer scrolls with its bar of buttons.
+- Without Simplify, people who may make servers find **Create server** in Pelican's user menu. Before, they had no link to the Server Maker.
+
 ## 2.0.0-beta.10
 
 - Released together with Simplify 2.0.0-beta.10, which runs the new code right after an update (no "Unable to find component" error).

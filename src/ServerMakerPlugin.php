@@ -25,10 +25,27 @@ final class ServerMakerPlugin implements Plugin
     {
         match ($panel->getId()) {
             'admin' => $panel->pages([ServerMaker::class, MakerSettings::class]),
-            'app' => $panel->pages([AppServerMaker::class, Steam::class])->userMenuItems(self::steamMenu()),
+            'app' => $panel->pages([AppServerMaker::class, Steam::class])->userMenuItems([...self::makerMenu(), ...self::steamMenu()]),
             'server' => $panel->pages([ServerSoftware::class, Performance::class]),
             default => null,
         };
+    }
+
+    /**
+     * Without Simplify there is no Create server button on the overview: people who may make servers reach the Server
+     * Maker from Pelican's user menu. Administrators also have it in the admin menu.
+     *
+     * @return array<string, Action>
+     */
+    public static function makerMenu(): array
+    {
+        return [
+            'simplify-servermaker' => Action::make('simplify-servermaker')
+                ->label(fn () => __('simplify-servermaker::maker.addon.create'))
+                ->icon('tabler-plus')
+                ->url(fn () => AppServerMaker::getUrl(panel: 'app'))
+                ->visible(fn () => ! CoreApi::atLeast(1) && Access::canUse()),
+        ];
     }
 
     /** Without Simplify's account menu (add-on API 4) the Steam page is reached from Pelican's user menu. */
